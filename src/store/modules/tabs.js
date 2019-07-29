@@ -74,7 +74,6 @@ const tabs = {
       state.currentPath = secondMenuIndex.url
       setStorage('secondMenuIndex', JSON.stringify(secondMenuIndex))
       setStorage('currentPath', secondMenuIndex.url)
-      console.log(secondMenuIndex.url + '33333333')
       goRouter(secondMenuIndex.url)
     },
     // 设置页面所在模块、所在一级菜单、所在二级菜单

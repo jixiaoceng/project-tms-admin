@@ -3,7 +3,7 @@ export default [
     'title': '教学',
     'url': '',
     'pid': '0',
-    'icon': 'icon-systemManage',
+    'icon': 'ppIcon-menu',
     'level': '1',
     'private': '1',
     'children': [
@@ -34,7 +34,15 @@ export default [
         'private': '1',
         'children': [
           {
-            'title': '学生列表',
+            'title': '新用户列表',
+            'url': '/studentManagement/studentList',
+            'pid': '2',
+            'icon': '',
+            'level': '3',
+            'private': '1'
+          },
+          {
+            'title': '老用户列表',
             'url': '/studentManagement/studentList',
             'pid': '2',
             'icon': '',

@@ -3,10 +3,10 @@
     <el-menu
       v-if="isShow"
       class="second-wrapper user-select-no"
-      background-color="#444"
-      text-color="#fff"
       :active-text-color="themeColor"
       :default-active="currentPath"
+      :background-color="variables.menuBg"
+      :text-color="variables.menuText"
     >
       <el-submenu
         v-for="(item, index) in secondMenuMap"
@@ -14,6 +14,7 @@
         :index="String(index)"
       >
         <template slot="title">
+          <i :class="`iconfont ${item.icon}`" />
           <span>{{ item.title }}</span>
         </template>
         <el-menu-item
@@ -29,6 +30,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import variables from '@/styles/variables.scss'
 
 export default {
   data() {
@@ -43,6 +45,9 @@ export default {
       } else {
         return []
       }
+    },
+    variables() {
+      return variables
     },
     ...mapGetters([
       'menuMap',
@@ -73,18 +78,18 @@ export default {
 
 <style lang="scss" scoped>
 .second-wrapper {
-  width: 190px;
-  background-color: #444;
-  border-right: 1px solid #444;
+  width: 180px;
+  background-color: #304156;
+  border-right: 1px solid #dcdcdc;
   margin-bottom: 50px;
   .menu-group {
     .group-name {
       padding-left: 10px;
       height: 50px;
       line-height: 50px;
-      background-color: rgba(242, 242, 242, 1);
-      border-top: 1px solid rgba(220, 220, 220, 1);
-      border-bottom: 1px solid rgba(220, 220, 220, 1);
+      background-color: #f1f1f1;
+      border-top: 1px solid #DCDCDC;
+      border-bottom: 1px solid #DCDCDC;
       font-size: 14px;
       color: #999;
       &:first-child {

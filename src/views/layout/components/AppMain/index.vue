@@ -38,7 +38,7 @@ export default {
       return this.$route.fullPath
     },
     titleStyle() {
-      return `left: ${this.device === 'mobile' ? '0px' : this.isCollapse ? '0px' : '190px'}`
+      return `left: ${this.device === 'mobile' ? '0px' : this.isCollapse ? '0px' : '180px'}`
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -75,7 +75,7 @@ export default {
   box-sizing: border-box;
   .page-title {
     position: fixed;
-    z-index: 2;
+    z-index: 9;
     right: 0;
     top: 80px;
     left: 190px;

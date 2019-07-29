@@ -62,7 +62,7 @@
 import ResizeMixin from '@/views/layout/mixin/ResizeHandler'
 import { mapGetters, mapMutations } from 'vuex'
 import { login, userInfo } from '@/mock/'
-// import errRouterMap from '@/router/base/error'
+import errRouterMap from '@/router/base/error'
 import { formatMenuMap } from '@/utils/handleData'
 
 export default {
@@ -100,7 +100,6 @@ export default {
   computed: {
     ...mapGetters([
       'themeColor',
-      'frontVersion',
       'device'
     ])
   },
@@ -149,7 +148,7 @@ export default {
       routers = [].concat(routers, {
         path: '/',
         redirect: secondMenuIndex.url
-      })
+      }, errRouterMap)
       this.$router.addRoutes(routers)
 
       // 初始化菜单和默认显示菜单

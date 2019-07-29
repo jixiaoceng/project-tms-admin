@@ -18,14 +18,14 @@
     // 主体区域
     .main-container {
       min-height: 100vh;
-      margin-left: 190px;
+      margin-left: 180px;
       transition: margin-left .28s;
       position: relative;
     }
     // 侧边栏
     .sidebar-container {
       transition: width 0.28s;
-      width: 190px !important;
+      width: 180px !important;
       height: 100%;
       position: fixed;
       z-index: 3;

@@ -12,6 +12,10 @@ Vue.use(Element, { size: 'small' })
 import '@/styles/index.scss' // global css
 Vue.config.productionTip = false
 
+// 自定义插件
+import Plugin from './plugin'
+Vue.use(Plugin)
+
 new Vue({
   el: '#app',
   router,

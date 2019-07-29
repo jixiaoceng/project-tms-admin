@@ -1,6 +1,6 @@
 <template>
   <div class="color-picker">
-    <i class="emao-icon icon-color" />
+    <i class="iconfont ppIcon-setup" />
     <el-color-picker
       v-model="theme"
       class="theme-picker"

@@ -22,30 +22,23 @@
         <!-- 个人信息 -->
         <el-dropdown class="avatar-container" trigger="hover" style="color: #fff;cursor: pointer">
           <span>
-            <i class="emao-icon icon-faceimg" style="font-size: 20px; margin-right: 6px;" @click="toUser" />
+            <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" @click="toUser" />
             <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ userName }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/systemManage/changePassword">
               <el-dropdown-item>修改密码</el-dropdown-item>
             </router-link>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <!-- 换肤 -->
-        <el-tooltip content="换肤" effect="dark" placement="bottom">
-          <theme-picker class="right-menu-item" />
-        </el-tooltip>
-        <!-- 下拉 -->
-        <el-dropdown class="avatar-container" trigger="hover" style="margin-right: 20px;">
-          <div class="avatar-wrapper">
-            <i class="emao-icon icon-menu" style="color: #fff;font-size: 18px!important;" />
-          </div>
-          <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
               <span style="display:block;" @click="logout">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <!-- 下拉 -->
+        <!-- 换肤 -->
+        <el-tooltip content="换肤" effect="dark" placement="bottom">
+          <theme-picker class="right-menu-item" />
+        </el-tooltip>
       </div>
     </div>
   </div>
@@ -102,7 +95,7 @@ export default {
   left: 0;
   right: 0;
   .brand {
-    width: 200px;
+    width: 160px;
     text-align: center;
     font-size: 20px;
     color: #fff;
@@ -121,7 +114,7 @@ export default {
     }
     .right-menu-item {
       display: inline-block;
-      margin: 0 20px;
+      margin: 0 10px;
     }
     .international{
       vertical-align: top;

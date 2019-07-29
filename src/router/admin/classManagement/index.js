@@ -1,9 +1,8 @@
 import Layout from '@/views/layout/Layout'
-const baseURI = 'views/classManagement/'
 const routerMap = [
   {
     path: 'scheduling',
-    component: () => import(`@/${baseURI}scheduling`),
+    component: () => import('@/views/classManagement/scheduling'),
     name: 'scheduling',
     meta: { title: '上课安排' }
   }
