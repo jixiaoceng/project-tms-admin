@@ -1,10 +1,22 @@
 import Layout from '@/views/layout/Layout'
 const routerMap = [
   {
-    path: 'studentList',
-    component: () => import('@/views/studentManagement/studentList'),
-    name: 'studentList',
-    meta: { title: '学生列表' }
+    path: 'newStudentList',
+    component: () => import('@/views/studentManagement/newStudentList'),
+    name: 'newStudentList',
+    meta: { title: '新用户列表' }
+  },
+  {
+    path: 'oldStudentList',
+    component: () => import('@/views/studentManagement/oldStudentList'),
+    name: 'oldStudentList',
+    meta: { title: '新用户列表' }
+  },
+  {
+    path: 'studentInfo',
+    component: () => import('@/views/studentManagement/subPage/studentInfo'),
+    name: 'studentInfo',
+    meta: { title: '学生档案' }
   }
 ]
 const studentManagement = {

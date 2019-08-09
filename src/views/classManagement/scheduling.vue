@@ -92,16 +92,18 @@
         <el-table-column align="center" prop="class_type.type_name" label="班型" :width="tablWidth" />
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
-            <!-- <router-link> -->
-            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">{{ item.username }}</el-button>
-            <!-- </router-link> -->
+            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
+              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:scope.row.id }}">
+                {{ item.username }}
+              </router-link>
+            </el-button>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" label="学生居住国" :width="tablWidth">
+        <!-- <el-table-column v-if="type != 4" align="center" label="学生居住国" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.nationality }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column v-if="type != 4" align="center" prop="" label="上课时间(学生)" :width="tablWidth" />
         <el-table-column align="center" label="版本" :width="tablWidth">
           <template slot-scope="scope">
@@ -127,7 +129,7 @@
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
-        </el-table-column>>
+        </el-table-column>
         <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.lession_num > 0 ? '否' : '是' }}</span>
@@ -169,13 +171,6 @@
         </el-table-column>
       </el-table>
     </custom-card>
-    <!-- 分页 -->
-    <custom-pagination
-      :total="total"
-      :current-page="currentPage"
-      @getCurrentPage="getCurrentPage"
-      @getPerPage="getPerPage"
-    />
   </div>
 </template>
 
@@ -227,7 +222,7 @@ export default {
           label: '高级版'
         },
         {
-          value: 'International',
+          value: 'International Lite',
           label: '国际版'
         }
       ],
@@ -576,17 +571,6 @@ export default {
     // 课堂转换
     clickHandler(row) {
       console.log(row)
-    },
-    // 获取当前页码
-    getCurrentPage(currentPage) {
-      this.currentPage = currentPage
-      // this.getTableData()
-    },
-    // 改变每页展示数据的条数
-    getPerPage(perPage) {
-      this.perPage = perPage
-      this.currentPage = 1
-      // this.getTableData()
     }
   }
 }

@@ -35,7 +35,7 @@ export default [
         'children': [
           {
             'title': '新用户列表',
-            'url': '/studentManagement/studentList',
+            'url': '/studentManagement/newStudentList',
             'pid': '2',
             'icon': '',
             'level': '3',
@@ -43,7 +43,7 @@ export default [
           },
           {
             'title': '老用户列表',
-            'url': '/studentManagement/studentList',
+            'url': '/studentManagement/oldStudentList',
             'pid': '2',
             'icon': '',
             'level': '3',

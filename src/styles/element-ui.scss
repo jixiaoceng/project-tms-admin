@@ -77,3 +77,7 @@
 .el-range-editor.el-input__inner {
   display: inline-flex !important;
 }
+
+.el-checkbox__input.is-disabled+span.el-checkbox__label,.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner:after,.el-input.is-disabled .el-input__inner {
+  color: #666!important
+}

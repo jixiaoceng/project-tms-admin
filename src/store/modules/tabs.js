@@ -43,7 +43,6 @@ const tabs = {
       setStorage('firstMenuIndex', 0)
       setStorage('secondMenuIndex', JSON.stringify(secondMenuIndex))
       setStorage('currentPath', secondMenuIndex.url)
-      console.log(secondMenuIndex.url + '11111111111')
       goRouter(secondMenuIndex.url)
     },
     // 设置当前页面的所在一级菜单
@@ -65,7 +64,6 @@ const tabs = {
       setStorage('firstMenuIndex', index)
       setStorage('secondMenuIndex', JSON.stringify(secondMenuIndex))
       setStorage('currentPath', secondMenuIndex.url)
-      console.log(secondMenuIndex.url + '22222222')
       goRouter(secondMenuIndex.url)
     },
     // 设置当前页面的所在二级菜单
