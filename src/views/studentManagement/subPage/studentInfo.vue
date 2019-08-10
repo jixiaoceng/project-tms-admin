@@ -39,7 +39,8 @@
       </el-row>
     </custom-card>
     <!-- 扩展信息 -->
-    <custom-card title="扩展信息" class="box-card" :collapse="collapse">
+    <custom-card title="上课进度" class="box-card" :collapse="collapse">
+      <div slot="header-right"><i class="iconfont ppIcon-approval" /></div>
       <el-row>
         <screen-item label="联系电话">
           <el-input v-model="extstudent.phone" :disabled="true" />
@@ -85,6 +86,57 @@
         </screen-item>
       </el-row>
     </custom-card>
+    <!-- 上课进度 -->
+    <custom-card title="在学版本" class="box-card" :collapse="collapse">
+      <div slot="header-right"><i class="iconfont ppIcon-approval" /></div>
+      <el-row>
+        <screen-item label="在学进度">
+          <el-input v-model="extstudent.phone" :disabled="true" />
+        </screen-item>
+        <screen-item label="家长问卷结果">
+          <el-input v-model="extstudent.weixin" :disabled="true" />
+          <el-button type="text">查看家长问卷记录</el-button>
+        </screen-item>
+        <screen-item label="水平测试结果">
+          <el-input v-model="extstudent.whatsapp" :disabled="true" />
+          <el-button type="text">查看水平测试记录</el-button>
+        </screen-item>
+        <screen-item label="上课进度">
+          <el-input v-model="extstudent.class_year" :disabled="true" />
+        </screen-item>
+        <screen-item label="账户余额">
+          <el-input v-model="extstudent.school" :disabled="true" />
+        </screen-item>
+        <screen-item label="小班课余额">
+          <el-input v-model="extstudent.school_nature" :disabled="true" />
+        </screen-item>
+      </el-row>
+    </custom-card>
+    <!--备注-->
+    <custom-card title="备注" class="table-wrapper" :collapse="collapse">
+      <div slot="header-right"><i class="iconfont el-icon-circle-plus-outline" /></div>
+      <el-table
+        :data="tableData"
+        tooltip-effect="dark"
+        :border="true"
+        style="width: 100%"
+      >
+        <el-table-column align="center" label="序号" :width="50">
+          <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
+        </el-table-column>
+        <el-table-column align="center" prop="create_time" label="备注时间" :width="150" />
+        <el-table-column align="center" prop="content" label="备注内容" />
+        <el-table-column align="center" prop="create_user" label="备注人" :width="100" />
+        <el-table-column align="center" prop="create_role" label="备注人角色" :width="100" />
+      </el-table>
+      <!-- 分页 -->
+      <custom-pagination
+        :total="total"
+        :current-page="currentPage"
+        @getCurrentPage="getCurrentPage"
+        @getPerPage="getPerPage"
+      />
+    </custom-card>
   </div>
 </template>
 
@@ -123,7 +175,30 @@ export default {
         'test_time': '2019-08-08',
         'pay_action': 3, // 1低，2中，3，高
         'student_residence': '假字段后台没返回'
-      }
+      },
+      // 当前页
+      currentPage: 1,
+      // 一共多少页
+      total: 0,
+      // 每页多少数据
+      perPage: 10,
+      // 表格数据
+      tableData: [
+        {
+          'id': 1,
+          'content': '学到lesson10，掌握100个汉字，性格活泼回答问题积极，需要多扩充一些课外知识',
+          'create_time': '2019-06-01 20:20',
+          'create_user': '黄红NO',
+          'create_role': '学管老师NO'
+        },
+        {
+          'id': 2,
+          'content': '2017年从武汉移民到新加坡',
+          'create_time': '2019-06-01 19:20',
+          'create_user': '王鹏天',
+          'create_role': '课程顾问'
+        }
+      ]
     }
   },
   created() {
@@ -132,7 +207,18 @@ export default {
   methods: {
     ...mapMutations({
       setPageTitle: 'SET_PAGE_TITLE'
-    })
+    }),
+    // 获取当前页码
+    getCurrentPage(currentPage) {
+      this.currentPage = currentPage
+      // this.getTableData()
+    },
+    // 改变每页展示数据的条数
+    getPerPage(perPage) {
+      this.perPage = perPage
+      this.currentPage = 1
+      // this.getTableData()
+    }
   }
 }
 </script>
@@ -149,6 +235,10 @@ export default {
   }
   .box-card{
     margin-bottom:20px;
+  }
+  .iconfont{
+    cursor: pointer;
+    color:#999;
   }
 }
 </style>
