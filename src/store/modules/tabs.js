@@ -1,5 +1,5 @@
 import router from '@/router'
-import store from '@/store'
+// import store from '@/store'
 import { setStorage } from '@/utils/handleStorage'
 
 const tabs = {
@@ -82,11 +82,7 @@ const tabs = {
       setStorage('moduleMenuIndex', menuIndexArr[0])
       setStorage('secondMenuIndex', JSON.stringify(menuIndexArr[1]))
       setStorage('currentPath', menuIndexArr[2])
-      if (store.getters.baseInfo.loginType === '1') {
-        goRouter('/changePassword')
-      } else {
-        goRouter(menuIndexArr[2])
-      }
+      goRouter(menuIndexArr[2])
     },
     // 设置页面所在模块、所在一级菜单、所在二级菜单
     SET_MENU_INDEX_NO(state, menuIndexArr) {
