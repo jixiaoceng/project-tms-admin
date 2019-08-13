@@ -104,7 +104,7 @@ export default {
     ])
   },
   created() {
-    // this._getUserInfo()
+    this._getUserInfo()
   },
   methods: {
     showPwd() {
@@ -119,6 +119,7 @@ export default {
         if (valid) {
           this.loading = true
           login(this.loginForm).then(res => {
+            this.setToken('登录') // 后台不返回token用cookie存储
             this._getUserInfo()
           }).catch(() => {
             this.loading = false
@@ -133,10 +134,8 @@ export default {
         const data = res.data
         const menuMap = formatMenuMap(data)
         let secondMenuIndex = null
-        console.log(data)
-        if (menuMap[2] && menuMap[2].children[0] && menuMap[2].children[0].children[0]) {
-          secondMenuIndex = menuMap[2].children[0].children[0]
-          console.log(secondMenuIndex)
+        if (menuMap[0] && menuMap[0].children[0] && menuMap[0].children[0].children[0]) {
+          secondMenuIndex = menuMap[0].children[0].children[0]
         } else {
           secondMenuIndex = { url: '/page/401' }
         }

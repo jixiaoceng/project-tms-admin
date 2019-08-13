@@ -8,8 +8,8 @@ import Vue from 'vue'
 import axios from 'axios'
 // import router from '@/router'
 import qs from 'qs'
-import HandleToken from '@/utils/auth'
-const handleToken = new HandleToken()
+// import HandleToken from '@/utils/auth'
+// const handleToken = new HandleToken()
 
 axios.defaults.withCredentials = true
 
@@ -31,9 +31,9 @@ class HandleParamAndResult {
       'Content-Type': 'application/json'
     }
     // 动态添加token
-    if (handleToken.getToken()) {
-      headers.Authorization = `Token ${handleToken.getToken()}`
-    }
+    // if (handleToken.getToken()) {
+    //   headers.Authorization = `Token ${handleToken.getToken()}`
+    // }
     return headers
   }
   _addHeadersPost() {

@@ -52,13 +52,12 @@ router.beforeEach((to, from, next) => {
     if (store.getters.menuMap === null) { // 判断当前用户还没有拉取完user_info信息，所以权限数据的长度为0
       userInfo().then((res) => {
         const data = res.data
-        store.commit('SET_BASE_INFO', data.baseInfo)
         let routers = require('@/router/admin/').default
         routers = [].concat(routers, errRouterMap)
         router.addRoutes(routers)
 
         // 初始化菜单和默认显示菜单
-        let menuMap = formatMenuMap(data.permission)
+        let menuMap = formatMenuMap(data)
         const menuIndex = getMenuIndex(menuMap)
         const moduleMenuIndex = getStorage('moduleMenuIndex')
         const secondMenuIndex = JSON.parse(getStorage('secondMenuIndex'))
@@ -75,12 +74,12 @@ router.beforeEach((to, from, next) => {
           store.commit('SET_MENU_INDEX', [moduleMenuIndex, secondMenuIndex, to.fullPath])
         }
       }).catch((err) => {
-        console.error('获取用户信息失败 or 用户信息处理失败', err)
         // next({ path: '/' })
-        logout().then(res => {
-          handleToken.removeToken()
-          router.push({ path: '/login' })
-        })
+        // logout().then(res => {
+        //   handleToken.removeToken()
+        //   router.push({ path: '/login' })
+        // })
+        router.push({ path: '/login' })
       })
     } else {
 

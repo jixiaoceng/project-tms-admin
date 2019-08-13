@@ -9,7 +9,7 @@
       @click="clickFirstMenu(index)"
     >
       <i :class="`iconfont ${item.icon}`" /><br>
-      <div class="menu-text">{{ item.title }}</div>
+      <div class="menu-text">{{ item.name }}</div>
     </div>
   </el-scrollbar>
 </template>

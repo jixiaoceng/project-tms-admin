@@ -2,7 +2,7 @@
   <section class="app-main flex-wrapper flex-direction-column">
     <!-- 页面头部标题 -->
     <div v-if="currentPage !== '/page/401'" ref="pageTitle" :style="titleStyle" class="page-title flex-wrapper flex-space-between flex-column-center">
-      <div class="line" :style="{borderLeft: `5px solid ${themeColor}`}">{{ pageTitle == '' ? secondMenuIndex.title : pageTitle }}</div>
+      <div class="line" :style="{borderLeft: `5px solid ${themeColor}`}">{{ pageTitle == '' ? secondMenuIndex.name : pageTitle }}</div>
       <div class="page-title-right">
         <el-button v-if="pageTitle !== ''" class="text-right" plain @click="goBack">返回</el-button>
         <el-button class="text-right" plain @click="refresh">刷新</el-button>

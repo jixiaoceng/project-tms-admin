@@ -1,4 +1,5 @@
 <template>
+  <!-- 二级三级菜单 -->
   <el-scrollbar wrap-class="scrollbar-wrapper" class="second-wrapper user-select-no">
     <el-menu
       v-if="isShow"
@@ -15,14 +16,14 @@
       >
         <template slot="title">
           <i :class="`iconfont ${item.icon}`" />
-          <span>{{ item.title }}</span>
+          <span>{{ item.name }}</span>
         </template>
         <el-menu-item
           v-for="(subItem, subIndex) in secondMenuMap[index].children"
           :key="subIndex"
           :index="subItem.url"
           @click="clickSecondMenu(subItem)"
-        >{{ subItem.title }}</el-menu-item>
+        >{{ subItem.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
   </el-scrollbar>
