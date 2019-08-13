@@ -62,19 +62,15 @@ export function getMenuIndex(menuMap) {
   const newMenuMap = formatMenuMap(menuMap)
   const menuIndex = {}
   for (let i = 0, length = newMenuMap.length; i < length; i++) {
-    const firstMenuMap = newMenuMap[i].children
-    if (!firstMenuMap) continue
-    for (let j = 0, length = firstMenuMap.length; j < length; j++) {
-      const secondMenuMap = firstMenuMap[j].children
-      if (!secondMenuMap) continue
-      for (let l = 0, length = secondMenuMap.length; l < length; l++) {
-        const thirdMenuMap = secondMenuMap[l].children
-        if (!thirdMenuMap) continue
-        for (let m = 0, length = thirdMenuMap.length; m < length; m++) {
-          const key = thirdMenuMap[m]['url']
-          const value = [i, j, thirdMenuMap[m], key]
-          menuIndex[key] = value
-        }
+    const secondMenuMap = newMenuMap[i].children
+    if (!secondMenuMap) continue
+    for (let l = 0, length = secondMenuMap.length; l < length; l++) {
+      const thirdMenuMap = secondMenuMap[l].children
+      if (!thirdMenuMap) continue
+      for (let m = 0, length = thirdMenuMap.length; m < length; m++) {
+        const key = thirdMenuMap[m]['url']
+        const value = [i, thirdMenuMap[m], key]
+        menuIndex[key] = value
       }
     }
   }
