@@ -42,7 +42,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名">
-        <el-input v-model="screenData.username" placeholder="请输入学生用户名" />
+        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" />
       </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
@@ -66,12 +66,18 @@
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            <span v-if="scope.row.course_info">
+              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
           <template slot-scope="scope">
-            Level{{ scope.row.course_info.course_level }}
+            <span v-if="scope.row.course_info">
+              Level{{ scope.row.course_info.course_level }}
+            </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
@@ -79,7 +85,7 @@
         <el-table-column align="center" prop="smallclass_count" label="小班课余额" />
         <el-table-column align="center" prop="user_status" label="当前状态" />
         <el-table-column align="center" prop="" label="当前状态时间" />
-        <el-table-column align="center" prop="来源" label="来源" />
+        <el-table-column align="center" prop="student_source" label="来源" />
       </el-table>
     </custom-card>
     <!-- 分页 -->
@@ -93,15 +99,18 @@
 </template>
 
 <script>
+import { managerStudent } from '@/api/classManagement/'
 export default {
   data() {
     return {
       screenData: {
-        source: '', // 来源
+        // source: '', // 来源
         student_status: '', // 状态
         programme_name: '', // 版本 Advanced高级 国际International Lite
-        username: '', // 学生姓名
+        student_name: '', // 学生姓名
         course_level: '', // 1-6
+        page_size: '10',
+        page: '1',
         ordering: '' // 按上课时间排序
       },
       labelWidth: '80',
@@ -111,28 +120,16 @@ export default {
           label: '全部'
         },
         {
-          value: '1',
+          value: 'direct',
           label: '直接用户'
         },
         {
-          value: '2',
+          value: 'referer',
           label: '转介绍'
         },
         {
-          value: '3',
+          value: 'ambassador',
           label: '城市合伙人'
-        },
-        {
-          value: '4',
-          label: '微信朋友圈广告'
-        },
-        {
-          value: '5',
-          label: 'Facebook 广告'
-        },
-        {
-          value: '6',
-          label: 'Instagram 广告'
         }
       ],
       programmeOption: [
@@ -145,7 +142,7 @@ export default {
           label: '高级版'
         },
         {
-          value: 'International Lite',
+          value: 'International',
           label: '国际版'
         }
       ],
@@ -239,21 +236,38 @@ export default {
     }
   },
   mounted() {
+    this.getTableDate()
   },
   methods: {
     // 筛选
     search() {
+      this.currentPage = 1
+      this.screenData.page = 1
+      this.getTableDate()
+    },
+    // 表格数据
+    getTableDate() {
+      return new Promise((resolve, reject) => {
+        managerStudent(this.screenData).then(res => {
+          this.total = res.data.count
+          this.tableData = res.data.results
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     // 获取当前页码
     getCurrentPage(currentPage) {
+      this.screenData.page = currentPage
       this.currentPage = currentPage
-      // this.getTableData()
+      this.getTableDate()
     },
     // 改变每页展示数据的条数
     getPerPage(perPage) {
+      this.screenData.page_size = perPage
       this.perPage = perPage
-      this.currentPage = 1
-      // this.getTableData()
+      this.screenData.page = 1
+      this.getTableDate()
     }
   }
 }

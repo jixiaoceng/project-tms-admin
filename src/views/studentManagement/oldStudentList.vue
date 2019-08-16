@@ -71,7 +71,7 @@
         <el-table-column align="center" prop="last_info.last_teacher" label="最近上课老师" />
         <el-table-column align="center" prop="next_info.next_attend_time" label="下次上课时间" />
         <el-table-column align="center" prop="next_info.next_teacher" label="下次上课老师" />
-        <el-table-column align="center" prop="lesson_sum.lesson_sum" label="本月上课次数" />
+        <el-table-column align="center" prop="lesson_sum" label="本月上课次数" />
         <el-table-column align="center" prop="last_remark" label="距离上次备注时间" />
       </el-table>
     </custom-card>
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import { managerOldstudent } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -104,28 +105,16 @@ export default {
           label: '全部'
         },
         {
-          value: '1',
+          value: 'direct',
           label: '直接用户'
         },
         {
-          value: '2',
+          value: 'referer',
           label: '转介绍'
         },
         {
-          value: '3',
+          value: 'ambassador',
           label: '城市合伙人'
-        },
-        {
-          value: '4',
-          label: '微信朋友圈广告'
-        },
-        {
-          value: '5',
-          label: 'Facebook 广告'
-        },
-        {
-          value: '6',
-          label: 'Instagram 广告'
         }
       ],
       programmeOption: [
@@ -138,7 +127,7 @@ export default {
           label: '高级版'
         },
         {
-          value: 'International Lite',
+          value: 'International',
           label: '国际版'
         }
       ],
@@ -179,72 +168,42 @@ export default {
       // 每页多少数据
       perPage: 10,
       // 表格数据
-      tableData: [
-        {
-          'id': 16,
-          'username': 'Jeremy.Yao',
-          'balance_count': 4551.0,
-          'smallclass_count': 0,
-          'virtual_class_sum': 76.0,
-          'course_info': {
-            'course_name': 'NN L2',
-            'course_level': 2,
-            'programme_name': 'Advanced'
-          },
-          'last_info': {
-            'last_teacher': 'Diana.Chen',
-            'last_attend_time': '2019-07-14 00:30:00'
-          },
-          'next_info': {
-            'next_teacher': 'caoyoo',
-            'next_attend_time': '2016-12-30 07:00:00'
-          },
-          'last_remark': null,
-          'lesson_sum': {
-            'lesson_sum': 0.0
-          }
-        },
-        {
-          'id': 94,
-          'username': 'zhangsiyuan',
-          'balance_count': 2025.0,
-          'smallclass_count': 0,
-          'virtual_class_sum': 81.0,
-          'course_info': {
-            'course_name': 'NN L4',
-            'course_level': 4,
-            'programme_name': 'Advanced'
-          },
-          'last_info': {
-            'last_teacher': '马诗睿',
-            'last_attend_time': '2019-02-01 11:00:00'
-          },
-          'next_info': {
-            'next_teacher': 'MsZou',
-            'next_attend_time': '2017-02-09 11:00:00'
-          },
-          'last_remark': null,
-          'lesson_sum': 0
-        }
-      ]
+      tableData: []
     }
   },
   mounted() {
+    this.getTableDate()
   },
   methods: {
     // 筛选
     search() {
+      this.currentPage = 1
+      this.screenData.page = 1
+      this.getTableDate()
+    },
+    // 表格数据
+    getTableDate() {
+      return new Promise((resolve, reject) => {
+        managerOldstudent(this.screenData).then(res => {
+          this.total = res.data.count
+          this.tableData = res.data.results
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     // 获取当前页码
     getCurrentPage(currentPage) {
+      this.screenData.page = currentPage
       this.currentPage = currentPage
-      // this.getTableData()
+      this.getTableDate()
     },
     // 改变每页展示数据的条数
     getPerPage(perPage) {
+      this.screenData.page_size = perPage
       this.perPage = perPage
-      this.currentPage = 1
-      // this.getTableData()
+      this.screenData.page = 1
+      this.getTableDate()
     }
   }
 }

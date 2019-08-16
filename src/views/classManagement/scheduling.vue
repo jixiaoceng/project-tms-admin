@@ -2,7 +2,7 @@
   <div class="scheduling-wrap">
     <screen-wrapper @search="search">
       <screen-item label="日期" :part="1" :label-width="labelWidth">
-        <el-radio-group v-model="screenData.search_day">
+        <el-radio-group v-model="screenData.search_day" @change="changeRadion">
           <el-radio-button label="1">今天</el-radio-button>
           <el-radio-button label="2">明天</el-radio-button>
           <el-radio-button label="3">后天</el-radio-button>
@@ -55,7 +55,7 @@
       </screen-item>
     </screen-wrapper>
     <!-- 分类 -->
-    <el-button-group class="type-btn">
+    <el-button-group v-if="tableType == 1" class="type-btn">
       <el-button
         size="medium"
         :type="type == 1 ? 'primary' : ''"
@@ -93,7 +93,7 @@
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
-              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:scope.row.id }}">
+              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
                 {{ item.username }}
               </router-link>
             </el-button>
@@ -104,28 +104,43 @@
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.nationality }}</span>
           </template>
         </el-table-column> -->
-        <el-table-column v-if="type != 4" align="center" prop="" label="上课时间(学生)" :width="tablWidth" />
+        <el-table-column v-if="type !== 4" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" />
         <el-table-column align="center" label="版本" :width="tablWidth">
           <template slot-scope="scope">
-            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            <span v-if="scope.row.virtualclass.course_session">
+              {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            </span>
+            <span v-else>
+              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别" :width="tablWidth">
           <template slot-scope="scope">
-            Level{{ scope.row.course_info.course_level }}
+            <span v-if="scope.row.virtualclass.course_session">
+              {{ scope.row.virtualclass.course_session.course_name }}
+            </span>
+            <span v-else>
+              Level{{ scope.row.course_info.course_level }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="上课进度" :width="tablWidth">
           <template slot-scope="scope">
-            Lesson{{ scope.row.course_info.course_level }}
+            <span v-if="scope.row.virtualclass.course_session">
+              {{ scope.row.virtualclass.course_session.session_name }}
+            </span>
+            <span v-else>
+              Lesson{{ scope.row.course_info.session_no }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" align="center" label="课堂类型" :width="tablWidth">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.lesson_sum > 0 ? '正式课' : '试听课' }}</span>
+            <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" label="老师" :width="tablWidth">
+        <el-table-column align="center" label="老师" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
@@ -136,50 +151,121 @@
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
-        <el-table-column v-if="type != 4" align="center" prop="virtualclass_type" label="课堂模式" :width="tablWidth" />
-        <el-table-column v-if="type == 3 || type == 4" align="center" label="学生进课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type == 3 || type == 4" align="center" label="老师进课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type == 4" align="center" prop="" label="完课状态" />
-        <el-table-column align="center" prop="" label="操作" fixed="right" :width="type==4?'240':tablWidth">
+        <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="tablWidth">
+          <template slot-scope="scope">
+            <span>{{ scope.row.virtualclass_type == 'Tk' ? '拓课' : '声网' }} </span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column v-if="type === 3" align="center" prop=" " label="学生进课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 3" align="center" prop=" " label="老师进课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 4" align="center" prop=" " label="学生进出课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 4" align="center" prop=" " label="老师进出课堂时间" :width="tablWidth" /> -->
+        <el-table-column v-if="type == 4" align="center" prop="finish_status" label="完课状态" />
+        <el-table-column align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
-              v-if="type == 3"
+              v-if="scope.row.appointment_status == 'started'"
               type="text"
-              @click="clickHandler(scope.row)"
+              @click="clickHandlerMonitor(scope.row.virtualclass.id)"
             >旁听</el-button>
             <el-button
-              v-if="type != 4"
+              v-if="scope.row.appointment_status == 'started' || scope.row.appointment_status == 'start'"
               type="text"
-              @click="clickHandler(scope.row)"
+              @click="clickHandlerRevert(scope.row.virtualclass.id)"
             >课堂转换</el-button>
             <el-button
-              v-if="type == 4"
+              v-if="scope.row.appointment_status == 'finish'"
               type="text"
-              @click="clickHandler(scope.row)"
+              @click="clickHandlerComment(scope.row.virtualclass.id,'Student',scope.row)"
             >老师评语</el-button>
             <el-button
-              v-if="type == 4"
+              v-if="scope.row.appointment_status == 'finish'"
               type="text"
-              @click="clickHandler(scope.row)"
+              @click="clickHandlerComment(scope.row.virtualclass.id,'Tutor',scope.row)"
             >学生反馈</el-button>
             <el-button
-              v-if="type == 4"
+              v-if="scope.row.appointment_status == 'finish' && scope.row.virtualclass_type == 'Tk'"
               type="text"
-              @click="clickHandler(scope.row)"
+              @click="clickHandlerPlayback(scope.row.virtualclass.id)"
             >课堂回放</el-button>
           </template>
         </el-table-column>
       </el-table>
     </custom-card>
+    <!-- 分页 -->
+    <custom-pagination
+      :total="total"
+      :current-page="currentPage"
+      @getCurrentPage="getCurrentPage"
+      @getPerPage="getPerPage"
+    />
+    <!-- 老师评语 -->
+    <el-dialog title="老师评语" :visible.sync="teacherComments">
+      <div class="teacher-tit">
+        <el-row>
+          <el-col :span="12">
+            <label>老师：{{ teacherInfo.teacherName }}</label>
+          </el-col>
+          <el-col :span="12">
+            <label>上课时间：{{ teacherInfo.classTime }}</label>
+          </el-col>
+          <el-col :span="12">
+            <label>班型：{{ teacherInfo.classType }}</label>
+          </el-col>
+          <el-col :span="12">
+            <label>本节课程：{{ teacherInfo.course }}</label>
+          </el-col>
+        </el-row>
+      </div>
+      <el-tabs v-if="valuationrate.comment.length" type="border-card">
+        <el-tab-pane v-for="(item,index) in valuationrate.comment" :key="index">
+          <span slot="label">{{ item.username }}</span>
+          <div v-if="studentFeedback">
+            <div class="rate-tit">
+              <span class="demonstration">知识掌握程度：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].PQ" disabled score-template="知识掌握程度：" />
+            </div>
+            <div class="rate-tit">
+              <span class="demonstration">进步程度：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].SP" disabled score-template="知识掌握程度：" />
+            </div>
+            <div class="rate-tit">
+              <span class="demonstration">学习态度：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].AR" disabled score-template="知识掌握程度：" />
+            </div>
+          </div>
+          <div v-else>
+            <div class="rate-tit">
+              <span class="demonstration">专业知识：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].PK" disabled score-template="知识掌握程度：" />
+            </div>
+            <div class="rate-tit">
+              <span class="demonstration">教授方式：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].ID" disabled score-template="知识掌握程度：" />
+            </div>
+            <div class="rate-tit">
+              <span class="demonstration">积极营造学习环境：</span>
+              <el-rate v-model="valuationrate.valuation[item.username].LE" disabled score-template="知识掌握程度：" />
+            </div>
+          </div>
+          <p class="evaluate">{{ item.comment }}</p>
+        </el-tab-pane>
+      </el-tabs>
+      <p v-else class="no-comments">
+        <img src="../../assets/icon-no-comments.png">
+        暂无评价
+      </p>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { managerScheduler, virtualclassRevert, virtualclassMonitor, virtualclassPlayback, virtualclassComment } from '@/api/classManagement/'
 export default {
   data() {
     return {
       screenData: {
-        search_day: '', // 1,2,3,4
+        search_day: '1', // 1,2,3,4
         start_time: '', // 时间段start_time  2019-07-24 12:00:00 end_time  2019-07-24 12:00:00
         end_time: '',
         class_type: '', // 班型  oneonone  smallclass
@@ -187,12 +273,17 @@ export default {
         teacher: '', // 新老师 new，老老师old
         programme_name: '', // 版本 Advanced高级 国际International
         student_name: '', // 学生姓名
+        page_size: '10',
+        page: '1',
+        appoint_status: '', // start未开始, started正在进行，finish结束
         ordering: '' // 按上课时间排序
       },
       type: 1, // 1全部2未开始3正在上课4已结束
       labelWidth: '80',
       tablWidth: '120',
       applyDate: [],
+      value1: 4,
+      tableType: 1, // 切换
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now()
@@ -222,7 +313,7 @@ export default {
           label: '高级版'
         },
         {
-          value: 'International Lite',
+          value: 'International',
           label: '国际版'
         }
       ],
@@ -247,331 +338,129 @@ export default {
       // 每页多少数据
       perPage: 10,
       // 表格数据
-      tableData: [
-        {
-          'scheduled_time': '2019-07-24 12:20',
-          'hosts': [{
-            'id': 1137,
-            'username': 'Fiona.Fang',
-            'lession_num': 96
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'Fiona.Fang'
-            ],
-            'students': [{
-              'id': 393,
-              'username': 'wu70343',
-              'lesson_sum': 94.0,
-              'first_name': '律',
-              'last_name': '吴',
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '1670840692',
-          'course_info': {
-            'course_name': 'NN L3',
-            'course_level': 3,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 12:50',
-          'hosts': [{
-            'id': 359,
-            'username': '陈晰子',
-            'lession_num': 417
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              '陈晰子'
-            ],
-            'students': [{
-              'id': 728,
-              'username': 'melody57',
-              'lesson_sum': 59.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '1064329856',
-          'course_info': {
-            'course_name': 'NN L2',
-            'course_level': 2,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'start',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 7:30',
-          'hosts': [{
-            'id': 357,
-            'username': '孙睿',
-            'lession_num': 43
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              '孙睿'
-            ],
-            'students': [{
-              'id': 815,
-              'username': 'Harry',
-              'lesson_sum': 41.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '1464727338',
-          'course_info': {
-            'course_name': 'NN L2',
-            'course_level': 2,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 06:00',
-          'hosts': [{
-            'id': 1332,
-            'username': 'Talia.Yang',
-            'lession_num': 13
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'Talia.Yang'
-            ],
-            'students': [{
-              'id': 1369,
-              'username': '安如',
-              'lesson_sum': 6.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '2027364210',
-          'course_info': {
-            'course_name': 'NN L1',
-            'course_level': 1,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 01:00',
-          'hosts': [{
-            'id': 122,
-            'username': 'yumeng',
-            'lession_num': 850
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'yumeng'
-            ],
-            'students': [{
-              'id': 226,
-              'username': 'shiqich',
-              'lesson_sum': 92.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': null,
-          'course_info': {
-            'course_name': 'NN L2',
-            'course_level': 2,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '声网'
-        },
-        {
-          'scheduled_time': '2019-07-24 07:30',
-          'hosts': [{
-            'id': 122,
-            'username': 'yumeng',
-            'lession_num': 850
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'yumeng'
-            ],
-            'students': [{
-              'id': 206,
-              'username': 'wendysgp',
-              'lesson_sum': 76.0,
-              'first_name': '',
-              'last_name': '杨',
-              'nationality': 'CN'
-            }]
-          },
-          'tk_class_id': null,
-          'course_info': {
-            'course_name': 'NN L3',
-            'course_level': 3,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '声网'
-        },
-        {
-          'scheduled_time': '2019-07-24 06:30',
-          'hosts': [{
-            'id': 1038,
-            'username': 'Lily.Wang',
-            'lession_num': 31
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'Lily.Wang'
-            ],
-            'students': [{
-              'id': 1340,
-              'username': '孙颖',
-              'lesson_sum': 4.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '508885413',
-          'course_info': {
-            'course_name': 'NN L1',
-            'course_level': 1,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 09:00',
-          'hosts': [{
-            'id': 122,
-            'username': 'yumeng',
-            'lession_num': 850
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'yumeng'
-            ],
-            'students': [{
-              'id': 323,
-              'username': 'Cathy',
-              'lesson_sum': 130.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '503494520',
-          'course_info': {
-            'course_name': 'NN L3',
-            'course_level': 3,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        },
-        {
-          'scheduled_time': '2019-07-24 01:00',
-          'hosts': [{
-            'id': 114,
-            'username': 'Yq198512',
-            'lession_num': 369
-          }],
-          'class_type': {
-            'type': 'oneonone',
-            'type_name': '一对一'
-          },
-          'learning_group': {
-            'last_teacher': [
-              'Yq198512'
-            ],
-            'students': [{
-              'id': 565,
-              'username': 'DianaV',
-              'lesson_sum': 66.0,
-              'first_name': null,
-              'last_name': null,
-              'nationality': null
-            }]
-          },
-          'tk_class_id': '859560045',
-          'course_info': {
-            'course_name': 'NN L1',
-            'course_level': 1,
-            'programme_name': 'Advanced'
-          },
-          'appointment_status': 'started',
-          'virtualclass_type': '拓客'
-        }
-      ]
+      tableData: [],
+      teacherComments: false, // 老师评语
+      studentFeedback: true, // 学生反馈
+      teacherInfo: {
+        teacherName: '',
+        classTime: '',
+        classType: '',
+        course: ''
+      },
+      valuationrate: {
+        comment: [], // 评价
+        valuation: [] // 评分
+      }
     }
   },
   mounted() {
+    this.getTableDate()
   },
   methods: {
     // 筛选
     search() {
+      this.currentPage = 1
+      this.screenData.page = 1
+      this.getTableDate()
+    },
+    // 表格数据
+    getTableDate() {
+      managerScheduler(this.screenData).then(res => {
+        this.total = res.data.count
+        this.tableData = res.data.results
+      })
+    },
+    // 日期切换
+    changeRadion(val) {
+      this.screenData.start_time = null
+      this.screenData.end_time = null
+      this.tableType = val
+      this.type = 1
     },
     timeChange() {
       if (this.applyDate) {
         this.screenData.start_time = this.applyDate[0]
         this.screenData.end_time = this.applyDate[1]
+        this.screenData.search_day = ''
       } else {
         this.screenData.start_time = null
         this.screenData.end_time = null
+        this.screenData.search_day = '1'
+        this.type = 1
       }
     },
     // 改变类型
     changeType(type) {
       this.type = type
-      this.currentPage = 1
+      this.screenData.appoint_status = type === 1 ? '' : type === 2 ? 'start' : type === 3 ? 'started' : 'finish'
+      this.screenData.page = 1
+      this.getTableDate()
     },
     // 课堂转换
-    clickHandler(row) {
-      console.log(row)
+    clickHandlerRevert(virtualclass_id) {
+      virtualclassRevert(virtualclass_id).then(res => {
+        this.$message({
+          message: '课堂转换成功',
+          type: 'success'
+        })
+        this.getTableDate()
+      })
+    },
+    // 旁听
+    clickHandlerMonitor(virtualclass_id) {
+      virtualclassMonitor(virtualclass_id).then(res => {
+        if (res.data.data.virtualclass_type === 'Tk') {
+          window.open(res.data.data.entrytkpath, '_blank')
+        } else {
+          window.open(process.env.VUE_APP_BASE_API + '/man/virtualclass/monitor/?vc_id=' + virtualclass_id, '_blank')
+        }
+      })
+    },
+    // 课堂回放
+    clickHandlerPlayback(virtualclass_id) {
+      virtualclassPlayback(virtualclass_id).then(res => {
+        console.log(res)
+        if (res.data.data.mp4_url && res.data.data.mp4_url !== 'null') {
+          window.open(res.data.data.mp4_url, '_blank')
+        } else {
+          this.$message({
+            message: '课堂回放未找到。。。',
+            type: 'warning'
+          })
+        }
+      })
+    },
+    // 老师评语
+    clickHandlerComment(virtualclass_id, target, obj) {
+      this.teacherInfo.teacherName = obj.hosts[0].username
+      this.teacherInfo.classTime = obj.scheduled_time
+      this.teacherInfo.classType = obj.class_type.type_name
+      this.studentFeedback = target === 'Student'
+      if (obj.course_info) {
+        this.teacherInfo.course = obj.course_info.programme_name === 'Advanced' ? '高级版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no : '国际版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no
+      } else {
+        this.teacherInfo.course = obj.virtualclass.course_session.programme_name === 'Advanced' ? '高级版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name : '国际版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name
+      }
+      this.teacherComments = true
+      virtualclassComment(virtualclass_id, target).then(res => {
+        this.valuationrate = res.data.data
+      })
+    },
+    clickHandler() {},
+    // 获取当前页码
+    getCurrentPage(currentPage) {
+      this.screenData.page = currentPage
+      this.currentPage = currentPage
+      this.getTableDate()
+    },
+    // 改变每页展示数据的条数
+    getPerPage(perPage) {
+      this.screenData.page_size = perPage
+      this.perPage = perPage
+      this.screenData.page = 1
+      this.getTableDate()
     }
+
   }
 }
 </script>
@@ -579,7 +468,47 @@ export default {
 <style lang="scss" scoped>
 .scheduling-wrap {
   .type-btn {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
+  }
+  .table-wrapper{
+    margin-top:20px;
+  }
+  .teacher-tit{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    margin-bottom:20px;
+    .el-col{
+      line-height:30px;
+    }
+  }
+  .rate-tit{
+    display:flex;
+    .demonstration{
+      line-height:20px;
+      width:100px;
+      font-size: 14px;
+    }
+  }
+  .evaluate{
+    height:100px;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+  }
+  label{
+    font-weight: 400;
+  }
+  .no-comments{
+    img{
+      width:60px;
+      height:60px;
+      display:block;
+      margin:10px auto;
+    }
+    padding:30px 0 100px 0;
+    text-align:center;
+    height:30px;
   }
 }
 </style>

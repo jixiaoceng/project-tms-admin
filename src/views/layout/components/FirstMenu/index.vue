@@ -3,8 +3,6 @@
     <div
       v-for="(item, index) in firstMenuMap"
       :key="index"
-      :style="{'color': index == firstMenuIndex ? themeColor : '#fff'}"
-      :class="{'active': index == firstMenuIndex}"
       class="first-item text-center"
       @click="clickFirstMenu(index)"
     >
@@ -25,8 +23,7 @@ export default {
     ...mapGetters([
       'menuMap',
       'themeColor',
-      'moduleMenuIndex',
-      'firstMenuIndex'
+      'moduleMenuIndex'
     ])
   },
   methods: {

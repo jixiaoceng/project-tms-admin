@@ -1,3 +1,4 @@
 import * as base from './base'
+import * as classManagement from './classManagement'
 
-export { base }
+export { base, classManagement }

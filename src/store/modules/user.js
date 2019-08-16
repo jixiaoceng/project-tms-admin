@@ -12,21 +12,14 @@ const user = {
       articlePlatform: []
     },
     department: '无',
-    userName: '管理员',
-    userId: '30000',
-    baseInfo: null
+    userName: '季小蹭',
+    userId: '30000'
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
       handleToken.setToken(token)
-    },
-    SET_BASE_INFO: (state, baseInfo) => {
-      state.baseInfo = baseInfo
-      state.department = baseInfo.department
-      state.userName = baseInfo.userName
-      state.userId = baseInfo.userId
     },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction

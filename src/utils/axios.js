@@ -30,32 +30,13 @@ class HandleParamAndResult {
     const headers = {
       'Content-Type': 'application/json'
     }
-    // 动态添加token
-    // if (handleToken.getToken()) {
-    //   headers.Authorization = `Token ${handleToken.getToken()}`
-    // }
-    return headers
-  }
-  _addHeadersPost() {
-    // 自定义headers Post请求
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    // 动态添加token
-    // if (handleToken.getToken()) {
-    //   headers.Authorization = `Token ${handleToken.getToken()}`
-    // }
     return headers
   }
 
   // 处理请求
   dealAxios(url, options) {
     const _this = this
-    if (options.method === 'post' || options.type === 'formData' || options.method === 'put') {
-      options.headers = this._addHeadersPost()
-    } else {
-      options.headers = this._addHeaders()
-    }
+    options.headers = this._addHeaders()
 
     // do something before request
     return new Promise((resolve, reject) => {
@@ -130,10 +111,11 @@ class RequestMethod {
      * @param { Object } data 请求参数
      */
   $post(url, data) {
+    console.log(data)
     return this._method(url, {
-      data: qs.stringify(data),
+      data: data,
       method: 'post',
-      type: 'formData'
+      type: 'json'
     })
   }
 

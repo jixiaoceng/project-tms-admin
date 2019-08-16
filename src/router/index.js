@@ -1,8 +1,8 @@
 /*
  * @Author: reco_luan
  * @Date: 2018-12-21 20:11:18
- * @Last Modified by: reco_luan
- * @Last Modified time: 2019-06-17 14:37:24
+ * @Last Modified by: fangli.ji
+ * @Last Modified time: 2019-08-13 14:37:24
  */
 
 /* eslint-disable */
@@ -32,7 +32,7 @@ NProgress.configure({ showSpinner: false }) // 页面加载滚动条的设置
 
 /**
  * 免登录白名单
- * 重点介绍 '/authredirect' ，这个页面的功能是：某个页面需要需要登录，登录后再跳转回原来的页面，并携带着之前的参数
+ * 这个页面的功能是：某个页面需要需要登录，登录后再跳转回原来的页面，并携带着之前的参数
  */
 const whiteList = ['/login', '/authredirect']
 

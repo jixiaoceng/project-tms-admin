@@ -7,7 +7,6 @@ const tabs = {
     menuMap: null,
     menuIndexObj: null,
     moduleMenuIndex: 0,
-    firstMenuIndex: 0,
     secondMenuIndex: null,
     currentPath: '/'
   },
@@ -40,7 +39,6 @@ const tabs = {
       state.secondMenuIndex = secondMenuIndex
       state.currentPath = secondMenuIndex.url
       setStorage('moduleMenuIndex', index)
-      setStorage('firstMenuIndex', 0)
       setStorage('secondMenuIndex', JSON.stringify(secondMenuIndex))
       setStorage('currentPath', secondMenuIndex.url)
       goRouter(secondMenuIndex.url)
@@ -58,10 +56,8 @@ const tabs = {
 
       // const secondMenuIndex = menuMap[state.moduleMenuIndex].children[index].children[0].children[0]
 
-      state.firstMenuIndex = index
       state.secondMenuIndex = secondMenuIndex
       state.currentPath = secondMenuIndex.url
-      setStorage('firstMenuIndex', index)
       setStorage('secondMenuIndex', JSON.stringify(secondMenuIndex))
       setStorage('currentPath', secondMenuIndex.url)
       goRouter(secondMenuIndex.url)
