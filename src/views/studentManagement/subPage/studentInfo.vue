@@ -110,11 +110,13 @@
           <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
         </screen-item>
         <screen-item label="家长问卷结果">
-          <el-input v-model="extstudent.weixin" :disabled="true" />
+          <el-input v-if="courseInfo.parent_result" :value="courseInfo.parent_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no" :disabled="true" />
+          <el-input v-else value="没做家长问卷" :disabled="true" />
           <el-button type="text">查看家长问卷记录</el-button>
         </screen-item>
         <screen-item label="水平测试结果">
-          <el-input v-model="extstudent.whatsapp" :disabled="true" />
+          <el-input v-if="courseInfo.assessment_result" :value="courseInfo.assessment_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.assessment_result.course_name : '国际版 ' + courseInfo.assessment_result.course_name" :disabled="true" />
+          <el-input v-else value="没做水平测试" :disabled="true" />
           <el-button type="text">查看水平测试记录</el-button>
         </screen-item>
         <screen-item label="上课进度">
