@@ -104,7 +104,7 @@ export default {
     ])
   },
   created() {
-    this._getUserInfo()
+    // this._getUserInfo()
   },
   methods: {
     showPwd() {

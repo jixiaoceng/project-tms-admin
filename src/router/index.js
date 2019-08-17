@@ -15,7 +15,7 @@ import { getStorage } from '@/utils/handleStorage'
 import { userInfo } from '@/api/base/'
 import errRouterMap from '@/router/base/error'
 import { formatMenuMap, getMenuIndex } from '@/utils/handleData'
-import { logout } from '@/api/base'
+// import { logout } from '@/api/base'
 import HandleToken from '@/utils/auth'
 const handleToken = new HandleToken()
 
