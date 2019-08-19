@@ -42,10 +42,13 @@ router.beforeEach((to, from, next) => {
       store.commit('ADD_VISITED_VIEWS', to)
     }
   }
+  console.log(to.path)
   // 开始滚动条
   NProgress.start()
   document.querySelector('#nprogress .bar').style.background = store.getters.themeColor
-
+  if (to.path === '/login') {
+    handleToken.removeToken()
+  }
   resetStore()
   // 如果有token的缓存
   if (handleToken.getToken()) {
@@ -79,6 +82,8 @@ router.beforeEach((to, from, next) => {
         //   handleToken.removeToken()
         //   router.push({ path: '/login' })
         // })
+        next({ path: '/' })
+        handleToken.removeToken()
         router.push({ path: '/login' })
       })
     } else {

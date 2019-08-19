@@ -222,7 +222,7 @@ export default {
       // 当前页
       total: 0,
       // 每页多少数据
-      perPage: 10,
+      perPage: 20,
       courseOption: [
         {
           value: 1,

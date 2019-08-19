@@ -42,7 +42,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" />
+        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
@@ -109,9 +109,9 @@ export default {
         programme_name: '', // 版本 Advanced高级 国际International Lite
         student_name: '', // 学生姓名
         course_level: '', // 1-6
-        page_size: '10',
+        page_size: '20',
         page: '1',
-        ordering: '' // 按上课时间排序
+        ordering: '-date_joined' // 按上课时间排序
       },
       labelWidth: '80',
       sourceOption: [
@@ -203,7 +203,7 @@ export default {
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 10,
+      perPage: 20,
       // 表格数据
       tableData: [
         {

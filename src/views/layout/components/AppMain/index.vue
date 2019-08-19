@@ -58,7 +58,7 @@ export default {
     },
     // 刷新
     refresh() {
-      // window.location.href = window.location.href
+      location.reload()
     }
   }
 }

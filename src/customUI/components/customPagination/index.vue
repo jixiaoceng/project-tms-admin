@@ -5,7 +5,7 @@
       background
       layout="total, sizes, prev, pager, next, jumper"
       :current-page="currentPage"
-      :page-sizes="[5, 10, 20, 50]"
+      :page-sizes="[20, 50, 100]"
       :page-size="pageSize"
       :total="total"
       @size-change="handleSizeChange"
@@ -25,7 +25,7 @@ export default {
     // 默认多少条
     pageSize: {
       type: Number || String,
-      default: 10
+      default: 20
     },
     // 一共多少个元素
     total: {

@@ -32,7 +32,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" />
+        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
@@ -166,7 +166,7 @@ export default {
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 10,
+      perPage: 20,
       // 表格数据
       tableData: []
     }

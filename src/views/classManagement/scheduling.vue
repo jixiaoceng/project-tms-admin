@@ -51,7 +51,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" />
+        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 分类 -->
@@ -80,17 +80,26 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <el-table
+        v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
         :border="true"
         style="width: 100%"
+        @sort-change="sortChange"
       >
         <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
-        <el-table-column align="center" prop="scheduled_time" label="上课时间(北京)" :width="tablWidth" />
-        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="tablWidth" />
-        <el-table-column align="center" label="学生用户名" :width="tablWidth">
+        <el-table-column
+          :key="Math.random()"
+          align="center"
+          prop="scheduled_time"
+          label="上课时间(北京)"
+          sortable="custom"
+          :width="160"
+        />
+        <el-table-column :key="Math.random()" align="center" prop="class_type.type_name" label="班型" :width="tablWidth" />
+        <el-table-column :key="Math.random()" align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
               <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
@@ -99,13 +108,13 @@
             </el-button>
           </template>
         </el-table-column>
-        <!-- <el-table-column v-if="type != 4" align="center" label="学生居住国" :width="tablWidth">
+        <!-- <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="学生居住国" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.nationality }}</span>
           </template>
         </el-table-column> -->
-        <el-table-column v-if="type !== 4" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" />
-        <el-table-column align="center" label="版本" :width="tablWidth">
+        <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" />
+        <el-table-column :key="Math.random()" align="center" label="版本" :width="tablWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
@@ -115,53 +124,71 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="级别" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="级别" :width="tablWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
-              {{ scope.row.virtualclass.course_session.course_name }}
+              Level{{ scope.row.virtualclass.course_session.course_level }}
             </span>
             <span v-else>
               Level{{ scope.row.course_info.course_level }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="上课进度" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="上课进度" :width="tablWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.session_name }}
             </span>
             <span v-else>
-              Lesson{{ scope.row.course_info.session_no }}
+              lesson{{ scope.row.course_info.session_no }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" label="课堂类型" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂类型" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="老师" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="老师" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="是否新老师" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.lession_num > 0 ? '否' : '是' }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
-        <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂模式" :width="tablWidth">
           <template slot-scope="scope">
             <span>{{ scope.row.virtualclass_type == 'Tk' ? '拓课' : '声网' }} </span>
           </template>
         </el-table-column>
-        <!-- <el-table-column v-if="type === 3" align="center" prop=" " label="学生进课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type === 3" align="center" prop=" " label="老师进课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type === 4" align="center" prop=" " label="学生进出课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type === 4" align="center" prop=" " label="老师进出课堂时间" :width="tablWidth" /> -->
-        <el-table-column v-if="type == 4" align="center" prop="finish_status" label="完课状态" />
-        <el-table-column align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
+        <el-table-column v-if="type === 3 || type === 4" :key="Math.random()" align="center" label="学生进课堂时间" :width="tablWidth">
+          <template slot-scope="scope">
+            <p v-if="scope.row.student_classroom">
+              <span v-for="item in scope.row.student_classroom" :key="item.student_id">
+                {{ item.in_class_time }} <br>
+              </span>
+            </p>
+            <span v-else>---</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="type === 3 || type === 4" :key="Math.random()" align="center" prop="teacher_start_time" label="老师进课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 4" :key="Math.random()" align="center" label="学生出课堂时间" :width="tablWidth">
+          <template slot-scope="scope">
+            <p v-if="scope.row.student_classroom">
+              <span v-for="item in scope.row.student_classroom" :key="item.student_id">
+                {{ item.out_class_time }} <br>
+              </span>
+            </p>
+            <span v-else>---</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="type === 4" :key="Math.random()" align="center" prop="teacher_end_time" label="老师出课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type == 4" :key="Math.random()" align="center" prop="finish_status" label="完课状态" />
+        <el-table-column :key="Math.random()" align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.appointment_status == 'started'"
@@ -273,10 +300,10 @@ export default {
         teacher: '', // 新老师 new，老老师old
         programme_name: '', // 版本 Advanced高级 国际International
         student_name: '', // 学生姓名
-        page_size: '10',
+        page_size: '20',
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
-        ordering: '' // 按上课时间排序
+        ordering: 'scheduled_time' // 按上课时间排序
       },
       type: 1, // 1全部2未开始3正在上课4已结束
       labelWidth: '80',
@@ -336,11 +363,12 @@ export default {
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 10,
+      perPage: 20,
       // 表格数据
       tableData: [],
       teacherComments: false, // 老师评语
       studentFeedback: true, // 学生反馈
+      loading: true, // 加载loading
       teacherInfo: {
         teacherName: '',
         classTime: '',
@@ -363,17 +391,21 @@ export default {
       this.screenData.page = 1
       this.getTableDate()
     },
+    sortChange(data) {
+      console.log(data)
+    },
     // 表格数据
     getTableDate() {
+      this.loading = true
       managerScheduler(this.screenData).then(res => {
+        this.loading = false
         this.total = res.data.count
         this.tableData = res.data.results
       })
     },
     // 日期切换
     changeRadion(val) {
-      this.screenData.start_time = null
-      this.screenData.end_time = null
+      this.applyDate = []
       this.tableType = val
       this.type = 1
     },
@@ -382,10 +414,11 @@ export default {
         this.screenData.start_time = this.applyDate[0]
         this.screenData.end_time = this.applyDate[1]
         this.screenData.search_day = ''
+        this.tableType = ''
       } else {
         this.screenData.start_time = null
         this.screenData.end_time = null
-        this.screenData.search_day = '1'
+        this.screenData.search_day = 1
         this.type = 1
       }
     },
