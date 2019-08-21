@@ -57,7 +57,7 @@
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
@@ -133,6 +133,10 @@ export default {
         {
           value: 'International',
           label: '国际版'
+        },
+        {
+          value: 'SG',
+          label: 'SG'
         }
       ],
       courseOption: [

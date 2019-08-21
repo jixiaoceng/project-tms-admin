@@ -23,7 +23,7 @@
         <el-dropdown class="avatar-container" trigger="hover" style="color: #fff;cursor: pointer">
           <span>
             <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" @click="toUser" />
-            <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ userName }}</span>
+            <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ user }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/systemManage/changePassword">
@@ -49,6 +49,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import ThemePicker from '@/components/ThemePicker'
 import ModuleMenu from '../ModuleMenu'
+import { getStorage } from '@/utils/handleStorage'
 
 export default {
   name: 'Navbar',
@@ -56,6 +57,11 @@ export default {
     Hamburger,
     ThemePicker,
     ModuleMenu
+  },
+  data() {
+    return {
+      user: this.userName || getStorage('userName')
+    }
   },
   computed: {
     ...mapGetters([

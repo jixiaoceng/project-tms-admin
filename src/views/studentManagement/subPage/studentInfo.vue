@@ -318,7 +318,7 @@ export default {
       managerStudentCourse(this.studentId).then(res => {
         if (res.data.code === 0) {
           this.courseInfo = res.data.data
-          this.courseInfo.programme_name = this.courseInfo.programme_name === 'Advanced' ? '高级版' : '国际版'
+          this.courseInfo.programme_name = this.courseInfo.programme_name === 'Advanced' ? '高级版' : this.courseInfo.programme_name === 'International Lite' ? '国际版' : 'SG'
         }
         this.getRemark()
       })

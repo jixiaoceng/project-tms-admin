@@ -124,7 +124,7 @@
               {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
             </span>
             <span v-else>
-              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
             </span>
           </template>
         </el-table-column>
@@ -364,6 +364,10 @@ export default {
         {
           value: 'International',
           label: '国际版'
+        },
+        {
+          value: 'SG',
+          label: 'SG'
         }
       ],
       courseOption: [
