@@ -48,10 +48,13 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <el-table
+        v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
         :border="true"
         style="width: 100%"
+        :default-sort="{prop: 'date', order: 'descending'}"
+        @sort-change="sortChange"
       >
         <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
@@ -80,11 +83,29 @@
             <span v-else>---</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
-        <el-table-column align="center" prop="balance_count" label="账户余额" />
-        <el-table-column align="center" prop="smallclass_count" label="小班课余额" />
+        <el-table-column
+          align="center"
+          prop="virtual_class_sum"
+          sortable="custom"
+          :class-name="getSortClass('virtual_class_sum')"
+          label="已学课时"
+        />
+        <el-table-column
+          align="center"
+          prop="balance_count"
+          sortable="custom"
+          :class-name="getSortClass('balance_count')"
+          label="账户余额"
+        />
+        <el-table-column
+          align="center"
+          prop="smallclass_count"
+          sortable="custom"
+          :class-name="getSortClass('smallclass_count')"
+          label="小班课余额"
+        />
         <el-table-column align="center" prop="user_status" label="当前状态" />
-        <el-table-column align="center" prop="" label="当前状态时间" />
+        <!-- <el-table-column align="center" prop="" label="当前状态时间" /> -->
         <el-table-column align="center" prop="student_source" label="来源" />
       </el-table>
     </custom-card>
@@ -104,7 +125,7 @@ export default {
   data() {
     return {
       screenData: {
-        // source: '', // 来源
+        source: '', // 来源
         student_status: '', // 状态
         programme_name: '', // 版本 Advanced高级 国际International Lite
         student_name: '', // 学生姓名
@@ -114,6 +135,7 @@ export default {
         ordering: '-date_joined' // 按上课时间排序
       },
       labelWidth: '80',
+      loading: true, // 加载loading
       sourceOption: [
         {
           value: '',
@@ -247,13 +269,11 @@ export default {
     },
     // 表格数据
     getTableDate() {
-      return new Promise((resolve, reject) => {
-        managerStudent(this.screenData).then(res => {
-          this.total = res.data.count
-          this.tableData = res.data.results
-        }).catch((err) => {
-          reject(err)
-        })
+      this.loading = true
+      managerStudent(this.screenData).then(res => {
+        this.loading = false
+        this.total = res.data.count
+        this.tableData = res.data.results
       })
     },
     // 获取当前页码
@@ -268,6 +288,24 @@ export default {
       this.perPage = perPage
       this.screenData.page = 1
       this.getTableDate()
+    },
+    sortChange(column) {
+      if (column.order === 'ascending') { // 升序
+        this.screenData.ordering = column.prop
+      } else if (column.order === 'descending') { // 降序
+        this.screenData.ordering = '-' + column.prop
+      } else {
+        return
+      }
+      this.getTableDate()
+    },
+    getSortClass: function(key) {
+      const sort = this.screenData.ordering
+      return sort === `${key}`
+        ? 'ascending'
+        : sort === `-${key}`
+          ? 'descending'
+          : ''
     }
   }
 }

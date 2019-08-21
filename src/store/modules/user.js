@@ -12,7 +12,7 @@ const user = {
       articlePlatform: []
     },
     department: '无',
-    userName: '季小蹭',
+    userName: '季小蹭dd',
     userId: '30000'
   },
 
@@ -20,6 +20,9 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
       handleToken.setToken(token)
+    },
+    SET_USERNAME: (state, userName) => {
+      state.userName = userName
     },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction

@@ -84,7 +84,10 @@
         :data="tableData"
         tooltip-effect="dark"
         :border="true"
+        fit
+        show-overflow-tooltip="true"
         style="width: 100%"
+        :default-sort="{prop: 'date', order: 'descending'}"
         @sort-change="sortChange"
       >
         <el-table-column align="center" label="序号" :width="50">
@@ -97,6 +100,7 @@
           label="上课时间(北京)"
           sortable="custom"
           :width="160"
+          :class-name="getSortClass('scheduled_time')"
         />
         <el-table-column :key="Math.random()" align="center" prop="class_type.type_name" label="班型" :width="tablWidth" />
         <el-table-column :key="Math.random()" align="center" label="学生用户名" :width="tablWidth">
@@ -113,7 +117,7 @@
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.nationality }}</span>
           </template>
         </el-table-column> -->
-        <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" />
+        <!-- <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" /> -->
         <el-table-column :key="Math.random()" align="center" label="版本" :width="tablWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
@@ -156,7 +160,13 @@
         </el-table-column>
         <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="是否新老师" :width="tablWidth">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.hosts" :key="item.id">{{ item.lession_num > 0 ? '否' : '是' }}</span>
+            <span
+              v-for="item in scope.row.hosts"
+              :key="item.id"
+              :class="item.lession_num > 0 ? '': 'red'"
+            >
+              {{ item.lession_num > 0 ? '否' : '是' }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" :key="Math.random()" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
@@ -187,7 +197,13 @@
           </template>
         </el-table-column>
         <el-table-column v-if="type === 4" :key="Math.random()" align="center" prop="teacher_end_time" label="老师出课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type == 4" :key="Math.random()" align="center" prop="finish_status" label="完课状态" />
+        <el-table-column v-if="type == 4" :key="Math.random()" align="center" label="完课状态">
+          <template slot-scope="scope">
+            <span :class="scope.row.finish_status === '异常' ? 'red': ''">
+              {{ scope.row.finish_status }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column :key="Math.random()" align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
@@ -227,7 +243,7 @@
       @getPerPage="getPerPage"
     />
     <!-- 老师评语 -->
-    <el-dialog title="老师评语" :visible.sync="teacherComments">
+    <el-dialog :title="titleName" :visible.sync="teacherComments">
       <div class="teacher-tit">
         <el-row>
           <el-col :span="12">
@@ -244,38 +260,44 @@
           </el-col>
         </el-row>
       </div>
-      <el-tabs v-if="valuationrate.comment.length" type="border-card">
-        <el-tab-pane v-for="(item,index) in valuationrate.comment" :key="index">
+      <el-tabs v-if="JSON.stringify(valuationrate.valuation) !== '{}'" type="border-card">
+        <el-tab-pane v-for="(item,index) in studentAll" :key="index">
           <span slot="label">{{ item.username }}</span>
           <div v-if="studentFeedback">
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">知识掌握程度：</span>
               <el-rate v-model="valuationrate.valuation[item.username].PQ" disabled score-template="知识掌握程度：" />
             </div>
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">进步程度：</span>
               <el-rate v-model="valuationrate.valuation[item.username].SP" disabled score-template="知识掌握程度：" />
             </div>
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">学习态度：</span>
               <el-rate v-model="valuationrate.valuation[item.username].AR" disabled score-template="知识掌握程度：" />
             </div>
           </div>
           <div v-else>
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">专业知识：</span>
               <el-rate v-model="valuationrate.valuation[item.username].PK" disabled score-template="知识掌握程度：" />
             </div>
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">教授方式：</span>
               <el-rate v-model="valuationrate.valuation[item.username].ID" disabled score-template="知识掌握程度：" />
             </div>
-            <div class="rate-tit">
+            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
               <span class="demonstration">积极营造学习环境：</span>
               <el-rate v-model="valuationrate.valuation[item.username].LE" disabled score-template="知识掌握程度：" />
             </div>
           </div>
-          <p class="evaluate">{{ item.comment }}</p>
+          <p v-if="valuationrate.comment[item.username]" v-loading="commentsLoading" class="evaluate">
+            {{ valuationrate.comment[item.username].comment }}
+          </p>
+          <p v-else class="no-comments">
+            <img src="../../assets/icon-no-comments.png">
+            没写评语。。。
+          </p>
         </el-tab-pane>
       </el-tabs>
       <p v-else class="no-comments">
@@ -358,17 +380,20 @@ export default {
           label: '正式课'
         }
       ],
+      studentAll: [],
       // 当前页
       currentPage: 1,
       // 一共多少页
       total: 0,
       // 每页多少数据
       perPage: 20,
+      titleName: '',
       // 表格数据
       tableData: [],
       teacherComments: false, // 老师评语
       studentFeedback: true, // 学生反馈
       loading: true, // 加载loading
+      commentsLoading: true,
       teacherInfo: {
         teacherName: '',
         classTime: '',
@@ -391,8 +416,15 @@ export default {
       this.screenData.page = 1
       this.getTableDate()
     },
-    sortChange(data) {
-      console.log(data)
+    sortChange(column) {
+      if (column.prop === 'scheduled_time' && column.order === 'ascending') { // 升序
+        this.screenData.ordering = 'scheduled_time'
+      } else if (column.prop === 'scheduled_time' && column.order === 'descending') { // 降序
+        this.screenData.ordering = '-scheduled_time'
+      } else {
+        return
+      }
+      this.getTableDate()
     },
     // 表格数据
     getTableDate() {
@@ -452,7 +484,6 @@ export default {
     // 课堂回放
     clickHandlerPlayback(virtualclass_id) {
       virtualclassPlayback(virtualclass_id).then(res => {
-        console.log(res)
         if (res.data.data.mp4_url && res.data.data.mp4_url !== 'null') {
           window.open(res.data.data.mp4_url, '_blank')
         } else {
@@ -465,17 +496,22 @@ export default {
     },
     // 老师评语
     clickHandlerComment(virtualclass_id, target, obj) {
+      this.studentAll = []
       this.teacherInfo.teacherName = obj.hosts[0].username
       this.teacherInfo.classTime = obj.scheduled_time
       this.teacherInfo.classType = obj.class_type.type_name
       this.studentFeedback = target === 'Student'
+      this.titleName = target === 'Student' ? '老师评语' : '学生反馈'
       if (obj.course_info) {
         this.teacherInfo.course = obj.course_info.programme_name === 'Advanced' ? '高级版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no : '国际版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no
       } else {
         this.teacherInfo.course = obj.virtualclass.course_session.programme_name === 'Advanced' ? '高级版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name : '国际版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name
       }
       this.teacherComments = true
+      this.commentsLoading = true
+      this.studentAll = obj.learning_group.students
       virtualclassComment(virtualclass_id, target).then(res => {
+        this.commentsLoading = false
         this.valuationrate = res.data.data
       })
     },
@@ -492,6 +528,14 @@ export default {
       this.perPage = perPage
       this.screenData.page = 1
       this.getTableDate()
+    },
+    getSortClass: function(key) {
+      const sort = this.screenData.ordering
+      return sort === `${key}`
+        ? 'ascending'
+        : sort === `-${key}`
+          ? 'descending'
+          : ''
     }
 
   }
@@ -519,7 +563,7 @@ export default {
     display:flex;
     .demonstration{
       line-height:20px;
-      width:100px;
+      width:140px;
       font-size: 14px;
     }
   }
@@ -542,6 +586,9 @@ export default {
     padding:30px 0 100px 0;
     text-align:center;
     height:30px;
+  }
+  .red{
+    color:#f00;
   }
 }
 </style>

@@ -90,7 +90,7 @@ export default {
   border-radius: 0px !important;
   height: 80px;
   position: fixed;
-  z-index: 10;
+  z-index: 999;
   top: 0;
   left: 0;
   right: 0;

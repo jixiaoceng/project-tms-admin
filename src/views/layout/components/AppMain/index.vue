@@ -75,7 +75,7 @@ export default {
   box-sizing: border-box;
   .page-title {
     position: fixed;
-    z-index: 9;
+    z-index: 999;
     right: 0;
     top: 80px;
     left: 190px;

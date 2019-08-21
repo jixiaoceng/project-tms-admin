@@ -119,6 +119,7 @@ export default {
         if (valid) {
           this.loading = true
           login(this.loginForm).then(res => {
+            this.setUserName(this.loginForm.username)
             this.setToken('登录') // 后台不返回token用cookie存储
             this._getUserInfo()
           }).catch(() => {
@@ -156,7 +157,8 @@ export default {
     ...mapMutations({
       setMenuMap: 'SET_MENU_MAP',
       setMenuIndex: 'SET_MENU_INDEX',
-      setToken: 'SET_TOKEN'
+      setToken: 'SET_TOKEN',
+      setUserName: 'SET_USERNAME'
     })
   }
 }

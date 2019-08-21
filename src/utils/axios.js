@@ -57,11 +57,8 @@ class HandleParamAndResult {
         //   router.push({ path: '/login' })
         //   return
         // }
-        if (err.response.status === 'error') {
-          err.response.data.detail = '网络连接失败，请检查网络，并刷新重试！'
-        }
         Vue.prototype.$message({
-          message: err.response.data.detail,
+          message: err.response.data.detail || '网络连接失败，请检查网络，并刷新重试！',
           type: 'error',
           duration: 3000
         })

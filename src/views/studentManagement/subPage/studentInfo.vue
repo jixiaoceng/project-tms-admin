@@ -10,19 +10,19 @@
           <el-input v-model="studentData.email" :disabled="true" />
         </screen-item>
         <screen-item label="姓名">
-          <el-input :value="studentData.first_name + studentData.last_name" :disabled="true" />
+          <el-input :value="studentData.last_name + studentData.first_name" :disabled="true" />
         </screen-item>
         <screen-item label="性别">
-          <el-input v-model="studentData.email" :disabled="true" />
+          <el-input v-model="studentData.gender" :disabled="true" />
         </screen-item>
         <screen-item label="出生日期">
           <el-input v-model="studentData.birthdate" :disabled="true" />
         </screen-item>
         <screen-item label="电话">
-          <el-input v-model="studentData.first_name" :disabled="true" />
+          <el-input v-model="studentData.phone_num" :disabled="true" />
         </screen-item>
         <screen-item label="居住国">
-          <el-input v-model="studentData.nationality" :disabled="true" />
+          <el-input v-model="studentData.country_of_residence" :disabled="true" />
         </screen-item>
         <screen-item label="货币种类">
           <el-input v-model="studentData.currency" :disabled="true" />
@@ -31,7 +31,7 @@
           <el-input v-model="studentData.date_joined" :disabled="true" />
         </screen-item>
         <screen-item label="推荐人">
-          <el-input v-model="studentData.first_name" :disabled="true" />
+          <el-input v-model="studentData.referrer" :disabled="true" />
         </screen-item>
         <screen-item label="最近登录">
           <el-input v-model="studentData.last_login" :disabled="true" />
@@ -80,7 +80,7 @@
           <el-input v-model="extstudent.test_result" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="检测时间">
-          <el-input v-model="extstudent.test_time" :disabled="exstudentDisabled" />
+          <el-input v-model="extstudent.test_time" placeholder="2019-01-01 00:00:00" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="付费意向">
           <el-select v-model="extstudent.pay_action" placeholder="" :disabled="exstudentDisabled">
@@ -110,12 +110,12 @@
           <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
         </screen-item>
         <screen-item label="家长问卷结果">
-          <el-input v-if="courseInfo.parent_result" :value="courseInfo.parent_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no" :disabled="true" />
+          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no" :disabled="true" />
           <el-input v-else value="没做家长问卷" :disabled="true" />
           <el-button type="text">查看家长问卷记录</el-button>
         </screen-item>
         <screen-item label="水平测试结果">
-          <el-input v-if="courseInfo.assessment_result" :value="courseInfo.assessment_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.assessment_result.course_name : '国际版 ' + courseInfo.assessment_result.course_name" :disabled="true" />
+          <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.assessment_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.assessment_result.course_name : '国际版 ' + courseInfo.assessment_result.course_name" :disabled="true" />
           <el-input v-else value="没做水平测试" :disabled="true" />
           <el-button type="text">查看水平测试记录</el-button>
         </screen-item>
@@ -126,7 +126,7 @@
           <el-input v-model="courseInfo.balance" :disabled="true" />
         </screen-item>
         <screen-item label="小班课余额">
-          <el-input v-model="courseInfo.smallclass_balance" :disabled="true" />
+          <el-input :value="courseInfo.smallclass_balance ? courseInfo.smallclass_balance.remaining_limit: ''" :disabled="true" />
         </screen-item>
       </el-row>
     </custom-card>
@@ -147,7 +147,7 @@
         <el-table-column align="center" prop="user.username" label="备注人" :width="100" />
         <el-table-column align="center" label="备注人角色" :width="100">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.user.role" :key="item.code">{{ item.name }}</span>
+            <span v-for="item in scope.row.user.role" :key="item.code" style="display:block;">{{ item.name }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -165,7 +165,7 @@
           <el-input
             v-model="Remarkcontent"
             type="textarea"
-            maxlength="400"
+            maxlength="200"
             :rows="4"
             placeholder="请填写备注内容"
           />
@@ -213,7 +213,7 @@ export default {
       },
       remarkstudent: {
         'page': 1,
-        'page_size': 10,
+        'page_size': 20,
         'student_id': ''
       },
       Remarkcontent: '', // 备注信息
@@ -295,7 +295,7 @@ export default {
         school_nature,
         school,
         phone,
-        pay_action,
+        pay_action: pay_action || 3,
         id,
         equipment,
         create_time,
@@ -306,6 +306,10 @@ export default {
       console.log(params)
       this.exstudentDisabled = true
       managerExtstudentAdd(params).then(res => {
+        this.$message({
+          message: '添加成功',
+          type: 'success'
+        })
         this.getExtstudent()
       })
     },
@@ -374,7 +378,7 @@ export default {
   }
   .iconfont{
     cursor: pointer;
-    color:#999;
+    color:#5CC2D0;
   }
 }
 </style>

@@ -38,6 +38,7 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <el-table
+        v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
         :border="true"
@@ -72,6 +73,7 @@
         <el-table-column align="center" prop="next_info.next_attend_time" label="下次上课时间" />
         <el-table-column align="center" prop="next_info.next_teacher" label="下次上课老师" />
         <el-table-column align="center" prop="lesson_sum" label="本月上课次数" />
+        <el-table-column align="center" prop="student_source" label="来源" />
         <el-table-column align="center" prop="last_remark" label="距离上次备注时间" />
       </el-table>
     </custom-card>
@@ -96,6 +98,8 @@ export default {
         student_name: '', // 学生姓名
         course_level: '', // 1-6
         ordering: '', // 按上课时间排序
+        page_size: '20',
+        page: '1',
         balance_count: '' // 排序 账户余额，virtual_class_sum 已学课时，smallclass_count 小班课余额
       },
       labelWidth: '80',
@@ -161,6 +165,7 @@ export default {
           label: 'Level6'
         }
       ],
+      loading: true, // 加载loading
       // 当前页
       currentPage: 1,
       // 一共多少页
@@ -183,13 +188,11 @@ export default {
     },
     // 表格数据
     getTableDate() {
-      return new Promise((resolve, reject) => {
-        managerOldstudent(this.screenData).then(res => {
-          this.total = res.data.count
-          this.tableData = res.data.results
-        }).catch((err) => {
-          reject(err)
-        })
+      this.loading = true
+      managerOldstudent(this.screenData).then(res => {
+        this.loading = false
+        this.total = res.data.count
+        this.tableData = res.data.results
       })
     },
     // 获取当前页码
