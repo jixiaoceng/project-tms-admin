@@ -107,6 +107,8 @@
         <el-table-column align="center" prop="user_status" label="当前状态" />
         <!-- <el-table-column align="center" prop="" label="当前状态时间" /> -->
         <el-table-column align="center" prop="student_source" label="来源" />
+        <el-table-column align="center" prop="course_adviser" label="课程顾问" />
+        <el-table-column align="center" prop="" label="操作" />
       </el-table>
     </custom-card>
     <!-- 分页 -->
