@@ -18,7 +18,6 @@ axios.defaults.withCredentials = true
  */
 class HandleParamAndResult {
   constructor() {
-    console.log(process.env.VUE_APP_BASE_API + '----')
     var HOST = process.env.VUE_APP_BASE_API
 
     this.api = HOST

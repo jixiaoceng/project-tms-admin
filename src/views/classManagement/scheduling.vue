@@ -576,6 +576,7 @@ export default {
     padding:10px;
     border:1px solid #ccc;
     border-radius:5px;
+    overflow:auto;
   }
   label{
     font-weight: 400;
