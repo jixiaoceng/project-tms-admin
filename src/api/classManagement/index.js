@@ -125,3 +125,11 @@ export const virtualclassPlayback = function(virtualclass_id) {
 export const virtualclassComment = function(virtualclass_id, target) {
   return $get('/manager/virtualclass/' + virtualclass_id + '/comment/?target=' + target)
 }
+
+/**
+ * 角色分配学管和课程顾问
+ * @param {String} role 角色 course_adviser  课程顾问，learn_manager   学管老师
+ */
+export const managerUser = function(role) {
+  return $get('/manager/user/', { role })
+}
