@@ -6,10 +6,6 @@
  */
 import Vue from 'vue'
 import axios from 'axios'
-// import router from '@/router'
-import qs from 'qs'
-// import HandleToken from '@/utils/auth'
-// const handleToken = new HandleToken()
 
 axios.defaults.withCredentials = true
 
@@ -50,7 +46,6 @@ class HandleParamAndResult {
         }
         resolve(res)
       }).catch(err => {
-        console.log(err.response.data)
         // if ((Number(err.response.status) === 401 && err.response.status !== 401100)) {
         //   handleToken.removeToken()
         //   router.push({ path: '/login' })
@@ -122,9 +117,9 @@ class RequestMethod {
      */
   $put(url, data) {
     return this._method(url, {
-      data: qs.stringify(data),
+      data: data,
       method: 'put',
-      type: 'formData'
+      type: 'json'
     })
   }
 

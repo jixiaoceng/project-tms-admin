@@ -1,6 +1,6 @@
 import GetData from '@/utils/axios.js'
 
-const { $get, $post } = new GetData()
+const { $get, $post, $put } = new GetData()
 
 /**
  * 上课安排
@@ -127,9 +127,47 @@ export const virtualclassComment = function(virtualclass_id, target) {
 }
 
 /**
- * 角色分配学管和课程顾问
+ * 角色学管和课程顾问列表
  * @param {String} role 角色 course_adviser  课程顾问，learn_manager   学管老师
  */
 export const managerUser = function(role) {
-  return $get('/manager/user/', { role })
+  return $get('/manager/user/userlist/', { role })
+}
+
+/**
+ * 分配课程顾问
+ * @param {Object} params 参数对象
+ *        student_ids         {String} 学生id
+ *        course_adviser_id   {String} 课程顾问id
+ */
+export const distributAdviser = function(params) {
+  return $post('/manager/student/add_advisers/', params)
+}
+
+/**
+ * 重新分配课程顾问
+ * @param {Number} student_id 学生id
+ * @param {Number} course_adviser_id 课程顾问id
+ */
+export const changeAdviser = function(student_id, course_adviser_id) {
+  return $put('/manager/student/' + student_id + '/change_adviser/', { course_adviser_id })
+}
+
+/**
+ * 分配学管老师
+ * @param {Object} params 参数对象
+ *        student_ids        {String} 学生id
+ *        learn_manager_id   {String} 学管老师id
+ */
+export const distributLearnmanager = function(params) {
+  return $post('/manager/oldstudent/add_learnmanagers/', params)
+}
+
+/**
+ * 重新分配学管老师
+ * @param {Number} student_id 学生id
+ * @param {Number} learn_manager_id 学管老师id
+ */
+export const changeLearnmanager = function(student_id, learn_manager_id) {
+  return $put('/manager/oldstudent/' + student_id + '/change_learnmanager/', { learn_manager_id })
 }

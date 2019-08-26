@@ -303,7 +303,6 @@ export default {
         age,
         user_id: this.studentId
       }
-      console.log(params)
       this.exstudentDisabled = true
       managerExtstudentAdd(params).then(res => {
         this.$message({

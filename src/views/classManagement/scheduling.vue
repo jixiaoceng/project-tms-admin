@@ -102,7 +102,7 @@
           :width="160"
           :class-name="getSortClass('scheduled_time')"
         />
-        <el-table-column :key="Math.random()" align="center" prop="class_type.type_name" label="班型" :width="tablWidth" />
+        <el-table-column :key="Math.random()" align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
         <el-table-column :key="Math.random()" align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
@@ -118,7 +118,7 @@
           </template>
         </el-table-column> -->
         <!-- <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" /> -->
-        <el-table-column :key="Math.random()" align="center" label="版本" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="版本" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
@@ -128,7 +128,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :key="Math.random()" align="center" label="级别" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="级别" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               Level{{ scope.row.virtualclass.course_session.course_level }}
@@ -138,7 +138,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :key="Math.random()" align="center" label="上课进度" :width="tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="上课进度" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.session_name }}
@@ -148,7 +148,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂类型" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂类型" :width="labelWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
           </template>
@@ -158,7 +158,7 @@
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="是否新老师" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
             <span
               v-for="item in scope.row.hosts"
@@ -170,7 +170,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" :key="Math.random()" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂模式" :width="tablWidth">
+        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂模式" :width="labelWidth">
           <template slot-scope="scope">
             <span>{{ scope.row.virtualclass_type == 'Tk' ? '拓课' : '声网' }} </span>
           </template>
@@ -328,7 +328,7 @@ export default {
         ordering: 'scheduled_time' // 按上课时间排序
       },
       type: 1, // 1全部2未开始3正在上课4已结束
-      labelWidth: '80',
+      labelWidth: '100',
       tablWidth: '120',
       applyDate: [],
       value1: 4,

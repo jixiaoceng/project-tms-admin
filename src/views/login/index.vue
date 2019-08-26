@@ -117,13 +117,13 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
           login(this.loginForm).then(res => {
+            if (res.data.code === 0) {
+              this.loading = true
+            }
             this.setUserName(this.loginForm.username)
             this.setToken('登录') // 后台不返回token用cookie存储
             this._getUserInfo()
-          }).catch(() => {
-            this.loading = false
           })
         } else {
           return false
