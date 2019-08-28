@@ -66,12 +66,10 @@
           <el-input v-model="extstudent.source_channel" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="课程顾问">
-          <el-input v-if="extstudent.course_adviser" v-model="extstudent.course_adviser.username" :disabled="true" />
-          <el-input v-else value="" :disabled="true" />
+          <el-input v-model="studentData.course_adviser" :disabled="true" />
         </screen-item>
         <screen-item label="学管老师">
-          <el-input v-if="extstudent.learn_manager" v-model="extstudent.learn_manager.username" :disabled="true" />
-          <el-input v-else value="" :disabled="true" />
+          <el-input v-model="studentData.learn_manager" :disabled="true" />
         </screen-item>
         <screen-item label="上课设备">
           <el-input v-model="extstudent.equipment" :disabled="exstudentDisabled" />

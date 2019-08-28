@@ -16,7 +16,7 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:10px;"
+          style="margin-left:10px;width:200px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
@@ -28,9 +28,9 @@
       <screen-item label="按员工查看" :part="2">
         <el-select v-model="screenData.cms_user_id" placeholder="请选择">
           <el-option
-            v-for="item in role"
-            :key="item.id"
-            :label="item.name"
+            v-for="(item,index) in role"
+            :key="index"
+            :label="item.realname"
             :value="item.id"
           />
         </el-select>
@@ -66,8 +66,8 @@
         <el-table-column align="center" prop="transaction_type" label="交易类型" />
         <el-table-column align="center" prop="amount" label="充值课时" />
         <el-table-column align="center" prop="bonus" label="赠课" />
-        <el-table-column align="center" prop="activity.activity_name" label="充值活动" />
-        <el-table-column align="center" prop="activity.discount_name" label="活动优惠" />
+        <el-table-column align="center" prop="activity.discount_name" label="充值活动" />
+        <el-table-column align="center" prop="activity.activity_name" label="活动优惠" />
         <el-table-column align="center" prop="activity.coupon_code" label="优惠码" />
         <el-table-column align="center" prop="activity.redeem_code" label="课程卡" />
         <el-table-column align="center" prop="activity.valid_date" label="有效期" />
@@ -103,6 +103,7 @@
 
 <script>
 import { managerRecharge, attendRecharge } from '@/api/financeManagement'
+import { managerUser } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -115,36 +116,7 @@ export default {
         page_size: 20,
         ordering: '-created_on'
       },
-      role: [
-        {
-          id: '',
-          name: '全部'
-        },
-        {
-          id: '1',
-          name: 'admin'
-        },
-        {
-          id: '9',
-          name: '王鹏天'
-        },
-        {
-          id: '12',
-          name: '韩小玲'
-        },
-        {
-          id: '13',
-          name: '刘文琳'
-        },
-        {
-          id: '16',
-          name: '测试'
-        },
-        {
-          id: '7',
-          name: '季芳莉'
-        }
-      ],
+      role: [],
       applyDate: [],
       loading: true, // 加载loading
       total: 0,
@@ -156,6 +128,7 @@ export default {
   },
   mounted() {
     this.getTableDate()
+    this.optionSdviser()
     this.getAdhoc()
   },
   methods: {
@@ -168,6 +141,8 @@ export default {
     // 日期切换
     changeRadion(val) {
       this.applyDate = []
+      this.screenData.start_time = ''
+      this.screenData.end_time = ''
     },
     // 表格数据
     getTableDate() {
@@ -180,8 +155,8 @@ export default {
     },
     timeChange() {
       if (this.applyDate) {
-        this.screenData.start_time = this.applyDate[ 0 ]
-        this.screenData.end_time = this.applyDate[ 1 ]
+        this.screenData.start_time = this.applyDate[0]
+        this.screenData.end_time = this.applyDate[1]
         this.screenData.month_query = ''
       } else {
         this.screenData.start_time = null
@@ -202,6 +177,11 @@ export default {
     getCurrentPage(currentPage) {
       this.screenData.page = currentPage
       this.getTableDate()
+    },
+    optionSdviser() {
+      managerUser().then(res => {
+        this.role = res.data.data
+      })
     },
     // 改变每页展示数据的条数
     getPerPage(perPage) {

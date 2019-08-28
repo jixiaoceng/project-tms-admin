@@ -1,7 +1,7 @@
 <template>
   <div class="scheduling-wrap">
     <screen-wrapper @search="search">
-      <screen-item label="日期" :part="1" :label-width="labelWidth">
+      <screen-item label="日期" :part="2" label-width="60">
         <el-radio-group v-model="screenData.search_day" @change="changeRadion">
           <el-radio-button label="1">今天</el-radio-button>
           <el-radio-button label="2">明天</el-radio-button>
@@ -10,7 +10,7 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:10px;"
+          style="margin-left:5px;width:150px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
@@ -20,7 +20,17 @@
           @change="timeChange"
         />
       </screen-item>
-      <screen-item label="班型" :part="4" :label-width="labelWidth">
+      <screen-item label="老师" :part="2" :label-width="labelWidth">
+        <el-select v-model="screenData.teacher" placeholder="请选择">
+          <el-option
+            v-for="item in teacherData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </screen-item>
+      <screen-item label="班型" :part="4" label-width="60">
         <el-select v-model="screenData.class_type" placeholder="请选择">
           <el-option
             v-for="item in classOption"
@@ -51,7 +61,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
+        <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 分类 -->
@@ -150,7 +160,11 @@
         </el-table-column>
         <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂类型" :width="labelWidth">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
+            <span
+              v-for="item in scope.row.learning_group.students"
+              :key="item.id"
+              :class="item.lesson_sum > 0 ? '': 'red'"
+            >{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
           </template>
         </el-table-column>
         <el-table-column :key="Math.random()" align="center" label="老师" :width="tablWidth">
@@ -333,6 +347,20 @@ export default {
       applyDate: [],
       value1: 4,
       tableType: 1, // 切换
+      teacherData: [
+        {
+          value: '',
+          label: '全部'
+        },
+        {
+          value: 'new',
+          label: '新老师'
+        },
+        {
+          value: 'old',
+          label: '老老师'
+        }
+      ],
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now()
@@ -443,6 +471,8 @@ export default {
     changeRadion(val) {
       this.applyDate = []
       this.tableType = val
+      this.screenData.start_time = null
+      this.screenData.end_time = null
       this.type = 1
     },
     timeChange() {

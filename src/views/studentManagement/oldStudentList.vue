@@ -32,7 +32,7 @@
         </el-select>
       </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
+        <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
@@ -85,7 +85,7 @@
         <el-table-column align="center" prop="last_remark" label="距离上次备注时间" />
         <el-table-column align="center" prop="course_adviser.name" label="课程顾问" />
         <el-table-column align="center" prop="learn_manager.name" label="学管老师" />
-        <el-table-column align="center" label="版本">
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
             <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.learn_manager.id)">重新分配</el-button>
@@ -216,7 +216,7 @@ export default {
       learnmanagerrDate: [],
       multipleSelection: [],
       learnmanagerSubmit: {
-        student_id: [],
+        student_ids: [],
         learn_manager_id: ''
       },
       LearnmanagerId: ''
@@ -259,7 +259,7 @@ export default {
       this.closeAdviser = true
       this.learnmanagerSubmit.learn_manager_id = ''
       if (id) {
-        this.learnmanagerSubmit.student_id = id
+        this.learnmanagerSubmit.student_ids.push(id)
       }
       this.optionSdviser()
     },
@@ -269,7 +269,7 @@ export default {
       })
     },
     againAdviser(id, learn) {
-      this.learnmanagerSubmit.student_id = id
+      this.learnmanagerSubmit.student_ids = id
       this.learnmanagerSubmit.learn_manager_id = learn
       this.LearnmanagerId = learn
       this.closeAdviser = true

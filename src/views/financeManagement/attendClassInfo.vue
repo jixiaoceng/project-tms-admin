@@ -16,20 +16,20 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:10px;"
+          style="margin-left:10px;width:200px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          size="small"
+          size="mini"
           @change="timeChange"
         />
       </screen-item>
       <screen-item label="按员工查看" :part="2">
         <el-select v-model="screenData.cms_user_id" placeholder="请选择">
           <el-option
-            v-for="item in learnmanagerrDate"
-            :key="item.id"
+            v-for="(item,index) in learnmanagerrDate"
+            :key="index"
             :label="item.realname"
             :value="item.id"
           /></el-select>
@@ -38,7 +38,7 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <div slot="header-right" class="slot-tit">
-        统计期内新用户课消 {{ old_student_amount }}；老用户课消 {{ old_student_amount }}
+        统计期内新用户课消 {{ new_student_amount }}；老用户课消 {{ old_student_amount }}
       </div>
       <el-table
         v-loading="loading"
@@ -149,6 +149,8 @@ export default {
     // 日期切换
     changeRadion(val) {
       this.applyDate = []
+      this.screenData.start_time = ''
+      this.screenData.end_time = ''
     },
     // 表格数据
     getTableDate() {
@@ -165,8 +167,8 @@ export default {
         this.screenData.end_time = this.applyDate[ 1 ]
         this.screenData.month_query = ''
       } else {
-        this.screenData.start_time = null
-        this.screenData.end_time = null
+        this.screenData.start_time = ''
+        this.screenData.end_time = ''
         this.screenData.month_query = 1
       }
     },
@@ -180,7 +182,8 @@ export default {
       })
     },
     optionSdviser() {
-      managerUser('learn_manager').then(res => {
+      managerUser().then(res => {
+        console.log(res.data.data)
         this.learnmanagerrDate = res.data.data
       })
     },
