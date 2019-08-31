@@ -50,6 +50,9 @@ import Hamburger from '@/components/Hamburger'
 import ThemePicker from '@/components/ThemePicker'
 import ModuleMenu from '../ModuleMenu'
 import { getStorage } from '@/utils/handleStorage'
+// import { logout } from '@/api/base/'
+// import HandleToken from '@/utils/auth'
+// const handleToken = new HandleToken()
 
 export default {
   name: 'Navbar',
@@ -79,7 +82,11 @@ export default {
       this.$router.push({ path: '/' })
     },
     logout() {
-
+      // logout().then(res => {
+      //   handleToken.removeToken()
+      //   this.$router.push({ path: '/login' })
+      //   console.log('退出成功')
+      // })
     },
     getCurrentTabIndex(index) {
       this.$emit('currentTabIndex', index)

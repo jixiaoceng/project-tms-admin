@@ -82,8 +82,8 @@
         <el-table-column align="center" prop="next_info.next_teacher" label="下次上课老师" />
         <el-table-column align="center" prop="lesson_sum" label="本月上课次数" />
         <el-table-column align="center" prop="student_source" label="来源" />
-        <el-table-column align="center" prop="last_remark" label="距离上次备注时间" />
-        <el-table-column align="center" prop="course_adviser.name" label="课程顾问" />
+        <el-table-column align="center" prop="last_remark" label="上次备注时间" />
+        <el-table-column align="center" prop="course_adviser" label="课程顾问" />
         <el-table-column align="center" prop="learn_manager.name" label="学管老师" />
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -102,8 +102,8 @@
     />
     <el-dialog title="分配学管老师" :visible.sync="closeAdviser" width="30%">
       <el-form>
-        <el-form-item label="课程顾问">
-          <el-select v-model="learnmanagerSubmit.learn_manager_id" placeholder="请选择课程顾问">
+        <el-form-item label="学管老师">
+          <el-select v-model="learnmanagerSubmit.learn_manager_id" placeholder="请选择学管老师">
             <el-option
               v-for="item in learnmanagerrDate"
               :key="item.id"
@@ -284,7 +284,7 @@ export default {
             type: 'warning'
           })
         } else {
-          changeLearnmanager(this.learnmanagerSubmit.student_id, this.learnmanagerSubmit.learn_manager_id).then(res => {
+          changeLearnmanager(this.learnmanagerSubmit.student_ids, this.learnmanagerSubmit.learn_manager_id).then(res => {
             this.closeAdviser = false
             this.$message({
               message: '分配成功',

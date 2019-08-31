@@ -15,6 +15,13 @@ export const login = function(params) {
 }
 
 /**
+ * 退出
+ */
+export const logout = function() {
+  return $post('/user/logout')
+}
+
+/**
  * 登录
  * @param {Object} params 参数对象，包括：
  *        username          {String} 用户名
