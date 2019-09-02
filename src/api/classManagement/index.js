@@ -171,3 +171,19 @@ export const distributLearnmanager = function(params) {
 export const changeLearnmanager = function(student_id, learn_manager_id) {
   return $put('/manager/oldstudent/' + student_id + '/change_learnmanager/', { learn_manager_id })
 }
+
+/**
+ * 异常处理
+ * @param {Number} virtualclass_id 课堂id
+ */
+export const virtualclassException = function(virtualclass_id) {
+  return $get('/manager/virtualclass/' + virtualclass_id + '/virtualclass_exception/')
+}
+
+/**
+ * 提交异常审核结果
+ * @param {Number} virtualclass_id 课堂id
+ */
+export const checkExceptionPut = function(virtualclass_id, param) {
+  return $put('/manager/virtualclass/' + virtualclass_id + '/check_exception/', param)
+}
