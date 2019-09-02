@@ -18,7 +18,7 @@ export const login = function(params) {
  * 退出
  */
 export const logout = function() {
-  return $post('/user/logout')
+  return $post('/manager/logout/')
 }
 
 /**

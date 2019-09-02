@@ -245,6 +245,11 @@
               type="text"
               @click="clickHandlerPlayback(scope.row.virtualclass.id)"
             >课堂回放</el-button>
+            <el-button
+              v-if="scope.row.appointment_status == 'finish'"
+              type="text"
+              @click="clickHandlerAbnormal"
+            >异常审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -319,6 +324,100 @@
         暂无评价
       </p>
     </el-dialog>
+
+    <!-- 异常审核 -->
+    <el-dialog title="异常审核" :visible.sync="abnormalLog">
+      <el-row>
+        <el-col :span="8">
+          <label>老师：Jessica.Wang </label>
+        </el-col>
+        <el-col :span="8">
+          <label>提交时间：2019-08-10 12:15</label>
+        </el-col>
+        <el-col :span="8">
+          <label>异常类型：学生未出席</label>
+        </el-col>
+        <el-col :span="24">
+          <el-input
+            type="textarea"
+            maxlength="200"
+            :rows="4"
+            resize="none"
+            class="mt10"
+            readonly
+            value="老师提交的异常原因异常原因异常原因异常原因异常原因异常原因异常原因异常原因异常原因异常原因异常原因异常原因"
+          />
+        </el-col>
+        <el-col class="mt10">
+          <span class="el-dialog__title">审核结果</span>
+        </el-col>
+        <el-col class="mt10">
+          <el-radio-group v-model="abnormalData.radioType" @change="changeReason">
+            <el-radio :label="1">学生缺席</el-radio>
+            <el-radio :label="2">老师缺席</el-radio>
+          </el-radio-group>
+        </el-col>
+        <el-col class="mt10">
+          <div v-if="abnormalData.radioType == 1">
+            <el-col :span="12">
+              <div class="demo-input-suffix">
+                补偿老师
+                <el-input
+                  placeholder="请输入内容"
+                  clearable
+                  v-model="abnormalData.compensate_teacher"
+                />
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="demo-input-suffix">
+                学生罚金
+                <el-input
+                  placeholder="请输入内容"
+                  clearable
+                  width="100px"
+                  v-model="abnormalData.fine_student"
+                />
+              </div>
+            </el-col>
+          </div>
+          <div v-else>
+            <el-col :span="12">
+              <div class="demo-input-suffix">
+                补偿学生
+                <el-input
+                  placeholder="请输入内容"
+                  clearable
+                  width="100px"
+                  v-model="abnormalData.compensate_student"
+                />
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="demo-input-suffix">
+                老师罚金
+                <el-input
+                  placeholder="请输入内容"
+                  clearable
+                  width="100px"
+                  v-model="abnormalData.fine_teacher"
+                />
+              </div>
+            </el-col>
+          </div>
+          <el-input
+            type="textarea"
+            maxlength="200"
+            :rows="4"
+            resize="none"
+            class="mt10"
+            placeholder="请填写备注内容"
+            v-model="abnormalData.audit_remarks"
+          />
+        </el-col>
+      </el-row>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -424,6 +523,15 @@ export default {
       tableData: [],
       teacherComments: false, // 老师评语
       studentFeedback: true, // 学生反馈
+      abnormalLog: false, // 异常审核
+      abnormalData: {
+        radioType: 1,
+        compensate_teacher: '', // 补偿老师
+        compensate_student: '',
+        fine_teacher: '', // 罚款老师
+        fine_syudent: '',
+        audit_remarks: ''
+      },
       loading: true, // 加载loading
       commentsLoading: true,
       teacherInfo: {
@@ -549,7 +657,9 @@ export default {
         this.valuationrate = res.data.data
       })
     },
-    clickHandler() {},
+    clickHandlerAbnormal() { // 异常审核
+      this.abnormalLog = true
+    },
     // 获取当前页码
     getCurrentPage(currentPage) {
       this.screenData.page = currentPage
@@ -563,13 +673,16 @@ export default {
       this.screenData.page = 1
       this.getTableDate()
     },
-    getSortClass: function(key) {
+    getSortClass(key) {
       const sort = this.screenData.ordering
       return sort === `${key}`
         ? 'ascending'
         : sort === `-${key}`
           ? 'descending'
           : ''
+    },
+    changeReason(val) {
+      console.log(val)
     }
 
   }
@@ -625,6 +738,18 @@ export default {
   .red{
     color:#f00;
   }
+}
+.el-button + .el-button{
+  margin-left:0;
+}
+.reason{
+  display:block;
+  border-radius:5px;
+  height:100px;
+  overflow:auto;
+  border:1px solid #ccc;
+  padding:10px 5px;
+  margin:10px 0;
 }
 </style>
 

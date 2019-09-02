@@ -22,13 +22,13 @@
         <!-- 个人信息 -->
         <el-dropdown class="avatar-container" trigger="hover" style="color: #fff;cursor: pointer">
           <span>
-            <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" @click="toUser" />
+            <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" />
             <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ user }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <router-link to="/systemManage/changePassword">
+            <!-- <router-link to="/systemManage/changePassword">
               <el-dropdown-item>修改密码</el-dropdown-item>
-            </router-link>
+            </router-link> -->
             <el-dropdown-item>
               <span style="display:block;" @click="logout">退出登录</span>
             </el-dropdown-item>
@@ -50,9 +50,9 @@ import Hamburger from '@/components/Hamburger'
 import ThemePicker from '@/components/ThemePicker'
 import ModuleMenu from '../ModuleMenu'
 import { getStorage } from '@/utils/handleStorage'
-// import { logout } from '@/api/base/'
-// import HandleToken from '@/utils/auth'
-// const handleToken = new HandleToken()
+import { logout } from '@/api/base/'
+import HandleToken from '@/utils/auth'
+const handleToken = new HandleToken()
 
 export default {
   name: 'Navbar',
@@ -78,15 +78,12 @@ export default {
     toggleSideBar() {
       this.toggleSideBar()
     },
-    toUser() {
-      this.$router.push({ path: '/' })
-    },
     logout() {
-      // logout().then(res => {
-      //   handleToken.removeToken()
-      //   this.$router.push({ path: '/login' })
-      //   console.log('退出成功')
-      // })
+      logout().then(res => {
+        handleToken.removeToken()
+        this.$router.push({ path: '/login' })
+        localStorage.clear()
+      })
     },
     getCurrentTabIndex(index) {
       this.$emit('currentTabIndex', index)

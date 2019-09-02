@@ -2,7 +2,7 @@
  * @Author: reco_luan
  * @Date: 2018-12-21 20:11:18
  * @Last Modified by: fangli.ji
- * @Last Modified time: 2019-08-13 14:37:24
+ * @Last Modified time: 2019-08-31 16:15:06
  */
 
 /* eslint-disable */
@@ -15,7 +15,7 @@ import { getStorage } from '@/utils/handleStorage'
 import { userInfo } from '@/api/base/'
 import errRouterMap from '@/router/base/error'
 import { formatMenuMap, getMenuIndex } from '@/utils/handleData'
-// import { logout } from '@/api/base'
+import { logout } from '@/api/base'
 import HandleToken from '@/utils/auth'
 const handleToken = new HandleToken()
 
@@ -77,11 +77,11 @@ router.beforeEach((to, from, next) => {
           store.commit('SET_MENU_INDEX', [moduleMenuIndex, secondMenuIndex, to.fullPath])
         }
       }).catch((err) => {
-        // next({ path: '/' })
-        // logout().then(res => {
-        //   handleToken.removeToken()
-        //   router.push({ path: '/login' })
-        // })
+        next({ path: '/' })
+        logout().then(res => {
+          handleToken.removeToken()
+          router.push({ path: '/login' })
+        })
         next({ path: '/' })
         handleToken.removeToken()
         router.push({ path: '/login' })
