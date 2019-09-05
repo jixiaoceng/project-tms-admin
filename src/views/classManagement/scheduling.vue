@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion:
+ * @version:
+ * @Author: fangli.ji
+ * @Date: 2019-09-03 12:24:30
+ * @LastEditors: fangli.ji
+ * @LastEditTime: 2019-09-05 15:34:09
+ -->
 <template>
   <div class="scheduling-wrap">
     <screen-wrapper @search="search">
@@ -90,6 +98,7 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <el-table
+        :key="Math.random()"
         v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
@@ -97,7 +106,6 @@
         fit
         show-overflow-tooltip="true"
         style="width: 100%"
-        :key="Math.random()"
         :default-sort="{prop: 'date', order: 'descending'}"
         @sort-change="sortChange"
       >
@@ -172,7 +180,7 @@
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4"  align="center" label="是否新老师" :width="labelWidth">
+        <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
             <span
               v-for="item in scope.row.hosts"
@@ -218,7 +226,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column  align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
+        <el-table-column align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.appointment_status == 'started'"
@@ -246,7 +254,7 @@
               @click="clickHandlerPlayback(scope.row.virtualclass.id)"
             >课堂回放</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'finish' &&  scope.row.finish_status != 0"
+              v-if="scope.row.appointment_status == 'finish' && scope.row.finish_status != 0"
               type="text"
               @click="clickHandlerAbnormal(scope.row.virtualclass.id)"
             >异常审核</el-button>
@@ -352,9 +360,9 @@
           <span class="el-dialog__title">审核结果</span>
         </el-col>
         <el-col class="mt10">
-          <el-radio-group v-model="virtualclassData.check_code" @change="changeReason">
-            <el-radio :label="1" :disabled="abnormalData.tag == 1">学生缺席</el-radio>
-            <el-radio :label="2" :disabled="abnormalData.tag == 1">老师缺席</el-radio>
+          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
+            <el-radio :label="1">学生缺席</el-radio>
+            <el-radio :label="2">老师缺席</el-radio>
           </el-radio-group>
         </el-col>
         <el-col class="mt10">
@@ -399,7 +407,7 @@
 <script>
 import { managerScheduler, virtualclassRevert, virtualclassMonitor, virtualclassPlayback, virtualclassComment, virtualclassException, checkExceptionPut } from '@/api/classManagement/'
 export default {
-  data () {
+  data() {
     return {
       screenData: {
         search_day: '1', // 1,2,3,4
@@ -436,7 +444,7 @@ export default {
         }
       ],
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() < Date.now()
         }
       },
@@ -508,7 +516,7 @@ export default {
         audit_remarks: ''
       },
       virtualclassData: {
-        submitter: '', //老师
+        submitter: '', // 老师
         submit_time: '', // 提交时间
         end_reason: '', // 异常类型
         check_result: '', // 审核原因
@@ -533,17 +541,17 @@ export default {
       virtualclass_id: 0
     }
   },
-  mounted () {
+  mounted() {
     this.getTableDate()
   },
   methods: {
     // 筛选
-    search () {
+    search() {
       this.currentPage = 1
       this.screenData.page = 1
       this.getTableDate()
     },
-    sortChange (column) {
+    sortChange(column) {
       if (column.prop === 'scheduled_time' && column.order === 'ascending') { // 升序
         this.screenData.ordering = 'scheduled_time'
       } else if (column.prop === 'scheduled_time' && column.order === 'descending') { // 降序
@@ -554,7 +562,7 @@ export default {
       this.getTableDate()
     },
     // 表格数据
-    getTableDate () {
+    getTableDate() {
       this.loading = true
       managerScheduler(this.screenData).then(res => {
         this.loading = false
@@ -563,14 +571,14 @@ export default {
       })
     },
     // 日期切换
-    changeRadion (val) {
+    changeRadion(val) {
       this.applyDate = []
       this.tableType = val
       this.screenData.start_time = null
       this.screenData.end_time = null
       this.type = 1
     },
-    timeChange () {
+    timeChange() {
       if (this.applyDate) {
         this.screenData.start_time = this.applyDate[ 0 ]
         this.screenData.end_time = this.applyDate[ 1 ]
@@ -584,14 +592,14 @@ export default {
       }
     },
     // 改变类型
-    changeType (type) {
+    changeType(type) {
       this.type = type
       this.screenData.appoint_status = type === 1 ? '' : type === 2 ? 'start' : type === 3 ? 'started' : 'finish'
       this.screenData.page = 1
       this.getTableDate()
     },
     // 课堂转换
-    clickHandlerRevert (virtualclass_id) {
+    clickHandlerRevert(virtualclass_id) {
       virtualclassRevert(virtualclass_id).then(res => {
         this.$message({
           message: '课堂转换成功',
@@ -601,7 +609,7 @@ export default {
       })
     },
     // 旁听
-    clickHandlerMonitor (virtualclass_id) {
+    clickHandlerMonitor(virtualclass_id) {
       virtualclassMonitor(virtualclass_id).then(res => {
         if (res.data.data.virtualclass_type === 'Tk') {
           window.open(res.data.data.entrytkpath, '_blank')
@@ -611,7 +619,7 @@ export default {
       })
     },
     // 课堂回放
-    clickHandlerPlayback (virtualclass_id) {
+    clickHandlerPlayback(virtualclass_id) {
       virtualclassPlayback(virtualclass_id).then(res => {
         if (res.data.data.mp4_url && res.data.data.mp4_url !== 'null') {
           window.open(res.data.data.mp4_url, '_blank')
@@ -624,7 +632,7 @@ export default {
       })
     },
     // 老师评语
-    clickHandlerComment (virtualclass_id, target, obj) {
+    clickHandlerComment(virtualclass_id, target, obj) {
       this.studentAll = []
       this.teacherInfo.teacherName = obj.hosts[ 0 ].username
       this.teacherInfo.classTime = obj.scheduled_time
@@ -644,7 +652,7 @@ export default {
         this.valuationrate = res.data.data
       })
     },
-    clickHandlerAbnormal (virtualclass_id) { // 异常审核
+    clickHandlerAbnormal(virtualclass_id) { // 异常审核
       this.abnormalLog = true
       virtualclassException(virtualclass_id).then(res => {
         this.virtualclassData = res.data.data
@@ -652,7 +660,7 @@ export default {
       })
     },
     // 异常审核
-    submitException () {
+    submitException() {
       const { student_amount, teacher_amount, check_code, check_description } = this.virtualclassData
       const params = {
         result: check_code,
@@ -669,19 +677,19 @@ export default {
       })
     },
     // 获取当前页码
-    getCurrentPage (currentPage) {
+    getCurrentPage(currentPage) {
       this.screenData.page = currentPage
       this.currentPage = currentPage
       this.getTableDate()
     },
     // 改变每页展示数据的条数
-    getPerPage (perPage) {
+    getPerPage(perPage) {
       this.screenData.page_size = perPage
       this.perPage = perPage
       this.screenData.page = 1
       this.getTableDate()
     },
-    getSortClass (key) {
+    getSortClass(key) {
       const sort = this.screenData.ordering
       return sort === `${key}`
         ? 'ascending'
@@ -689,7 +697,7 @@ export default {
           ? 'descending'
           : ''
     },
-    changeReason (val) {
+    changeReason(val) {
       console.log(val)
     }
 
