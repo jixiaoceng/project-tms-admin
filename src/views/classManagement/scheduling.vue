@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion:
+ * @version:
+ * @Author: fangli.ji
+ * @Date: 2019-09-03 12:24:30
+ * @LastEditors: fangli.ji
+ * @LastEditTime: 2019-09-05 15:34:09
+ -->
 <template>
   <div class="scheduling-wrap">
     <screen-wrapper @search="search">
@@ -100,6 +108,7 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
       <el-table
+        :key="Math.random()"
         v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
@@ -115,8 +124,11 @@
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column
+<<<<<<< HEAD
           :key="Math.random()"
           ref="tableWrap"
+=======
+>>>>>>> abnormal
           align="center"
           prop="scheduled_time"
           label="上课时间(北京)"
@@ -124,8 +136,8 @@
           :width="160"
           :class-name="getSortClass('scheduled_time')"
         />
-        <el-table-column :key="Math.random()" align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
-        <el-table-column :key="Math.random()" align="center" label="学生用户名" :width="tablWidth">
+        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
+        <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
               <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
@@ -140,7 +152,7 @@
           </template>
         </el-table-column> -->
         <!-- <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" /> -->
-        <el-table-column :key="Math.random()" align="center" label="版本" :width="labelWidth">
+        <el-table-column align="center" label="版本" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
@@ -150,7 +162,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :key="Math.random()" align="center" label="级别" :width="labelWidth">
+        <el-table-column align="center" label="级别" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               Level{{ scope.row.virtualclass.course_session.course_level }}
@@ -160,7 +172,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :key="Math.random()" align="center" label="上课进度" :width="labelWidth">
+        <el-table-column align="center" label="上课进度" :width="labelWidth">
           <template slot-scope="scope">
             <span v-if="scope.row.virtualclass.course_session">
               {{ scope.row.virtualclass.course_session.session_name }}
@@ -170,7 +182,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂类型" :width="labelWidth">
+        <el-table-column v-if="type != 4" align="center" label="课堂类型" :width="labelWidth">
           <template slot-scope="scope">
             <span
               v-for="item in scope.row.learning_group.students"
@@ -179,12 +191,12 @@
             >{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
           </template>
         </el-table-column>
-        <el-table-column :key="Math.random()" align="center" label="老师" :width="tablWidth">
+        <el-table-column align="center" label="老师" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="是否新老师" :width="labelWidth">
+        <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
             <span
               v-for="item in scope.row.hosts"
@@ -195,13 +207,13 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
-        <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="课堂模式" :width="labelWidth">
+        <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
+        <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="labelWidth">
           <template slot-scope="scope">
             <span>{{ scope.row.virtualclass_type == 'Tk' ? '拓课' : '声网' }} </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type === 3 || type === 4" :key="Math.random()" align="center" label="学生进课堂时间" :width="tablWidth">
+        <el-table-column v-if="type === 3 || type === 4" align="center" label="学生进课堂时间" :width="tablWidth">
           <template slot-scope="scope">
             <p v-if="scope.row.student_classroom">
               <span v-for="item in scope.row.student_classroom" :key="item.student_id">
@@ -211,8 +223,8 @@
             <span v-else>---</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type === 3 || type === 4" :key="Math.random()" align="center" prop="teacher_start_time" label="老师进课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type === 4" :key="Math.random()" align="center" label="学生出课堂时间" :width="tablWidth">
+        <el-table-column v-if="type === 3 || type === 4" align="center" prop="teacher_start_time" label="老师进课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 4" align="center" label="学生出课堂时间" :width="tablWidth">
           <template slot-scope="scope">
             <p v-if="scope.row.student_classroom">
               <span v-for="item in scope.row.student_classroom" :key="item.student_id">
@@ -222,11 +234,11 @@
             <span v-else>---</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type === 4" :key="Math.random()" align="center" prop="teacher_end_time" label="老师出课堂时间" :width="tablWidth" />
-        <el-table-column v-if="type == 4" :key="Math.random()" align="center" label="完课状态">
+        <el-table-column v-if="type === 4" align="center" prop="teacher_end_time" label="老师出课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
-            <span :class="scope.row.finish_status === '异常' ? 'red': ''">
-              {{ scope.row.finish_status }}
+            <span :class="scope.row.finish_status != 0 ? 'red': ''">
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == '' ? '异常' : '正常' }}
             </span>
           </template>
         </el-table-column>
@@ -246,7 +258,11 @@
             >{{ item.learn_manager }} </span>
           </template>
         </el-table-column>
+<<<<<<< HEAD
         <el-table-column :key="Math.random()" align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
+=======
+        <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
+>>>>>>> abnormal
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.appointment_status == 'started'"
@@ -273,6 +289,11 @@
               type="text"
               @click="clickHandlerPlayback(scope.row.virtualclass.id)"
             >课堂回放</el-button>
+            <el-button
+              v-if="scope.row.appointment_status == 'finish' && scope.row.finish_status != 0"
+              type="text"
+              @click="clickHandlerAbnormal(scope.row.virtualclass.id)"
+            >异常审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -347,11 +368,84 @@
         暂无评价
       </p>
     </el-dialog>
+
+    <!-- 异常审核 -->
+    <el-dialog title="异常审核" :visible.sync="abnormalLog">
+      <el-row>
+        <el-col :span="8">
+          <label>老师：{{ virtualclassData.submitter }} </label>
+        </el-col>
+        <el-col :span="8">
+          <label>提交时间：{{ virtualclassData.submit_time }}</label>
+        </el-col>
+        <el-col :span="8">
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == '' ? '异常' : '正常' }}</label>
+        </el-col>
+        <el-col :span="24">
+          <el-input
+            type="textarea"
+            maxlength="200"
+            :rows="4"
+            resize="none"
+            class="mt10"
+            readonly
+            :value="virtualclassData.end_reason_description"
+          />
+        </el-col>
+        <el-col class="mt10">
+          <span class="el-dialog__title">审核结果</span>
+        </el-col>
+        <el-col class="mt10">
+          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
+            <el-radio :label="1">学生缺席</el-radio>
+            <el-radio :label="2">老师缺席</el-radio>
+          </el-radio-group>
+        </el-col>
+        <el-col class="mt10">
+          <div v-if="virtualclassData.check_code == 1">
+            <el-col>
+              <screen-item label="补偿老师" label-width="80">
+                <el-input v-model="virtualclassData.teacher_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+              <screen-item label="学生罚金" label-width="80">
+                <el-input v-model="virtualclassData.student_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+            </el-col>
+          </div>
+          <div v-else>
+            <el-col>
+              <screen-item label="补偿学生" label-width="80">
+                <el-input v-model="virtualclassData.student_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+              <screen-item label="老师罚金" label-width="80">
+                <el-input v-model="virtualclassData.teacher_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+            </el-col>
+          </div>
+          <el-input
+            v-model="virtualclassData.check_description"
+            type="textarea"
+            maxlength="200"
+            :rows="4"
+            resize="none"
+            class="mt10"
+            :disabled="virtualclassData.tag == 1"
+            placeholder="请填写备注内容"
+          />
+          <el-button v-if="virtualclassData.tag !== 1" class="mt20" type="primary" size="medium" @click="submitException">提交</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 import {
+=======
+ import {
+>>>>>>> abnormal
   managerScheduler,
   virtualclassRevert,
   virtualclassMonitor,
@@ -461,6 +555,26 @@ export default {
       tableData: [],
       teacherComments: false, // 老师评语
       studentFeedback: true, // 学生反馈
+      abnormalLog: false, // 异常审核
+      abnormalData: {
+        radioType: 1,
+        compensate_teacher: '', // 补偿老师
+        compensate_student: '',
+        fine_teacher: '', // 罚款老师
+        fine_syudent: '',
+        audit_remarks: ''
+      },
+      virtualclassData: {
+        submitter: '', // 老师
+        submit_time: '', // 提交时间
+        end_reason: '', // 异常类型
+        check_result: '', // 审核原因
+        check_code: 1, // 审核结果 1学生缺席2老师缺席
+        student_amount: '', // 学生罚金
+        teacher_amount: '', // 老师补偿
+        check_user: '', // 审核人
+        check_time: '' // 审核时间
+      }, // 异常审核
       loading: true, // 加载loading
       commentsLoading: true,
       teacherInfo: {
@@ -473,6 +587,10 @@ export default {
         comment: [], // 评价
         valuation: [] // 评分
       },
+<<<<<<< HEAD
+=======
+      virtualclass_id: 0,
+>>>>>>> abnormal
       role: []
     }
   },
@@ -516,8 +634,8 @@ export default {
     },
     timeChange() {
       if (this.applyDate) {
-        this.screenData.start_time = this.applyDate[0]
-        this.screenData.end_time = this.applyDate[1]
+        this.screenData.start_time = this.applyDate[ 0 ]
+        this.screenData.end_time = this.applyDate[ 1 ]
         this.screenData.search_day = ''
         this.tableType = ''
       } else {
@@ -570,7 +688,7 @@ export default {
     // 老师评语
     clickHandlerComment(virtualclass_id, target, obj) {
       this.studentAll = []
-      this.teacherInfo.teacherName = obj.hosts[0].username
+      this.teacherInfo.teacherName = obj.hosts[ 0 ].username
       this.teacherInfo.classTime = obj.scheduled_time
       this.teacherInfo.classType = obj.class_type.type_name
       this.studentFeedback = target === 'Student'
@@ -588,7 +706,30 @@ export default {
         this.valuationrate = res.data.data
       })
     },
-    clickHandler() {},
+    clickHandlerAbnormal(virtualclass_id) { // 异常审核
+      this.abnormalLog = true
+      virtualclassException(virtualclass_id).then(res => {
+        this.virtualclassData = res.data.data
+        this.virtualclass_id = virtualclass_id
+      })
+    },
+    // 异常审核
+    submitException() {
+      const { student_amount, teacher_amount, check_code, check_description } = this.virtualclassData
+      const params = {
+        result: check_code,
+        student_amount: student_amount,
+        teacher_amount: teacher_amount,
+        description: check_description
+      }
+      checkExceptionPut(this.virtualclass_id, params).then(res => {
+        this.abnormalLog = false
+        this.$message({
+          message: '异常审核成功',
+          type: 'success'
+        })
+      })
+    },
     // 获取当前页码
     getCurrentPage(currentPage) {
       this.screenData.page = currentPage
@@ -602,7 +743,7 @@ export default {
       this.screenData.page = 1
       this.getTableDate()
     },
-    getSortClass: function(key) {
+    getSortClass(key) {
       const sort = this.screenData.ordering
       return sort === `${key}`
         ? 'ascending'
@@ -670,6 +811,26 @@ export default {
   .red{
     color:#f00;
   }
+}
+.el-button + .el-button{
+  margin-left:0;
+}
+.reason{
+  display:block;
+  border-radius:5px;
+  height:100px;
+  overflow:auto;
+  border:1px solid #ccc;
+  padding:10px 5px;
+  margin:10px 0;
+}
+.btn-style{
+  display:block;
+  margin:20px auto;
+}
+.mt20{
+  margin:20px auto 0 auto;
+  display:block;
 }
 </style>
 
