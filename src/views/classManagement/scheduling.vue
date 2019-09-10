@@ -124,11 +124,6 @@
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column
-<<<<<<< HEAD
-          :key="Math.random()"
-          ref="tableWrap"
-=======
->>>>>>> abnormal
           align="center"
           prop="scheduled_time"
           label="上课时间(北京)"
@@ -258,11 +253,7 @@
             >{{ item.learn_manager }} </span>
           </template>
         </el-table-column>
-<<<<<<< HEAD
-        <el-table-column :key="Math.random()" align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
-=======
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
->>>>>>> abnormal
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.appointment_status == 'started'"
@@ -441,11 +432,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import {
-=======
  import {
->>>>>>> abnormal
   managerScheduler,
   virtualclassRevert,
   virtualclassMonitor,
@@ -587,10 +574,7 @@ export default {
         comment: [], // 评价
         valuation: [] // 评分
       },
-<<<<<<< HEAD
-=======
       virtualclass_id: 0,
->>>>>>> abnormal
       role: []
     }
   },
