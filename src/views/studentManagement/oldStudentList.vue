@@ -1,7 +1,7 @@
 <template>
   <div class="student-wrap">
     <screen-wrapper @search="search">
-      <screen-item label="来源" :part="4" :label-width="labelWidth">
+      <screen-item label="来源">
         <el-select v-model="screenData.source" placeholder="请选择">
           <el-option
             v-for="item in sourceOption"
@@ -11,7 +11,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="版本" :part="4" :label-width="labelWidth">
+      <screen-item label="版本">
         <el-select v-model="screenData.programme_name" placeholder="请选择">
           <el-option
             v-for="item in programmeOption"
@@ -21,7 +21,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="级别" :part="4" :label-width="labelWidth">
+      <screen-item label="级别">
         <el-select v-model="screenData.course_level" placeholder="请选择">
           <el-option
             v-for="item in courseOption"
@@ -31,7 +31,17 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
+      <screen-item label="顾问，学管">
+        <el-select v-model="screenData.cms_user" placeholder="请选择">
+          <el-option
+            v-for="item in role"
+            :key="item.id"
+            :label="item.realname"
+            :value="item.id"
+          />
+        </el-select>
+      </screen-item>
+      <screen-item label="学生用户名">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
@@ -46,6 +56,7 @@
         tooltip-effect="dark"
         :border="true"
         style="width: 100%"
+        :height="tableHeight"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -71,6 +82,11 @@
         <el-table-column align="center" label="级别">
           <template slot-scope="scope">
             Level{{ scope.row.course_info.course_level }}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="上课进度">
+          <template slot-scope="scope">
+            Level{{ scope.row.course_info.session_no }}
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
@@ -132,11 +148,13 @@ export default {
         student_name: '', // 学生姓名
         course_level: '', // 1-6
         ordering: '', // 按上课时间排序
-        page_size: '20',
+        page_size: '50',
         page: '1',
+        cms_user: '',
         balance_count: '' // 排序 账户余额，virtual_class_sum 已学课时，smallclass_count 小班课余额
       },
       labelWidth: '80',
+      tableHeight: window.innerHeight - 200 || 300,
       sourceOption: [
         {
           value: '',
@@ -209,9 +227,10 @@ export default {
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 20,
+      perPage: 50,
       // 表格数据
       tableData: [],
+      role: [],
       closeAdviser: false,
       learnmanagerrDate: [],
       multipleSelection: [],
@@ -225,6 +244,7 @@ export default {
   mounted() {
     this.getTableDate()
     this.optionSdviser()
+    this.optionRole()
   },
   methods: {
     // 筛选
@@ -266,6 +286,11 @@ export default {
     optionSdviser() {
       managerUser('learn_manager').then(res => {
         this.learnmanagerrDate = res.data.data
+      })
+    },
+    optionRole() {
+      managerUser().then(res => {
+        this.role = res.data.data
       })
     },
     againAdviser(id, learn) {

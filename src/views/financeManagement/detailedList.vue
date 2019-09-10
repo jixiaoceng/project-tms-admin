@@ -113,7 +113,7 @@ export default {
         end_time: '',
         cms_user_id: '',
         page: 1,
-        page_size: 20,
+        page_size: 50,
         ordering: '-created_on'
       },
       role: [],

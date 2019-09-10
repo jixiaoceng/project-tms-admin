@@ -18,7 +18,7 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:5px;width:150px;"
+          style="margin-left:5px;width:200px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
@@ -28,13 +28,23 @@
           @change="timeChange"
         />
       </screen-item>
-      <screen-item label="老师" :part="2" :label-width="labelWidth">
+      <screen-item label="老师" :part="4" :label-width="labelWidth">
         <el-select v-model="screenData.teacher" placeholder="请选择">
           <el-option
             v-for="item in teacherData"
             :key="item.value"
             :label="item.label"
             :value="item.value"
+          />
+        </el-select>
+      </screen-item>
+      <screen-item label="顾问，学管" :part="4" :label-width="labelWidth">
+        <el-select v-model="screenData.cms_user" placeholder="请选择">
+          <el-option
+            v-for="item in role"
+            :key="item.id"
+            :label="item.realname"
+            :value="item.id"
           />
         </el-select>
       </screen-item>
@@ -226,7 +236,23 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="" label="操作" fixed="right" :width="type==4 || type==1?'240':tablWidth">
+        <el-table-column :key="Math.random()" align="center" label="课程顾问" :width="labelWidth">
+          <template slot-scope="scope">
+            <span
+              v-for="item in scope.row.learning_group.students"
+              :key="item.id"
+            >{{ item.course_adviser }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column :key="Math.random()" align="center" label="学管老师" :width="labelWidth">
+          <template slot-scope="scope">
+            <span
+              v-for="item in scope.row.learning_group.students"
+              :key="item.id"
+            >{{ item.learn_manager }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.appointment_status == 'started'"
@@ -405,7 +431,14 @@
 </template>
 
 <script>
-import { managerScheduler, virtualclassRevert, virtualclassMonitor, virtualclassPlayback, virtualclassComment, virtualclassException, checkExceptionPut } from '@/api/classManagement/'
+ import {
+  managerScheduler,
+  virtualclassRevert,
+  virtualclassMonitor,
+  virtualclassPlayback,
+  virtualclassComment,
+  managerUser
+} from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -418,10 +451,11 @@ export default {
         teacher: '', // 新老师 new，老老师old
         programme_name: '', // 版本 Advanced高级 国际International
         student_name: '', // 学生姓名
-        page_size: '20',
+        page_size: '50',
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
-        ordering: 'scheduled_time' // 按上课时间排序
+        ordering: 'scheduled_time', // 按上课时间排序
+        cms_user: '' // 课程顾问和学管
       },
       type: 1, // 1全部2未开始3正在上课4已结束
       labelWidth: '100',
@@ -495,12 +529,13 @@ export default {
         }
       ],
       studentAll: [],
+      tableHeight: window.innerHeight - 200 || 300,
       // 当前页
       currentPage: 1,
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 20,
+      perPage: 50,
       titleName: '',
       // 表格数据
       tableData: [],
@@ -538,11 +573,13 @@ export default {
         comment: [], // 评价
         valuation: [] // 评分
       },
-      virtualclass_id: 0
+      virtualclass_id: 0,
+      role: []
     }
   },
   mounted() {
     this.getTableDate()
+    this.optionSdviser()
   },
   methods: {
     // 筛选
@@ -697,8 +734,11 @@ export default {
           ? 'descending'
           : ''
     },
-    changeReason(val) {
-      console.log(val)
+    // 课程顾问学管
+    optionSdviser() {
+      managerUser().then(res => {
+        this.role = res.data.data
+      })
     }
 
   }
