@@ -190,3 +190,10 @@ aside {
 .multiselect--active {
   z-index: 999 !important;
 }
+.el-submenu__title,.el-submenu .el-menu-item  {
+    height:50px;
+    line-height:50px;
+}
+.el-submenu .el-menu-item{
+    width:auto;
+}

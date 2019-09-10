@@ -101,18 +101,18 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
   border-radius: 0px !important;
-  height: 80px;
+  height: 60px;
   position: fixed;
   z-index: 999;
   top: 0;
   left: 0;
   right: 0;
   .brand {
-    width: 160px;
+    width: 130px;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     color: #fff;
-    line-height: 30px;
+    line-height: 20px;
   }
   .hamburger-container {
     margin: 0 20px

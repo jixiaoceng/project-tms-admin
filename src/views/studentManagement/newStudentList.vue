@@ -41,6 +41,16 @@
           />
         </el-select>
       </screen-item>
+      <screen-item label="顾问，学管">
+        <el-select v-model="screenData.cms_user" placeholder="请选择">
+          <el-option
+            v-for="item in role"
+            :key="item.id"
+            :label="item.realname"
+            :value="item.id"
+          />
+        </el-select>
+      </screen-item>
       <screen-item label="学生用户名">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
@@ -56,6 +66,7 @@
         tooltip-effect="dark"
         :border="true"
         style="width: 100%"
+        :height="tableHeight"
         :default-sort="{prop: 'date', order: 'descending'}"
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
@@ -87,6 +98,14 @@
           <template slot-scope="scope">
             <span v-if="scope.row.course_info">
               Level{{ scope.row.course_info.course_level }}
+            </span>
+            <span v-else>---</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="上课进度">
+          <template slot-scope="scope">
+            <span v-if="scope.row.course_info">
+              lesson{{ scope.row.course_info.session_no }}
             </span>
             <span v-else>---</span>
           </template>
@@ -159,7 +178,11 @@
 </template>
 
 <script>
-import { managerStudent, managerUser, distributAdviser, changeAdviser } from '@/api/classManagement/'
+import {
+  managerStudent,
+  managerUser,
+  distributAdviser,
+  changeAdviser } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -169,11 +192,13 @@ export default {
         programme_name: '', // 版本 Advanced高级 国际International Lite
         student_name: '', // 学生姓名
         course_level: '', // 1-6
-        page_size: '20',
+        page_size: '50',
         page: '1',
+        cms_user: '',
         ordering: '-date_joined' // 按上课时间排序
       },
       labelWidth: '80',
+      role: [],
       loading: true, // 加载loading
       sourceOption: [
         {
@@ -269,7 +294,8 @@ export default {
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 20,
+      perPage: 50,
+      tableHeight: window.innerHeight - 200 || 300,
       // 表格数据
       tableData: [],
       adviserDate: [],
@@ -284,6 +310,7 @@ export default {
   mounted() {
     this.getTableDate()
     this.optionSdviser()
+    this.optionRole()
   },
   methods: {
     // 筛选
@@ -343,6 +370,11 @@ export default {
     optionSdviser() {
       managerUser('course_adviser').then(res => {
         this.adviserDate = res.data.data
+      })
+    },
+    optionRole() {
+      managerUser().then(res => {
+        this.role = res.data.data
       })
     },
     againAdviser(id, adviser) {

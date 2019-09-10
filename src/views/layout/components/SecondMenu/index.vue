@@ -79,7 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .second-wrapper {
-  width: 180px;
+  width: 150px;
   background-color: #304156;
   border-right: 1px solid #dcdcdc;
   margin-bottom: 50px;

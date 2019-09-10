@@ -57,7 +57,7 @@ export default {
   .module-item {
     position: relative;
     padding: 0 20px;
-    line-height: 80px;
+    line-height: 60px;
     cursor: pointer;
     transition: all .3s;
     color: #fff;

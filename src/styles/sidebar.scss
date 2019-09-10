@@ -5,7 +5,7 @@
     position: relative;
     // height: 100%;
     width: 100%;
-    padding-top: 80px;
+    padding-top: 60px;
     .drawer-bg {
       background: #000;
       opacity: 0.3;
@@ -18,14 +18,14 @@
     // 主体区域
     .main-container {
       min-height: 100vh;
-      margin-left: 180px;
+      margin-left: 150px;
       transition: margin-left .28s;
       position: relative;
     }
     // 侧边栏
     .sidebar-container {
       transition: width 0.28s;
-      width: 180px !important;
+      width: 150px !important;
       height: 100%;
       position: fixed;
       z-index: 3;
