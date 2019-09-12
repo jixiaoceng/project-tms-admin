@@ -61,7 +61,7 @@
 <script>
 import ResizeMixin from '@/views/layout/mixin/ResizeHandler'
 import { mapGetters, mapMutations } from 'vuex'
-import { login, userInfo } from '@/mock/'
+import { login, userInfo } from '@/api/base/'
 import errRouterMap from '@/router/base/error'
 import { formatMenuMap } from '@/utils/handleData'
 
@@ -117,50 +117,48 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          // login(this.loginForm.username.trim(), this.loginForm.password.trim()).then(res => {
-          const data = login.data
-          this.setToken(data.token)
-
-          this._getUserInfo()
-          // }).catch(() => {
-          //   this.loading = false
-          // })
+          login(this.loginForm).then(res => {
+            if (res.data.code === 0) {
+              this.loading = true
+            }
+            this.setUserName(this.loginForm.username)
+            this.setToken('登录') // 后台不返回token用cookie存储
+            this._getUserInfo()
+          })
         } else {
           return false
         }
       })
     },
     _getUserInfo() {
-      // userInfo().then((res) => {
-      const data = userInfo.data
-      this.setBaseInfo(data.baseInfo)
-      const menuMap = formatMenuMap(data.permission)
-      let secondMenuIndex = null
-      if (menuMap[0] && menuMap[0].children[0] && menuMap[0].children[0].children[0]) {
-        secondMenuIndex = menuMap[0].children[0].children[0]
-      } else {
-        secondMenuIndex = { url: '/page/401' }
-      }
+      userInfo().then((res) => {
+        const data = res.data
+        const menuMap = formatMenuMap(data)
+        let secondMenuIndex = null
+        if (menuMap[0] && menuMap[0].children[0] && menuMap[0].children[0].children[0]) {
+          secondMenuIndex = menuMap[0].children[0].children[0]
+        } else {
+          secondMenuIndex = { url: '/page/401' }
+        }
 
-      // 获取当前版本并加载当前版本的路由
-      let routers = require('@/router/admin/').default
-      routers = [].concat(routers, {
-        path: '/',
-        redirect: secondMenuIndex.url
-      }, errRouterMap)
-      this.$router.addRoutes(routers)
+        // 获取当前版本并加载当前版本的路由
+        let routers = require('@/router/admin/').default
+        routers = [].concat(routers, {
+          path: '/',
+          redirect: secondMenuIndex.url
+        }, errRouterMap)
+        this.$router.addRoutes(routers)
 
-      // 初始化菜单和默认显示菜单
-      this.setMenuMap(menuMap)
-      this.setMenuIndex([0, secondMenuIndex, secondMenuIndex.url])
-      // })
+        // 初始化菜单和默认显示菜单
+        this.setMenuMap(menuMap)
+        this.setMenuIndex([0, secondMenuIndex, secondMenuIndex.url])
+      })
     },
     ...mapMutations({
       setMenuMap: 'SET_MENU_MAP',
       setMenuIndex: 'SET_MENU_INDEX',
       setToken: 'SET_TOKEN',
-      setBaseInfo: 'SET_BASE_INFO'
+      setUserName: 'SET_USERNAME'
     })
   }
 }

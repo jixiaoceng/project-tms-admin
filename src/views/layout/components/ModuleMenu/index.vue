@@ -1,4 +1,5 @@
 <template>
+  <!-- 一级菜单 -->
   <div
     class="module-wrapper user-select-no"
     :style="{backgroundColor: themeColor}"
@@ -13,7 +14,7 @@
       @click="clickModuleTab(index)"
     >
       <i v-show="device == 'mobile'" :class="`iconfont ${item.icon}`" />
-      <span class="module-name">{{ item.title }}</span>
+      <span class="module-name">{{ item.name }}</span>
     </div>
   </div>
 </template>
@@ -37,7 +38,6 @@ export default {
     ])
   },
   mounted() {
-    console.log(this.menuMap)
   },
   methods: {
     clickModuleTab(index) {
@@ -57,7 +57,7 @@ export default {
   .module-item {
     position: relative;
     padding: 0 20px;
-    line-height: 80px;
+    line-height: 60px;
     cursor: pointer;
     transition: all .3s;
     color: #fff;

@@ -1,5 +1,6 @@
 import HandleToken from '@/utils/auth'
 const handleToken = new HandleToken()
+import { setStorage } from '@/utils/handleStorage'
 
 const user = {
   state: {
@@ -12,9 +13,8 @@ const user = {
       articlePlatform: []
     },
     department: '无',
-    userName: '管理员',
-    userId: '30000',
-    baseInfo: null
+    userName: '',
+    userId: '30000'
   },
 
   mutations: {
@@ -22,11 +22,9 @@ const user = {
       state.token = token
       handleToken.setToken(token)
     },
-    SET_BASE_INFO: (state, baseInfo) => {
-      state.baseInfo = baseInfo
-      state.department = baseInfo.department
-      state.userName = baseInfo.userName
-      state.userId = baseInfo.userId
+    SET_USERNAME: (state, userName) => {
+      state.userName = userName
+      setStorage('userName', userName)
     },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction

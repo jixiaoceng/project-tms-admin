@@ -73,7 +73,12 @@ div:focus {
 .pl-5 {
   padding-left: 5px;
 }
-
+.mt10{
+  margin-top:10px;
+}
+.mt20{
+  margin-top:20px;
+}
 .block {
   display: block;
 }
@@ -188,5 +193,12 @@ aside {
 }
 
 .multiselect--active {
-  z-index: 1000 !important;
+  z-index: 999 !important;
+}
+.el-submenu__title,.el-submenu .el-menu-item  {
+    height:50px;
+    line-height:50px;
+}
+.el-submenu .el-menu-item{
+    width:auto;
 }

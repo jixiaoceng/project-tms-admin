@@ -22,13 +22,13 @@
         <!-- 个人信息 -->
         <el-dropdown class="avatar-container" trigger="hover" style="color: #fff;cursor: pointer">
           <span>
-            <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" @click="toUser" />
-            <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ userName }}</span>
+            <i class="el-icon-user-solid" style="font-size: 20px; vertical-align: bottom" />
+            <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ user }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <router-link to="/systemManage/changePassword">
+            <!-- <router-link to="/systemManage/changePassword">
               <el-dropdown-item>修改密码</el-dropdown-item>
-            </router-link>
+            </router-link> -->
             <el-dropdown-item>
               <span style="display:block;" @click="logout">退出登录</span>
             </el-dropdown-item>
@@ -49,6 +49,10 @@ import { mapGetters, mapMutations } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import ThemePicker from '@/components/ThemePicker'
 import ModuleMenu from '../ModuleMenu'
+import { getStorage } from '@/utils/handleStorage'
+import { logout } from '@/api/base/'
+import HandleToken from '@/utils/auth'
+const handleToken = new HandleToken()
 
 export default {
   name: 'Navbar',
@@ -56,6 +60,11 @@ export default {
     Hamburger,
     ThemePicker,
     ModuleMenu
+  },
+  data() {
+    return {
+      user: this.userName || getStorage('userName')
+    }
   },
   computed: {
     ...mapGetters([
@@ -69,11 +78,12 @@ export default {
     toggleSideBar() {
       this.toggleSideBar()
     },
-    toUser() {
-      this.$router.push({ path: '/' })
-    },
     logout() {
-
+      logout().then(res => {
+        handleToken.removeToken()
+        this.$router.push({ path: '/login' })
+        localStorage.clear()
+      })
     },
     getCurrentTabIndex(index) {
       this.$emit('currentTabIndex', index)
@@ -88,18 +98,18 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
   border-radius: 0px !important;
-  height: 80px;
+  height: 60px;
   position: fixed;
-  z-index: 10;
+  z-index: 999;
   top: 0;
   left: 0;
   right: 0;
   .brand {
-    width: 160px;
+    width: 130px;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     color: #fff;
-    line-height: 30px;
+    line-height: 20px;
   }
   .hamburger-container {
     margin: 0 20px

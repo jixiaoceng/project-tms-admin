@@ -2,7 +2,7 @@
   <section class="app-main flex-wrapper flex-direction-column">
     <!-- 页面头部标题 -->
     <div v-if="currentPage !== '/page/401'" ref="pageTitle" :style="titleStyle" class="page-title flex-wrapper flex-space-between flex-column-center">
-      <div class="line" :style="{borderLeft: `5px solid ${themeColor}`}">{{ pageTitle == '' ? secondMenuIndex.title : pageTitle }}</div>
+      <div class="line" :style="{borderLeft: `5px solid ${themeColor}`}">{{ pageTitle == '' ? secondMenuIndex.name : pageTitle }}</div>
       <div class="page-title-right">
         <el-button v-if="pageTitle !== ''" class="text-right" plain @click="goBack">返回</el-button>
         <el-button class="text-right" plain @click="refresh">刷新</el-button>
@@ -38,7 +38,7 @@ export default {
       return this.$route.fullPath
     },
     titleStyle() {
-      return `left: ${this.device === 'mobile' ? '0px' : this.isCollapse ? '0px' : '180px'}`
+      return `left: ${this.device === 'mobile' ? '0px' : this.isCollapse ? '0px' : '150px'}`
     },
     isCollapse() {
       return !this.sidebar.opened
@@ -58,7 +58,7 @@ export default {
     },
     // 刷新
     refresh() {
-      // window.location.href = window.location.href
+      location.reload()
     }
   }
 }
@@ -75,10 +75,10 @@ export default {
   box-sizing: border-box;
   .page-title {
     position: fixed;
-    z-index: 9;
+    z-index: 999;
     right: 0;
-    top: 80px;
-    left: 190px;
+    top: 60px;
+    left: 150px;
     padding: 0 20px;
     height: 50px;
     background-color: #f2f2f2;

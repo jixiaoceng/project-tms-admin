@@ -1,7 +1,7 @@
 <template>
   <div class="student-wrap">
     <screen-wrapper @search="search">
-      <screen-item label="来源" :part="4" :label-width="labelWidth">
+      <screen-item label="来源">
         <el-select v-model="screenData.source" placeholder="请选择">
           <el-option
             v-for="item in sourceOption"
@@ -11,7 +11,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="版本" :part="4" :label-width="labelWidth">
+      <screen-item label="版本">
         <el-select v-model="screenData.programme_name" placeholder="请选择">
           <el-option
             v-for="item in programmeOption"
@@ -21,7 +21,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="级别" :part="4" :label-width="labelWidth">
+      <screen-item label="级别">
         <el-select v-model="screenData.course_level" placeholder="请选择">
           <el-option
             v-for="item in courseOption"
@@ -31,18 +31,38 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
-        <el-input v-model="screenData.student_name" placeholder="请输入学生用户名" />
+      <screen-item label="顾问，学管">
+        <el-select v-model="screenData.cms_user" placeholder="请选择">
+          <el-option
+            v-for="item in role"
+            :key="item.id"
+            :label="item.realname"
+            :value="item.id"
+          />
+        </el-select>
+      </screen-item>
+      <screen-item label="学生用户名">
+        <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
+      <div slot="header-right">
+        <el-button type="primary" @click="batchAll()">批量分配</el-button>
+      </div>
       <el-table
+        v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
         :border="true"
         style="width: 100%"
+        :height="tableHeight"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column
+          type="selection"
+          width="40"
+        />
         <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
@@ -56,12 +76,17 @@
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : '国际版' }}
+            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
           <template slot-scope="scope">
             Level{{ scope.row.course_info.course_level }}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="上课进度">
+          <template slot-scope="scope">
+            Level{{ scope.row.course_info.session_no }}
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
@@ -71,8 +96,17 @@
         <el-table-column align="center" prop="last_info.last_teacher" label="最近上课老师" />
         <el-table-column align="center" prop="next_info.next_attend_time" label="下次上课时间" />
         <el-table-column align="center" prop="next_info.next_teacher" label="下次上课老师" />
-        <el-table-column align="center" prop="lesson_sum.lesson_sum" label="本月上课次数" />
-        <el-table-column align="center" prop="last_remark" label="距离上次备注时间" />
+        <el-table-column align="center" prop="lesson_sum" label="本月上课次数" />
+        <el-table-column align="center" prop="student_source" label="来源" />
+        <el-table-column align="center" prop="last_remark" label="上次备注时间" />
+        <el-table-column align="center" prop="course_adviser" label="课程顾问" />
+        <el-table-column align="center" prop="learn_manager.name" label="学管老师" />
+        <el-table-column align="center" label="操作">
+          <template slot-scope="scope">
+            <el-button v-if="!scope.row.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
+            <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.learn_manager.id)">重新分配</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </custom-card>
     <!-- 分页 -->
@@ -82,10 +116,29 @@
       @getCurrentPage="getCurrentPage"
       @getPerPage="getPerPage"
     />
+    <el-dialog title="分配学管老师" :visible.sync="closeAdviser" width="30%">
+      <el-form>
+        <el-form-item label="学管老师">
+          <el-select v-model="learnmanagerSubmit.learn_manager_id" placeholder="请选择学管老师">
+            <el-option
+              v-for="item in learnmanagerrDate"
+              :key="item.id"
+              :label="item.realname"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item class="btn-wrapper text-center">
+          <el-button @click="closeAdviser = false">取消</el-button>
+          <el-button type="primary" @click="submitAdviser">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { managerOldstudent, managerUser, distributLearnmanager, changeLearnmanager } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -95,37 +148,29 @@ export default {
         student_name: '', // 学生姓名
         course_level: '', // 1-6
         ordering: '', // 按上课时间排序
+        page_size: '50',
+        page: '1',
+        cms_user: '',
         balance_count: '' // 排序 账户余额，virtual_class_sum 已学课时，smallclass_count 小班课余额
       },
       labelWidth: '80',
+      tableHeight: window.innerHeight - 200 || 300,
       sourceOption: [
         {
           value: '',
           label: '全部'
         },
         {
-          value: '1',
+          value: 'direct',
           label: '直接用户'
         },
         {
-          value: '2',
+          value: 'referer',
           label: '转介绍'
         },
         {
-          value: '3',
+          value: 'ambassador',
           label: '城市合伙人'
-        },
-        {
-          value: '4',
-          label: '微信朋友圈广告'
-        },
-        {
-          value: '5',
-          label: 'Facebook 广告'
-        },
-        {
-          value: '6',
-          label: 'Instagram 广告'
         }
       ],
       programmeOption: [
@@ -138,8 +183,12 @@ export default {
           label: '高级版'
         },
         {
-          value: 'International Lite',
+          value: 'International',
           label: '国际版'
+        },
+        {
+          value: 'SG',
+          label: 'SG'
         }
       ],
       courseOption: [
@@ -172,79 +221,121 @@ export default {
           label: 'Level6'
         }
       ],
+      loading: true, // 加载loading
       // 当前页
       currentPage: 1,
       // 一共多少页
       total: 0,
       // 每页多少数据
-      perPage: 10,
+      perPage: 50,
       // 表格数据
-      tableData: [
-        {
-          'id': 16,
-          'username': 'Jeremy.Yao',
-          'balance_count': 4551.0,
-          'smallclass_count': 0,
-          'virtual_class_sum': 76.0,
-          'course_info': {
-            'course_name': 'NN L2',
-            'course_level': 2,
-            'programme_name': 'Advanced'
-          },
-          'last_info': {
-            'last_teacher': 'Diana.Chen',
-            'last_attend_time': '2019-07-14 00:30:00'
-          },
-          'next_info': {
-            'next_teacher': 'caoyoo',
-            'next_attend_time': '2016-12-30 07:00:00'
-          },
-          'last_remark': null,
-          'lesson_sum': {
-            'lesson_sum': 0.0
-          }
-        },
-        {
-          'id': 94,
-          'username': 'zhangsiyuan',
-          'balance_count': 2025.0,
-          'smallclass_count': 0,
-          'virtual_class_sum': 81.0,
-          'course_info': {
-            'course_name': 'NN L4',
-            'course_level': 4,
-            'programme_name': 'Advanced'
-          },
-          'last_info': {
-            'last_teacher': '马诗睿',
-            'last_attend_time': '2019-02-01 11:00:00'
-          },
-          'next_info': {
-            'next_teacher': 'MsZou',
-            'next_attend_time': '2017-02-09 11:00:00'
-          },
-          'last_remark': null,
-          'lesson_sum': 0
-        }
-      ]
+      tableData: [],
+      role: [],
+      closeAdviser: false,
+      learnmanagerrDate: [],
+      multipleSelection: [],
+      learnmanagerSubmit: {
+        student_ids: [],
+        learn_manager_id: ''
+      },
+      LearnmanagerId: ''
     }
   },
   mounted() {
+    this.getTableDate()
+    this.optionSdviser()
+    this.optionRole()
   },
   methods: {
     // 筛选
     search() {
+      this.currentPage = 1
+      this.screenData.page = 1
+      this.getTableDate()
+    },
+    // 表格数据
+    getTableDate() {
+      this.loading = true
+      managerOldstudent(this.screenData).then(res => {
+        this.loading = false
+        this.total = res.data.count
+        this.tableData = res.data.results
+      })
     },
     // 获取当前页码
     getCurrentPage(currentPage) {
+      this.screenData.page = currentPage
       this.currentPage = currentPage
-      // this.getTableData()
+      this.getTableDate()
     },
     // 改变每页展示数据的条数
     getPerPage(perPage) {
+      this.screenData.page_size = perPage
       this.perPage = perPage
-      this.currentPage = 1
-      // this.getTableData()
+      this.screenData.page = 1
+      this.getTableDate()
+    },
+    endAdviser(id) {
+      this.closeAdviser = true
+      this.learnmanagerSubmit.learn_manager_id = ''
+      if (id) {
+        this.learnmanagerSubmit.student_ids.push(id)
+      }
+      this.optionSdviser()
+    },
+    optionSdviser() {
+      managerUser('learn_manager').then(res => {
+        this.learnmanagerrDate = res.data.data
+      })
+    },
+    optionRole() {
+      managerUser().then(res => {
+        this.role = res.data.data
+      })
+    },
+    againAdviser(id, learn) {
+      this.learnmanagerSubmit.student_ids = id
+      this.learnmanagerSubmit.learn_manager_id = learn
+      this.LearnmanagerId = learn
+      this.closeAdviser = true
+    },
+    // 提交分配
+    submitAdviser() {
+      console.log(this.learnmanagerSubmit)
+      if (this.LearnmanagerId) {
+        if (this.LearnmanagerId === this.learnmanagerSubmit.learn_manager_id) {
+          this.$message({
+            message: '请选择要重新分配的学管老师',
+            type: 'warning'
+          })
+        } else {
+          changeLearnmanager(this.learnmanagerSubmit.student_ids, this.learnmanagerSubmit.learn_manager_id).then(res => {
+            this.closeAdviser = false
+            this.$message({
+              message: '分配成功',
+              type: 'success'
+            })
+            this.getTableDate()
+          })
+        }
+      } else {
+        distributLearnmanager(this.learnmanagerSubmit).then(res => {
+          this.closeAdviser = false
+          this.$message({
+            message: '分配成功',
+            type: 'success'
+          })
+          this.getTableDate()
+        })
+      }
+    },
+    handleSelectionChange(val) {
+      this.learnmanagerSubmit.student_ids = val.map(item => (item.id))
+    },
+    // 批量分配
+    batchAll() {
+      this.learnmanagerSubmit.learn_manager_id = ''
+      this.closeAdviser = true
     }
   }
 }
