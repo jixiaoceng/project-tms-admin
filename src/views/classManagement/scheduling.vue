@@ -28,16 +28,7 @@
           @change="timeChange"
         />
       </screen-item>
-      <screen-item label="老师" :part="4" :label-width="labelWidth">
-        <el-select v-model="screenData.teacher" placeholder="请选择">
-          <el-option
-            v-for="item in teacherData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </screen-item>
+      
       <screen-item label="顾问，学管" :part="4" :label-width="labelWidth">
         <el-select v-model="screenData.cms_user" placeholder="请选择">
           <el-option
@@ -131,7 +122,8 @@
           :width="160"
           :class-name="getSortClass('scheduled_time')"
         />
-        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
+        <el-tab
+        le-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
@@ -387,7 +379,7 @@
           <span class="el-dialog__title">审核结果</span>
         </el-col>
         <el-col class="mt10">
-          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
+          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1">
             <el-radio :label="1">学生缺席</el-radio>
             <el-radio :label="2">老师缺席</el-radio>
           </el-radio-group>
