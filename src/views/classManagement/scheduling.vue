@@ -233,7 +233,7 @@
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
-              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '异常' : '正常' }}
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
             </span>
           </template>
         </el-table-column>
@@ -370,7 +370,7 @@
           <label>提交时间：{{ virtualclassData.submit_time }}</label>
         </el-col>
         <el-col :span="8">
-          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == 0 ? '异常' : '正常' }}</label>
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
         </el-col>
         <el-col :span="24">
           <el-input
