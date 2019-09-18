@@ -53,10 +53,10 @@
             v-for="(item,i) in Lastweek"
             :key="item.date"
             :label="item.date"
-          >{{ item.date.slice(5) }}
+          >
             <span v-if="i==0">{{ '(今天)' }}</span>
             <span v-if="i==1">{{ '(明天)' }}</span>
-            <span v-if="i!=0&&i!=1" tabindex="0">{{ '('+item.week+')' }}</span>
+            <span v-if="i!=0&&i!=1">{{ '('+item.week+')' }}</span>
           </el-radio-button>
         </el-radio-group>
       </screen-item>
@@ -148,9 +148,6 @@ import {
 } from '@/api/tutorManagement/'
 export default {
   data() {
-    var day3 = new Date()
-    day3.setTime(day3.getTime() + 24 * 60 * 60 * 1000)
-    var s3 = day3.getFullYear() + '-' + (day3.getMonth() + 1) + '-' + day3.getDate()
     return {
       loading: true, // 加载loading
       page_size: '50', // 一页几条
@@ -164,14 +161,14 @@ export default {
       perPage: 50,
       flag: false, // 是否在结果中查找
       findresultsArr: [], // 在结果中查找
-      dateDay: s3, // 点击点击周几
+      dateDay: '', // 点击点击周几
       Lastweek: [], // 实时更新当前一周信息
       labelWidth: '100',
       programme: '', // 版本
       course_level: '', // 级别
       class_type: '', // 班型
       date_day: '', // 日期  自己选择的
-      times: ['7:00'], // 时间
+      times: [], // 时间
       value1: '', // 选择日历的时间
       applyDate: [], // 日历
       Screeningresults: [], // 筛选结果
@@ -269,15 +266,12 @@ export default {
 
   },
   created() {
-    var day3 = new Date()
-    day3.setTime(day3.getTime() + 24 * 60 * 60 * 1000)
-    var s3 = day3.getFullYear() + '-' + (day3.getMonth() + 1) + '-' + day3.getDate()
     var information = {
       programme: '',
       course_level: '',
       class_type: '',
-      date_day: s3,
-      times: '07:00:00'
+      date_day: '',
+      times: ''
     }
     this.loading = true
     searchTeacher(information).then(res => {
@@ -336,12 +330,23 @@ export default {
         page_size: this.page_size,
         teacher_name: this.input
       }
-      console.log(information)
-      searchTeacher(information).then(res => {
-        this.loading = false
-        this.Screeningresults = res.data.results
-        this.total = res.data.count
-      })
+      if (information.times !== '') { // 选择时间就必须选择日期
+        if (information.date_day) {
+          searchTeacher(information).then(res => {
+            this.loading = false
+            this.Screeningresults = res.data.results
+            this.total = res.data.count
+          })
+        } else {
+          alert('请选择日期！')
+        }
+      } else {
+        searchTeacher(information).then(res => {
+          this.loading = false
+          this.Screeningresults = res.data.results
+          this.total = res.data.count
+        })
+      }
     },
     // 结果中查找
     findresults() {
