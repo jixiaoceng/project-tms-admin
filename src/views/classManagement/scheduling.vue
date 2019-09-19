@@ -28,7 +28,7 @@
           @change="timeChange"
         />
       </screen-item>
-      
+
       <screen-item label="顾问，学管" :part="4" :label-width="labelWidth">
         <el-select v-model="screenData.cms_user" placeholder="请选择">
           <el-option
@@ -123,7 +123,12 @@
           :class-name="getSortClass('scheduled_time')"
         />
         <el-tab
-        le-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
+          le-column
+          align="center"
+          prop="class_type.type_name"
+          label="班型"
+          :width="labelWidth"
+        />
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
@@ -225,7 +230,7 @@
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
-              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '异常' : '正常' }}
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' :scope.row.finish_status=='21'?"老师学生均未出席课堂": scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
             </span>
           </template>
         </el-table-column>
@@ -362,7 +367,7 @@
           <label>提交时间：{{ virtualclassData.submit_time }}</label>
         </el-col>
         <el-col :span="8">
-          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == 0 ? '异常' : '正常' }}</label>
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' :virtualclassData.end_reason == '21' ? '老师学生均未出席课堂' :virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
         </el-col>
         <el-col :span="24">
           <el-input

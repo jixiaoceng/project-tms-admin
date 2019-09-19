@@ -187,3 +187,11 @@ export const virtualclassException = function(virtualclass_id) {
 export const checkExceptionPut = function(virtualclass_id, param) {
   return $put('/manager/virtualclass/' + virtualclass_id + '/check_exception/', param)
 }
+/**
+ * 重置密码
+ * @param {Number} user_id 用户ID
+ */
+export const resetpasswordSer = function(user_id) {
+  // console.log('/manager/oldstudent/' + user_id + '/resetpasswd/')
+  return $put('/manager/student/' + user_id + '/resetpasswd/')
+}
