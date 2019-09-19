@@ -104,9 +104,8 @@
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
-            <el-button v-if="!scope.row.course_adviser" type="text" @click="resetpassword(scope.row.id)">重置密码</el-button>
-
             <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.learn_manager.id)">重新分配</el-button>
+            <el-button type="text" @click="resetpassword(scope.row.id)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>

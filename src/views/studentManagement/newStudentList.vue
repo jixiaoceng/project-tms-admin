@@ -144,10 +144,11 @@
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.course_adviser" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
-            <el-button v-if="!scope.row.course_adviser" type="text" @click="resetpassword(scope.row.id)">重置密码</el-button>
+
             <!-- <el-button v-if="!scope.row.course_adviser" type="text" @click="open">点击打开 Message Box</el-button> -->
 
             <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.course_adviser.id)">重新分配</el-button>
+            <el-button type="text" @click="resetpassword(scope.row.id)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>

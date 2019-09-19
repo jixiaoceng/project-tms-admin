@@ -5,7 +5,6 @@
         label="版本"
         :part="4"
         :label-width="labelWidth"
-        style="margin-top:10px;margin-left:-40px;"
       >
         <el-select v-model="programme" placeholder="请选择">
           <el-option
@@ -20,7 +19,6 @@
         label="级别"
         :part="4"
         :label-width="labelWidth"
-        style="margin-top:10px;margin-left:-10px;"
       >
         <el-select v-model="course_level" placeholder="请选择">
           <el-option
@@ -34,8 +32,7 @@
       <screen-item
         label="班型"
         :part="4"
-        label-width="60"
-        style="margin-left:30px;margin-right:30px;"
+        :label-width="labelWidth"
       >
         <el-select v-model="class_type" placeholder="请选择">
           <el-option
@@ -46,14 +43,9 @@
           />
         </el-select>
       </screen-item>
-      <el-dropdown>
-        <!-- <button
-          style="width:100px;height:40px;outline:none;
-          margin-top:5px;color:#fff;border-radius:10px;border:0;cursor:pointer;"
-          @click="searchFn()"
-        ><el-button style="width:100px;height:40px" type="primary">筛选</el-button></button> -->
-      </el-dropdown>
-      <br>
+      <screen-item label="老师姓名" :part="4" :label-width="labelWidth">
+        <el-input v-model.trim="input" placeholder="请输入老师姓名" @keyup.enter.native="search" />
+      </screen-item>
       <screen-item label="日期" :part="2" style="width:850px;" label-width="60">
         <el-radio-group v-model="dateDay" @change="changeRadion">
           <el-radio-button label="all">全部</el-radio-button>
@@ -68,21 +60,17 @@
           </el-radio-button>
         </el-radio-group>
       </screen-item>
-      <div class="block">
+      <screen-item label="" :part="4">
         <el-date-picker
           v-model="date_day"
-          style="margin-top:45px;"
           type="date"
           placeholder="选择日期"
           @change="changeDate"
         />
 
-      </div>
-      <br>
-      <br>
-      <div style="width:100%;margin-top:0px;margin-left:23px">
-        <span style="display:inline-block;width:100%;margin-left:23px;font-size:14px;color:#666;">时间:</span>
-        <el-checkbox-group v-model="times" style="margin-left:23px;margin-top:5px">
+      </screen-item>
+      <screen-item label="时间" :part="1" label-width="60">
+        <el-checkbox-group v-model="times">
           <el-checkbox
             v-for="(item,index) in date"
             :key="index"
@@ -91,70 +79,65 @@
             :label="item.val"
           />
         </el-checkbox-group>
-      </div>
+      </screen-item>
     </screen-wrapper>
-    <div style="width:100%;height:50px;background:#eee;margin-top:30px;display:flex;justify-content:flex-end; align-items:center;">
-      <el-input v-model="input" style="width:200px;" placeholder="请输入老师姓名" />
-      <el-button style="width:100px;height:30px;margin:0 20px;cursor:pointer;" @click="findresults">结果中查找</el-button>
-    </div>
+    <custom-card title="数据列表" class="table-wrapper" style="margin-top:20px;">
 
-    <el-table
+      <el-table
+        ref="singleTable"
+        v-loading="loading"
+        tooltip-effect="dark"
+        :default-sort="{prop: 'date', order: 'descending'}"
+        :data="flag?findresultsArr:Screeningresults"
+        :height="310"
+        border
+        highlight-current-row
+        style="width: 100%;margin-top:20px;"
+      >
+        <el-table-column
+          type="index"
+          width="50"
+          label="序号"
+        />
+        <el-table-column
+          property="user.username"
+          label="老师"
+          width="120"
+        />
+        <el-table-column
+          property="user.userdetail.real_name"
+          label="真实姓名"
+          width="120"
+        />
+        <el-table-column
+          property="user.userdetail.gender"
+          label="性别"
+        />
+        <el-table-column
+          property="teach_year"
+          label="教学年限"
+        />
+        <el-table-column
+          property="rating"
+          label="评分"
+        />
+        <el-table-column
+          property="user.userdetail.phone_num"
+          label="手机号"
+        />
+        <el-table-column
+          property="country_of_residence"
+          label="居住国"
+        />
+      </el-table>
 
-      ref="singleTable"
-      :data="flag?findresultsArr:Screeningresults"
-      height="250"
-
-      border
-      highlight-current-row
-
-      style="width: 100%;margin-top:20px;"
-    >
-      <el-table-column
-        type="index"
-        width="50"
+      <custom-pagination
+        :total="total"
+        :current-page="currentPage"
+        @getCurrentPage="getCurrentPage"
+        @getPerPage="getPerPage"
       />
-      <el-table-column
-        property="user.username"
-        label="老师"
-        width="120"
-      />
-      <el-table-column
-        property="user.userdetail.real_name"
-        label="真实姓名"
-        width="120"
-      />
-      <el-table-column
-        property="user.userdetail.gender"
-        label="性别"
-      />
-      <el-table-column
-        property="teach_year"
-        label="教学年限"
-      />
-      <el-table-column
-        property="rating"
-        label="评分"
-      />
-      <el-table-column
-        property="user.userdetail.phone_num"
-        label="手机号"
-      />
-      <el-table-column
-        property="country_of_residence"
-        label="居住国"
-      />
-    </el-table>
-    <el-pagination
-      style="display:flex;justify-content:flex-end;margin-top:10px; "
-      :current-page="currentPage"
-      :page-sizes="[50,100]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-
+    </custom-card>
   </div>
 
 </template>
@@ -169,6 +152,10 @@ export default {
     day3.setTime(day3.getTime() + 24 * 60 * 60 * 1000)
     var s3 = day3.getFullYear() + '-' + (day3.getMonth() + 1) + '-' + day3.getDate()
     return {
+      loading: true, // 加载loading
+      page_size: '50', // 一页几条
+      page: '1', // 当前第几页
+      tableHeight: window.innerHeight - 200 || 300,
       // 当前页
       currentPage: 1,
       // 一共多少页
@@ -180,9 +167,9 @@ export default {
       dateDay: s3, // 点击点击周几
       Lastweek: [], // 实时更新当前一周信息
       labelWidth: '100',
-      programme: '高级版', // 版本
-      course_level: 'Level1', // 级别
-      class_type: '一对一', // 班型
+      programme: '', // 版本
+      course_level: '', // 级别
+      class_type: '', // 班型
       date_day: '', // 日期  自己选择的
       times: ['7:00'], // 时间
       value1: '', // 选择日历的时间
@@ -287,13 +274,15 @@ export default {
     day3.setTime(day3.getTime() + 24 * 60 * 60 * 1000)
     var s3 = day3.getFullYear() + '-' + (day3.getMonth() + 1) + '-' + day3.getDate()
     var information = {
-      programme: 'Advanced',
-      course_level: '1',
-      class_type: 'oneonone',
+      programme: '',
+      course_level: '',
+      class_type: '',
       date_day: s3,
       times: '07:00:00'
     }
+    this.loading = true
     searchTeacher(information).then(res => {
+      this.loading = false
       this.Screeningresults = res.data.results
       this.total = res.data.results.length
     })
@@ -306,34 +295,55 @@ export default {
 
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+    handleSelectionChange(val) {
+      this.adviserSubmit.student_ids = val.map(item => (item.id))
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+    // 获取当前页码
+    getCurrentPage(currentPage) {
+      this.page = currentPage
+      this.currentPage = currentPage
+      this.searchFn()
+    },
+    // 改变每页展示数据的条数
+    getPerPage(perPage) {
+      this.page_size = perPage
+      this.perPage = perPage
+      this.page = 1
+      this.searchFn()
     },
     search() {
-      // this.currentPage = 1
-      // this.screenData.page = 1
+      this.currentPage = 1
+      this.page = 1
       this.searchFn()
     },
     searchFn() { // 点击筛选
+      this.loading = true
       this.flag = false
       var newTimes = []
       this.times.forEach(item => {
-        newTimes.push('0' + item + ':00')
+        if (item.split(':')[0].length === 1) {
+          newTimes.push('0' + item + ':00')
+        } else {
+          newTimes.push(item)
+        }
       })
       var information = {
-        programme: this.programme === '高级版' ? 'Advanced' : this.programme === '国际版' ? 'International' : this.programme === '' ? '' : 'SG',
-        course_level: this.course_level === 'Level1' ? '1' : this.course_level === 'Level2' ? '2' : this.course_level === '' ? '' : this.course_level === 'Level3' ? '3' : this.course_level === 'Level4' ? '4' : this.course_level === 'Level5' ? '5' : '6',
-        class_type: this.class_type === '一对一' ? 'oneonone' : this.class_type === '' ? '' : 'smallclass',
+        programme: this.programme,
+        course_level: this.course_level,
+        class_type: this.class_type,
+        times: newTimes.toString(),
         date_day: this.date_day ? this.timeChange(this.date_day) : this.dateDay,
-        times: newTimes.toString()
+        page: this.page,
+        page_size: this.page_size,
+        teacher_name: this.input
+        // page_size:"10"
+
       }
       console.log(information)
       searchTeacher(information).then(res => {
+        this.loading = false
         this.Screeningresults = res.data.results
-        this.total = res.data.results.length
+        this.total = res.data.count
       })
     },
     // 结果中查找
@@ -351,10 +361,7 @@ export default {
       this.date_day = val ? '' : this.date_day
       this.applyDate = []
       this.tableType = val
-      this.screenData.start_time = null
-      this.screenData.end_time = null
       this.type = 1
-      this.screenData.appoint_status = ''
     },
     changeDate() {
       this.dateDay = ''
@@ -365,7 +372,6 @@ export default {
       var start = this.timeChange(start1).slice(this.timeChange(start1).length - 2)
       var end = over.slice(over.length - 2)
       var weekArray = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-      // var week1 = weekArray[new Date().getDay()]
       for (var i = start; i < end; i++) {
         var obj = {}
         obj.date = over.slice(0, -2) + i
