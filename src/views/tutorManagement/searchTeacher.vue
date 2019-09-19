@@ -48,11 +48,12 @@
       </screen-item>
       <screen-item label="日期" :part="2" style="width:850px;" label-width="50">
         <el-radio-group v-model="dateDay" @change="changeRadion">
-          <el-radio-button label="all">全部</el-radio-button>
+          <el-radio-button style="outlint:none" label="all" @click.native.prevent="clickitem('all')"> 全部</el-radio-button>
           <el-radio-button
             v-for="(item,i) in Lastweek"
             :key="item.date"
             :label="item.date"
+            @click.native.prevent="clickitem(item.date)"
           >
             <span>{{ item.date.slice(5) }}</span>
             <span v-if="i==0">{{ '(今天)' }}</span>
@@ -365,6 +366,9 @@ export default {
       this.applyDate = []
       this.tableType = val
       this.type = 1
+    },
+    clickitem(e) {
+      e === this.dateDay ? this.dateDay = '' : this.dateDay = e
     },
     changeDate() {
       this.dateDay = ''
