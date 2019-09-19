@@ -47,11 +47,11 @@
         </el-select>
       </screen-item>
       <el-dropdown>
-        <button
+        <!-- <button
           style="width:100px;height:40px;outline:none;
           margin-top:5px;color:#fff;border-radius:10px;border:0;cursor:pointer;"
           @click="searchFn()"
-        ><el-button style="width:100px;height:40px" type="primary">筛选</el-button></button>
+        ><el-button style="width:100px;height:40px" type="primary">筛选</el-button></button> -->
       </el-dropdown>
       <br>
       <screen-item label="日期" :part="2" style="width:850px;" label-width="60">
@@ -71,7 +71,7 @@
       <div class="block">
         <el-date-picker
           v-model="date_day"
-          style="margin-top:20px;"
+          style="margin-top:45px;"
           type="date"
           placeholder="选择日期"
           @change="changeDate"
@@ -79,8 +79,9 @@
 
       </div>
       <br>
+      <br>
       <div style="width:100%;margin-top:0px;margin-left:23px">
-        <span style="margin-left:23px;font-size:14px;color:#666;margin-right:33px">时间:</span>
+        <span style="display:inline-block;width:100%;margin-left:23px;font-size:14px;color:#666;">时间:</span>
         <el-checkbox-group v-model="times" style="margin-left:23px;margin-top:5px">
           <el-checkbox
             v-for="(item,index) in date"
@@ -238,9 +239,12 @@ export default {
         { val: '22:30', lab: '22:30:00' },
         { val: '23:00', lab: '23:00:00' },
         { val: '23:30', lab: '23:30:00' }
-
       ],
       programmeOption: [{
+        value: '',
+        label: '全部'
+      },
+      {
         value: 'Advanced',
         label: '高级版'
       },
@@ -254,6 +258,7 @@ export default {
       }
       ],
       level: [
+        { value: '', lable: '全部' },
         { value: '1', lable: 'Level1' },
         { value: '2', lable: 'Level2' },
         { value: '3', lable: 'Level3' },
@@ -261,13 +266,17 @@ export default {
         { value: '5', lable: 'Level5' },
         { value: '6', lable: 'Level6' }
       ],
-      classOption: [{
-        value: 'oneonone',
-        label: '一对一'
-      }, {
-        value: 'smallclass',
-        label: '小班课'
-      }]
+      classOption: [
+        {
+          value: '',
+          label: '全部'
+        }, {
+          value: 'oneonone',
+          label: '一对一'
+        }, {
+          value: 'smallclass',
+          label: '小班课'
+        }]
     }
   },
   beforeCreate() {
@@ -304,8 +313,8 @@ export default {
       console.log(`当前页: ${val}`)
     },
     search() {
-      this.currentPage = 1
-      this.screenData.page = 1
+      // this.currentPage = 1
+      // this.screenData.page = 1
       this.searchFn()
     },
     searchFn() { // 点击筛选
@@ -315,12 +324,13 @@ export default {
         newTimes.push('0' + item + ':00')
       })
       var information = {
-        programme: this.programme,
-        course_level: this.course_level,
-        class_type: this.class_type,
+        programme: this.programme === '高级版' ? 'Advanced' : this.programme === '国际版' ? 'International' : this.programme === '' ? '' : 'SG',
+        course_level: this.course_level === 'Level1' ? '1' : this.course_level === 'Level2' ? '2' : this.course_level === '' ? '' : this.course_level === 'Level3' ? '3' : this.course_level === 'Level4' ? '4' : this.course_level === 'Level5' ? '5' : '6',
+        class_type: this.class_type === '一对一' ? 'oneonone' : this.class_type === '' ? '' : 'smallclass',
         date_day: this.date_day ? this.timeChange(this.date_day) : this.dateDay,
         times: newTimes.toString()
       }
+      console.log(information)
       searchTeacher(information).then(res => {
         this.Screeningresults = res.data.results
         this.total = res.data.results.length
@@ -329,8 +339,8 @@ export default {
     // 结果中查找
     findresults() {
       this.flag = true
+      this.findresultsArr = []
       this.Screeningresults.forEach(item => {
-        console.log(item.user.username, this.input)
         if (item.user.username === this.input) {
           this.findresultsArr.push(item)
         }
@@ -346,19 +356,6 @@ export default {
       this.type = 1
       this.screenData.appoint_status = ''
     },
-    // // 获取当前页码
-    // getCurrentPage(currentPage) {
-    //    this.screenData.page = currentPage
-    //    this.currentPage = currentPage
-    //    this.searchFn()
-    // },
-    // // 改变每页展示数据的条数
-    // getPerPage(perPage) {
-    //    this.screenData.page_size = perPage
-    //    this.perPage = perPage
-    //    this.screenData.page = 1
-    //    this.searchFn()
-    // },
     changeDate() {
       this.dateDay = ''
     },
@@ -366,7 +363,6 @@ export default {
       var over = this.fun_date(7) // 七天后日期
       var start1 = new Date() // 当前时间
       var start = this.timeChange(start1).slice(this.timeChange(start1).length - 2)
-      console.log()
       var end = over.slice(over.length - 2)
       var weekArray = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
       // var week1 = weekArray[new Date().getDay()]

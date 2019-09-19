@@ -69,7 +69,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
+      <screen-item style="margin-top:-40px" label="学生用户名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
