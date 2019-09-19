@@ -46,7 +46,7 @@
       <screen-item label="老师姓名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="input" placeholder="请输入老师姓名" @keyup.enter.native="search" />
       </screen-item>
-      <screen-item label="日期" :part="2" style="width:850px;" label-width="60">
+      <screen-item label="日期" :part="2" style="width:850px;" label-width="50">
         <el-radio-group v-model="dateDay" @change="changeRadion">
           <el-radio-button label="all">全部</el-radio-button>
           <el-radio-button
@@ -69,7 +69,7 @@
         />
 
       </screen-item>
-      <screen-item label="时间" :part="1" label-width="60">
+      <screen-item label="时间" :part="1" label-width="50">
         <el-checkbox-group v-model="times">
           <el-checkbox
             v-for="(item,index) in date"
@@ -89,7 +89,7 @@
         tooltip-effect="dark"
         :default-sort="{prop: 'date', order: 'descending'}"
         :data="flag?findresultsArr:Screeningresults"
-        :height="310"
+        :height="tableHeight"
         border
         highlight-current-row
         style="width: 100%;margin-top:20px;"
@@ -324,7 +324,7 @@ export default {
         if (item.split(':')[0].length === 1) {
           newTimes.push('0' + item + ':00')
         } else {
-          newTimes.push(item)
+          newTimes.push(item + ':00')
         }
       })
       var information = {
@@ -336,8 +336,6 @@ export default {
         page: this.page,
         page_size: this.page_size,
         teacher_name: this.input
-        // page_size:"10"
-
       }
       console.log(information)
       searchTeacher(information).then(res => {
