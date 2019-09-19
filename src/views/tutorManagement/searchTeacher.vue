@@ -279,7 +279,7 @@ export default {
     searchTeacher(information).then(res => {
       this.loading = false
       this.Screeningresults = res.data.results
-      this.total = res.data.results.length
+      this.total = res.data.count
     })
   },
   mounted() {
