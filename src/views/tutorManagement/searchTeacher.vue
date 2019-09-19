@@ -54,6 +54,7 @@
             :key="item.date"
             :label="item.date"
           >
+            <span>{{ item.date.slice(5) }}</span>
             <span v-if="i==0">{{ '(今天)' }}</span>
             <span v-if="i==1">{{ '(明天)' }}</span>
             <span v-if="i!=0&&i!=1">{{ '('+item.week+')' }}</span>
