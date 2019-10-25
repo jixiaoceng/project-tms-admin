@@ -14,7 +14,7 @@ const { $get, $post, $put } = new GetData()
  *        ordering            {String} 排序
  */
 export const managerScheduler = function(params) {
-  return $get('/manager/scheduler/', params)
+  return $get('/scheduler/classroom/', params)
 }
 
 /**
@@ -131,7 +131,7 @@ export const virtualclassComment = function(virtualclass_id, target) {
  * @param {String} role 角色 course_adviser  课程顾问，learn_manager   学管老师
  */
 export const managerUser = function(role) {
-  return $get('/manager/user/userlist/', { role })
+  return $get('/user/userlist/', { role })
 }
 
 /**

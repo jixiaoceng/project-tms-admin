@@ -11,14 +11,14 @@ const { $get, $post } = new GetData()
  *        password          {String} 密码
  */
 export const login = function(params) {
-  return $post('/manager/login/', params)
+  return $post('/login/', params)
 }
 
 /**
  * 退出
  */
 export const logout = function() {
-  return $post('/manager/logout/')
+  return $post('/logout/')
 }
 
 /**
@@ -36,5 +36,5 @@ export const tokenAuth = function(params) {
  * @param {Number} all
  */
 export const userInfo = function() {
-  return $get('/manager/menu/menu_list', { all: 1 })
+  return $get('/menu/menu_list', { all: 1 })
 }

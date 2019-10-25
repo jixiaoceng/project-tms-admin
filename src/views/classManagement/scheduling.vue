@@ -129,14 +129,14 @@
           label="上课时间(北京)"
           sortable="custom"
           :width="160"
-          :class-name="getSortClass('scheduled_time')"
+          :class-name="getSortClass('start_time')"
         />
         <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
-            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
+            <el-button v-for="item in scope.row.virtual_class_member" :key="item.user_id" type="text">
               <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
-                {{ item.username }}
+                {{ item.student_name }}
               </router-link>
             </el-button>
           </template>
@@ -491,11 +491,11 @@ export default {
           label: '全部'
         },
         {
-          value: 'oneonone',
+          value: '1',
           label: '一对一'
         },
         {
-          value: 'smallclass',
+          value: '2',
           label: '小班课'
         }
       ],
@@ -505,15 +505,15 @@ export default {
           label: '全部'
         },
         {
-          value: 'Advanced',
+          value: '1',
           label: '高级版'
         },
         {
-          value: 'International',
+          value: '2',
           label: '国际版'
         },
         {
-          value: 'SG',
+          value: '3',
           label: 'SG'
         }
       ],
