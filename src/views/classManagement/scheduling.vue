@@ -4,7 +4,7 @@
  * @Author: fangli.ji
  * @Date: 2019-09-03 12:24:30
  * @LastEditors: fangli.ji
- * @LastEditTime: 2019-09-05 15:34:09
+ * @LastEditTime: 2019-10-30 18:38:39
  -->
 <template>
   <div class="scheduling-wrap">
@@ -28,16 +28,7 @@
           @change="timeChange"
         />
       </screen-item>
-      <screen-item label="老师" :part="4" :label-width="labelWidth">
-        <el-select v-model="screenData.teacher" placeholder="请选择">
-          <el-option
-            v-for="item in teacherData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </screen-item>
+
       <screen-item label="顾问，学管" :part="4" :label-width="labelWidth">
         <el-select v-model="screenData.cms_user" placeholder="请选择">
           <el-option
@@ -131,7 +122,13 @@
           :width="160"
           :class-name="getSortClass('scheduled_time')"
         />
-        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
+        <el-tab
+          le-column
+          align="center"
+          prop="class_type.type_name"
+          label="班型"
+          :width="labelWidth"
+        />
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
             <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
@@ -233,7 +230,7 @@
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
-              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' :scope.row.finish_status=='21'?"老师学生均未出席课堂": scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
             </span>
           </template>
         </el-table-column>
@@ -370,7 +367,7 @@
           <label>提交时间：{{ virtualclassData.submit_time }}</label>
         </el-col>
         <el-col :span="8">
-          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' :virtualclassData.end_reason == '21' ? '老师学生均未出席课堂' :virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
         </el-col>
         <el-col :span="24">
           <el-input
@@ -387,7 +384,7 @@
           <span class="el-dialog__title">审核结果</span>
         </el-col>
         <el-col class="mt10">
-          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
+          <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1">
             <el-radio :label="1">学生缺席</el-radio>
             <el-radio :label="2">老师缺席</el-radio>
           </el-radio-group>
