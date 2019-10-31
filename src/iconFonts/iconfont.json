@@ -1,0 +1,310 @@
+{
+  "id": "1316376",
+  "name": "LingoAce教学管理后台",
+  "font_family": "iconfont",
+  "css_prefix_text": "ppIcon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "672616",
+      "name": "账号",
+      "font_class": "user",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "742874",
+      "name": "隐藏密码",
+      "font_class": "hidepwd",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "1200334",
+      "name": "密码",
+      "font_class": "pwd",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "1265376",
+      "name": "活动",
+      "font_class": "huodong",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "4242887",
+      "name": "日志",
+      "font_class": "journal",
+      "unicode": "e80f",
+      "unicode_decimal": 59407
+    },
+    {
+      "icon_id": "5613024",
+      "name": "城市",
+      "font_class": "city",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "5766072",
+      "name": "课程管理_m",
+      "font_class": "course",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "5766088",
+      "name": "课时_m",
+      "font_class": "class-hour",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "5766115",
+      "name": "金额_m",
+      "font_class": "money",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "5766197",
+      "name": "日历_m",
+      "font_class": "calendar",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "5766354",
+      "name": "员工管理_m",
+      "font_class": "staff",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "5766359",
+      "name": "身份与权限_m",
+      "font_class": "permieeion",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "6015252",
+      "name": "我的班级",
+      "font_class": "my-class",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "6246283",
+      "name": "课程表",
+      "font_class": "class-card",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "6427391",
+      "name": "排课",
+      "font_class": "paike",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "6583375",
+      "name": "文件",
+      "font_class": "folder",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "6588143",
+      "name": "套题/作业",
+      "font_class": "work",
+      "unicode": "e688",
+      "unicode_decimal": 59016
+    },
+    {
+      "icon_id": "6588144",
+      "name": "批改",
+      "font_class": "correct",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "6610065",
+      "name": "文件",
+      "font_class": "file",
+      "unicode": "e68c",
+      "unicode_decimal": 59020
+    },
+    {
+      "icon_id": "6898694",
+      "name": "最近常用",
+      "font_class": "times",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "6898717",
+      "name": "问题管理",
+      "font_class": "problem",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "6898826",
+      "name": "系统配置",
+      "font_class": "system",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "6898928",
+      "name": "知识管理",
+      "font_class": "knowledge",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "6899011",
+      "name": "任务管理",
+      "font_class": "task",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "6899298",
+      "name": "变更",
+      "font_class": "refresh",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "6900066",
+      "name": "发布管理",
+      "font_class": "release",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    },
+    {
+      "icon_id": "6900132",
+      "name": "审批中心",
+      "font_class": "approval",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "6900161",
+      "name": "综合控制台",
+      "font_class": "menu",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "7215994",
+      "name": "客户管理",
+      "font_class": "smallclass",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "7216345",
+      "name": "统计",
+      "font_class": "statistics",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "7216348",
+      "name": "设置",
+      "font_class": "setup",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "7511372",
+      "name": "上课管理",
+      "font_class": "class",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "7832284",
+      "name": "订单",
+      "font_class": "order",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "7832286",
+      "name": "优惠券",
+      "font_class": "coupon",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "7851615",
+      "name": "学生管理",
+      "font_class": "student",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "8643855",
+      "name": "权限",
+      "font_class": "power",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "8818062",
+      "name": "教师管理",
+      "font_class": "teachers",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "9607106",
+      "name": "支付",
+      "font_class": "payment",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "9725579",
+      "name": "通知",
+      "font_class": "notice",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "9730007",
+      "name": "赞",
+      "font_class": "zan",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "9910823",
+      "name": "service",
+      "font_class": "service",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "9922126",
+      "name": "复制",
+      "font_class": "copy",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "9922130",
+      "name": "删除",
+      "font_class": "delete",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    }
+  ]
+}
