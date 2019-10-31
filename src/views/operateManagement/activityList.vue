@@ -19,7 +19,7 @@
         :height="tableHeight"
       >
         <el-table-column align="center" label="序号" :width="50">
-          <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
+          <template slot-scope="scope">{{ (screenData.page - 1) * screenData.page_size + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column align="center" label="团编号">
           <template slot-scope="scope">
@@ -84,18 +84,16 @@ export default {
   data() {
     return {
       screenData: {
-        student_name: '' // 充值成员账号
+        student_name: '', // 充值成员账号
+        page: 1,
+        page_size: 50
       },
       labelWidth: '80',
       grantVisible: false,
       loading: true, // 加载loading
       closeAdviser: false,
-      // 当前页
-      currentPage: 1,
       // 一共多少页
       total: 0,
-      // 每页多少数据
-      perPage: 50,
       tableHeight: window.innerHeight - 200 || 300,
       grantItem: '', // 要发放的内容
       // 表格数据
@@ -111,7 +109,6 @@ export default {
   methods: {
     // 筛选
     search() {
-      this.currentPage = 1
       this.screenData.page = 1
       this.getTableDate()
     },
@@ -128,13 +125,11 @@ export default {
     // 获取当前页码
     getCurrentPage(currentPage) {
       this.screenData.page = currentPage
-      this.currentPage = currentPage
       this.getTableDate()
     },
     // 改变每页展示数据的条数
     getPerPage(perPage) {
       this.screenData.page_size = perPage
-      this.perPage = perPage
       this.screenData.page = 1
       this.getTableDate()
     },
