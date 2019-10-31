@@ -3,38 +3,38 @@
     <!-- 基本信息 -->
     <custom-card title="注册信息" class="box-card" :collapse="collapse">
       <el-row>
-        <screen-item label="用户名">
-          <el-input v-model="studentData.username" :disabled="true" />
+        <screen-item label="家长用户名">
+          <el-input v-model="studentData.parent_user.username" :disabled="true" />
         </screen-item>
         <screen-item label="注册邮箱">
-          <el-input v-model="studentData.email" :disabled="true" />
+          <el-input v-model="studentData.parent_user.email" :disabled="true" />
         </screen-item>
         <screen-item label="姓名">
-          <el-input :value="studentData.last_name + studentData.first_name" :disabled="true" />
+          <el-input :value="studentData.real_name" :disabled="true" />
         </screen-item>
         <screen-item label="性别">
           <el-input v-model="studentData.gender" :disabled="true" />
         </screen-item>
         <screen-item label="出生日期">
-          <el-input v-model="studentData.birthdate" :disabled="true" />
+          <el-input v-model="studentData.birthday" :disabled="true" />
         </screen-item>
         <screen-item label="电话">
-          <el-input v-model="studentData.phone_num" :disabled="true" />
+          <el-input v-model="studentData.parent_user.phone" :disabled="true" />
         </screen-item>
         <screen-item label="居住国">
-          <el-input v-model="studentData.country_of_residence" :disabled="true" />
+          <el-input v-model="studentData.parent_user.country_of_residence" :disabled="true" />
         </screen-item>
         <screen-item label="货币种类">
-          <el-input v-model="studentData.currency" :disabled="true" />
+          <el-input v-model="studentData.parent_user.currency" :disabled="true" />
         </screen-item>
         <screen-item label="注册日期">
-          <el-input v-model="studentData.date_joined" :disabled="true" />
+          <el-input v-model="studentData.register_date" :disabled="true" />
         </screen-item>
         <screen-item label="推荐人">
-          <el-input v-model="studentData.referrer" :disabled="true" />
+          <el-input v-model="studentData.parent_user.referrer_user_name" :disabled="true" />
         </screen-item>
         <screen-item label="最近登录">
-          <el-input v-model="studentData.last_login" :disabled="true" />
+          <el-input v-model="studentData.parent_user.last_login" :disabled="true" />
         </screen-item>
       </el-row>
     </custom-card>
@@ -45,13 +45,13 @@
       </div>
       <el-row>
         <screen-item label="联系电话">
-          <el-input v-model="extstudent.phone" :disabled="exstudentDisabled" />
+          <el-input v-model="studentData.parent_user.phone" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="微信号">
-          <el-input v-model="extstudent.weixin" :disabled="exstudentDisabled" />
+          <el-input v-model="studentData.parent_user.wechat" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="WhatsApp">
-          <el-input v-model="extstudent.whatsapp" :disabled="exstudentDisabled" />
+          <el-input v-model="studentData.parent_user.whatsapp" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="就读年级">
           <el-input v-model="extstudent.class_year" :disabled="exstudentDisabled" />
@@ -66,10 +66,10 @@
           <el-input v-model="extstudent.source_channel" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="课程顾问">
-          <el-input v-model="studentData.course_adviser" :disabled="true" />
+          <el-input v-model="studentData.parent_user.course_adviser" :disabled="true" />
         </screen-item>
         <screen-item label="学管老师">
-          <el-input v-model="studentData.learn_manager" :disabled="true" />
+          <el-input v-model="studentData.parent_user.learn_manager" :disabled="true" />
         </screen-item>
         <screen-item label="上课设备">
           <el-input v-model="extstudent.equipment" :disabled="exstudentDisabled" />
@@ -102,13 +102,13 @@
     <custom-card title="上课进度" class="box-card" :collapse="collapse">
       <el-row>
         <screen-item label="在学版本">
-          <el-input v-model="courseInfo.programme_name" :disabled="true" />
+          <el-input v-model="courseInfo.course_edition_name" :disabled="true" />
         </screen-item>
         <screen-item label="在学级别">
           <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
         </screen-item>
         <screen-item label="家长问卷结果">
-          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.session_no" :disabled="true" />
+          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.lesson_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.lesson_no" :disabled="true" />
           <el-input v-else value="没做家长问卷" :disabled="true" />
           <el-button type="text">查看家长问卷记录</el-button>
         </screen-item>
@@ -315,7 +315,7 @@ export default {
       managerStudentCourse(this.studentId).then(res => {
         if (res.data.code === 0) {
           this.courseInfo = res.data.data
-          this.courseInfo.programme_name = this.courseInfo.programme_name === 'Advanced' ? '高级版' : this.courseInfo.programme_name === 'International Lite' ? '国际版' : 'SG'
+          this.courseInfo.programme_name = this.courseInfo.course_edition_name === 'Advanced' ? '高级版' : this.courseInfo.course_edition_nmae === 'International Lite' ? '国际版' : 'SG'
         }
         this.getRemark()
       })
@@ -331,7 +331,7 @@ export default {
     endRemarkConfirm() {
       const params = {
         'content': this.Remarkcontent,
-        'student': this.studentId
+        'student_id': this.studentId
       }
       postRemarkstudent(params).then(res => {
         this.$message({

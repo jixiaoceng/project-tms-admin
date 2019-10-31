@@ -2,7 +2,7 @@
   <div class="student-wrap">
     <screen-wrapper @search="search">
       <screen-item label="来源">
-        <el-select v-model="screenData.source" placeholder="请选择">
+        <el-select v-model="screenData.student_source" placeholder="请选择">
           <el-option
             v-for="item in sourceOption"
             :key="item.value"
@@ -81,7 +81,7 @@
         <el-table-column align="center" prop="username" label="学生用户名">
           <template slot-scope="scope">
             <router-link :to="{ path : `studentInfo`, query:{ studentId:scope.row.id }}">
-              <el-button type="text">{{ scope.row.username }}</el-button>
+              <el-button type="text">{{ scope.row.real_name }}</el-button>
             </router-link>
           </template>
         </el-table-column>
@@ -89,7 +89,7 @@
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
             <span v-if="scope.row.course_info">
-              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
+              {{ scope.row.course_info.course_edition_name == 'Advanced' ? '高级版' : scope.row.course_info.course_edition_name == 'International Lite' ? '国际版' : 'SG' }}
             </span>
             <span v-else>---</span>
           </template>
@@ -105,7 +105,7 @@
         <el-table-column align="center" label="上课进度">
           <template slot-scope="scope">
             <span v-if="scope.row.course_info">
-              lesson{{ scope.row.course_info.session_no }}
+              lesson{{ scope.row.course_info.lesson_no }}
             </span>
             <span v-else>---</span>
           </template>
@@ -141,10 +141,13 @@
         <!-- <el-table-column align="center" prop="" label="当前状态时间" /> -->
         <el-table-column align="center" prop="student_source" label="来源" />
         <el-table-column align="center" prop="course_adviser.name" label="课程顾问" />
+        <el-table-column align="center" prop="learn_manager.name" label="学管老师" />
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.course_adviser" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
             <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.course_adviser.id)">重新分配</el-button>
+            <!--            <el-button v-if="!scope.row.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配课程学管</el-button>-->
+            <!--            <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.learnmanager.id)">重新分配学管</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -187,7 +190,7 @@ export default {
   data() {
     return {
       screenData: {
-        source: '', // 来源
+        student_source: '', // 来源
         student_status: '', // 状态
         programme_name: '', // 版本 Advanced高级 国际International Lite
         student_name: '', // 学生姓名
@@ -195,7 +198,7 @@ export default {
         page_size: '50',
         page: '1',
         cms_user: '',
-        ordering: '-date_joined' // 按上课时间排序
+        ordering: '-create_time' // 按上课时间排序
       },
       labelWidth: '80',
       role: [],

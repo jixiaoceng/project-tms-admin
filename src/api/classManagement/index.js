@@ -14,7 +14,7 @@ const { $get, $post, $put } = new GetData()
  *        ordering            {String} 排序
  */
 export const managerScheduler = function(params) {
-  return $get('/scheduler/classroom/', params)
+  return $get('/classroom/', params)
 }
 
 /**
@@ -28,7 +28,7 @@ export const managerScheduler = function(params) {
  *        ordering            {String} 排序
  */
 export const managerStudent = function(params) {
-  return $get('/manager/student/', params)
+  return $get('/student/', params)
 }
 
 /**
@@ -50,7 +50,7 @@ export const managerOldstudent = function(params) {
  * @param {Number} id 学生
  */
 export const managerStudentDetails = function(id) {
-  return $get('/manager/student/' + id + '/details/')
+  return $get('/student/' + id + '/details/')
 }
 
 /**
@@ -58,7 +58,7 @@ export const managerStudentDetails = function(id) {
  * @param {Number} id 学生
  */
 export const managerExtstudent = function(id) {
-  return $get('/manager/extstudent/' + id)
+  return $get('/extstudent/' + id)
 }
 
 /**
@@ -66,7 +66,7 @@ export const managerExtstudent = function(id) {
  * @param {Object} params 参数对象
  */
 export const managerExtstudentAdd = function(params) {
-  return $post('/manager/extstudent/add/', params)
+  return $post('/extstudent/add/', params)
 }
 
 /**
@@ -74,7 +74,7 @@ export const managerExtstudentAdd = function(params) {
  * @param {Number} id 学生
  */
 export const managerStudentCourse = function(id) {
-  return $get('/manager/student/' + id + '/course_info/')
+  return $get('/student/' + id + '/course_info/')
 }
 
 /**
@@ -82,7 +82,7 @@ export const managerStudentCourse = function(id) {
  * @param {Object} params 参数对象
  */
 export const getRemarkstudent = function(params) {
-  return $get('/manager/remarkstudent/', params)
+  return $get('/remarkstudent/', params)
 }
 
 /**
@@ -90,7 +90,7 @@ export const getRemarkstudent = function(params) {
  * @param {Object} params 参数对象
  */
 export const postRemarkstudent = function(params) {
-  return $post('/manager/remarkstudent/', params)
+  return $post('/remarkstudent/', params)
 }
 
 /**
@@ -98,7 +98,7 @@ export const postRemarkstudent = function(params) {
  * @param {Number} virtualclass_id 教室id
  */
 export const virtualclassRevert = function(virtualclass_id) {
-  return $get('/manager/virtualclass/' + virtualclass_id + '/revert/')
+  return $get('/classroom/' + virtualclass_id + '/revert/')
 }
 
 /**
@@ -106,7 +106,7 @@ export const virtualclassRevert = function(virtualclass_id) {
  * @param {Number} virtualclass_id 教室id
  */
 export const virtualclassMonitor = function(virtualclass_id) {
-  return $get('/manager/virtualclass/' + virtualclass_id + '/monitor/')
+  return $get('/classroom/' + virtualclass_id + '/monitor/')
 }
 
 /**
@@ -114,7 +114,7 @@ export const virtualclassMonitor = function(virtualclass_id) {
  * @param {Number} virtualclass_id 教室id
  */
 export const virtualclassPlayback = function(virtualclass_id) {
-  return $get('/manager/virtualclass/' + virtualclass_id + '/course_playback/')
+  return $get('/classroom/' + virtualclass_id + '/course_playback/')
 }
 
 /**
@@ -123,7 +123,7 @@ export const virtualclassPlayback = function(virtualclass_id) {
  * @param {Number} target Tutor获得的是学生反馈， Student获得的是老师评语
  */
 export const virtualclassComment = function(virtualclass_id, target) {
-  return $get('/manager/virtualclass/' + virtualclass_id + '/comment/?target=' + target)
+  return $get('/classroom/' + virtualclass_id + '/comment/?target=' + target)
 }
 
 /**
@@ -141,7 +141,7 @@ export const managerUser = function(role) {
  *        course_adviser_id   {String} 课程顾问id
  */
 export const distributAdviser = function(params) {
-  return $post('/manager/student/add_advisers/', params)
+  return $post('/student/add_advisers/', params)
 }
 
 /**
@@ -150,7 +150,7 @@ export const distributAdviser = function(params) {
  * @param {Number} course_adviser_id 课程顾问id
  */
 export const changeAdviser = function(student_id, course_adviser_id) {
-  return $put('/manager/student/' + student_id + '/change_adviser/', { course_adviser_id })
+  return $put('/student/' + student_id + '/change_adviser/', { course_adviser_id })
 }
 
 /**
@@ -177,7 +177,7 @@ export const changeLearnmanager = function(student_id, learn_manager_id) {
  * @param {Number} virtualclass_id 课堂id
  */
 export const virtualclassException = function(virtualclass_id) {
-  return $get('/manager/virtualclass/' + virtualclass_id + '/virtualclass_exception/')
+  return $get('/classroom/' + virtualclass_id + '/virtualclass_exception/')
 }
 
 /**
@@ -185,5 +185,5 @@ export const virtualclassException = function(virtualclass_id) {
  * @param {Number} virtualclass_id 课堂id
  */
 export const checkExceptionPut = function(virtualclass_id, param) {
-  return $put('/manager/virtualclass/' + virtualclass_id + '/check_exception/', param)
+  return $put('/classroom/' + virtualclass_id + '/check_exception/', param)
 }

@@ -120,12 +120,13 @@
         :default-sort="{prop: 'date', order: 'descending'}"
         @sort-change="sortChange"
       >
-        <el-table-column align="center" label="序号" :width="50">
+        <el-table-column align="center" label="序号" :width="160">
+          <!--          <template slot-scope="scope"> {{ scope.row.id }}</template>-->
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column
           align="center"
-          prop="scheduled_time"
+          prop="start_time"
           label="上课时间(北京)"
           sortable="custom"
           :width="160"
@@ -149,70 +150,62 @@
         <!-- <el-table-column v-if="type !== 4" :key="Math.random()" align="center" prop="scheduled_time" label="上课时间(学生)" :width="tablWidth" /> -->
         <el-table-column align="center" label="版本" :width="labelWidth">
           <template slot-scope="scope">
-            <span v-if="scope.row.virtualclass.course_session">
-              {{ scope.row.virtualclass.course_session.programme_name == 'Advanced' ? '高级版' : '国际版' }}
-            </span>
-            <span v-else>
-              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
+            <span>
+              {{ scope.row.course_info.course_edition_name == 'Advanced' ? '高级版' : scope.row.course_info.course_edition_name == 'International Lite' ? '国际版' : 'SG' }}
             </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别" :width="labelWidth">
           <template slot-scope="scope">
-            <span v-if="scope.row.virtualclass.course_session">
-              Level{{ scope.row.virtualclass.course_session.course_level }}
-            </span>
-            <span v-else>
+            <span>
               Level{{ scope.row.course_info.course_level }}
             </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="上课进度" :width="labelWidth">
           <template slot-scope="scope">
-            <span v-if="scope.row.virtualclass.course_session">
-              {{ scope.row.virtualclass.course_session.session_name }}
-            </span>
-            <span v-else>
-              lesson{{ scope.row.course_info.session_no }}
+            <span>
+              lesson{{ scope.row.course_info.lesson_no }}
             </span>
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" align="center" label="课堂类型" :width="labelWidth">
           <template slot-scope="scope">
             <span
-              v-for="item in scope.row.learning_group.students"
+              v-for="item in scope.row.virtual_class_member"
               :key="item.id"
-              :class="item.lesson_sum > 0 ? '': 'red'"
-            >{{ item.lesson_sum > 0 ? '正式课' : '试听课' }} </span>
+              :class="item.first_course == 0 ? '': 'red'"
+            >{{ item.first_course == 0 ? '正式课' : '试听课' }} </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="老师" :width="tablWidth">
           <template slot-scope="scope">
-            <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
+            <span>{{ scope.row.tutor_user.username }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
-            <span
+            <!-- <span
               v-for="item in scope.row.hosts"
               :key="item.id"
               :class="item.lession_num > 0 ? '': 'red'"
-            >
-              {{ item.lession_num > 0 ? '否' : '是' }}
+            > -->
+            <span>
+              {{ scope.row.tutor_user.total_number_of_class > 0 ? '否' : '是' }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
+        <el-table-column v-if="type != 4" align="center" prop="last_teacher" label="上节课老师" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="labelWidth">
           <template slot-scope="scope">
-            <span>{{ scope.row.virtualclass_type == 'Tk' ? '拓课' : '声网' }} </span>
+            <span>{{ scope.row.virtualclass_type }} </span>
           </template>
         </el-table-column>
         <el-table-column v-if="type === 3 || type === 4" align="center" label="学生进课堂时间" :width="tablWidth">
           <template slot-scope="scope">
-            <p v-if="scope.row.student_classroom">
-              <span v-for="item in scope.row.student_classroom" :key="item.student_id">
-                {{ item.in_class_time }} <br>
+            <p v-if="scope.row.virtual_class_member">
+              <span v-for="item in scope.row.virtual_class_member" :key="item.user_id">
+                {{ item.enter_time }} <br>
               </span>
             </p>
             <span v-else>---</span>
@@ -221,9 +214,9 @@
         <el-table-column v-if="type === 3 || type === 4" align="center" prop="teacher_start_time" label="老师进课堂时间" :width="tablWidth" />
         <el-table-column v-if="type === 4" align="center" label="学生出课堂时间" :width="tablWidth">
           <template slot-scope="scope">
-            <p v-if="scope.row.student_classroom">
-              <span v-for="item in scope.row.student_classroom" :key="item.student_id">
-                {{ item.out_class_time }} <br>
+            <p v-if="scope.row.virtual_class_member">
+              <span v-for="item in scope.row.virtual_class_member" :key="item.user_id">
+                {{ item.leave_time }} <br>
               </span>
             </p>
             <span v-else>---</span>
@@ -233,57 +226,57 @@
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
-              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '21' ? '老师学生均未出席课堂' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
             </span>
           </template>
         </el-table-column>
         <el-table-column :key="Math.random()" align="center" label="课程顾问" :width="labelWidth">
           <template slot-scope="scope">
             <span
-              v-for="item in scope.row.learning_group.students"
-              :key="item.id"
+              v-for="item in scope.row.virtual_class_member"
+              :key="item.user_id"
             >{{ item.course_adviser }} </span>
           </template>
         </el-table-column>
         <el-table-column :key="Math.random()" align="center" label="学管老师" :width="labelWidth">
           <template slot-scope="scope">
             <span
-              v-for="item in scope.row.learning_group.students"
-              :key="item.id"
+              v-for="item in scope.row.virtual_class_member"
+              :key="item.user_id"
             >{{ item.learn_manager }} </span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.appointment_status == 'started'"
+              v-if="scope.row.appointment_status == 2"
               type="text"
-              @click="clickHandlerMonitor(scope.row.virtualclass.id)"
+              @click="clickHandlerMonitor(scope.row.id)"
             >旁听</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'started' || scope.row.appointment_status == 'start'"
+              v-if="scope.row.appointment_status == 2 || scope.row.appointment_status == 1"
               type="text"
-              @click="clickHandlerRevert(scope.row.virtualclass.id)"
+              @click="clickHandlerRevert(scope.row.id)"
             >课堂转换</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'finish'"
+              v-if="scope.row.appointment_status == 3 || scope.row.appointment_status == 4"
               type="text"
-              @click="clickHandlerComment(scope.row.virtualclass.id,'Student',scope.row)"
+              @click="clickHandlerComment(scope.row.id,'Student',scope.row)"
             >老师评语</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'finish'"
+              v-if="scope.row.appointment_status == 3 || scope.row.appointment_status == 4"
               type="text"
-              @click="clickHandlerComment(scope.row.virtualclass.id,'Tutor',scope.row)"
+              @click="clickHandlerComment(scope.row.id,'Tutor',scope.row)"
             >学生反馈</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'finish' && scope.row.virtualclass_type == 'Tk'"
+              v-if="(scope.row.appointment_status == 3 || scope.row.appointment_status == 4) && scope.row.virtualclass_type == '拓客'"
               type="text"
-              @click="clickHandlerPlayback(scope.row.virtualclass.id)"
+              @click="clickHandlerPlayback(scope.row.id)"
             >课堂回放</el-button>
             <el-button
-              v-if="scope.row.appointment_status == 'finish' && scope.row.finish_status != 0"
+              v-if="scope.row.appointment_status == 4"
               type="text"
-              @click="clickHandlerAbnormal(scope.row.virtualclass.id)"
+              @click="clickHandlerAbnormal(scope.row.id)"
             >异常审核</el-button>
           </template>
         </el-table-column>
@@ -316,37 +309,37 @@
       </div>
       <el-tabs v-if="JSON.stringify(valuationrate.valuation) !== '{}'" type="border-card">
         <el-tab-pane v-for="(item,index) in studentAll" :key="index">
-          <span slot="label">{{ item.username }}</span>
+          <span slot="label">{{ item.student_name }}</span>
           <div v-if="studentFeedback">
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">知识掌握程度：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].PQ" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_pk" disabled score-template="知识掌握程度：" />
             </div>
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">进步程度：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].SP" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_id" disabled score-template="知识掌握程度：" />
             </div>
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">学习态度：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].AR" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_le" disabled score-template="知识掌握程度：" />
             </div>
           </div>
           <div v-else>
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">专业知识：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].PK" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_pk" disabled score-template="知识掌握程度：" />
             </div>
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">教授方式：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].ID" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_id" disabled score-template="知识掌握程度：" />
             </div>
-            <div v-if="valuationrate.valuation[item.username]" class="rate-tit">
+            <div v-if="valuationrate.valuation[item.student_name]" class="rate-tit">
               <span class="demonstration">积极营造学习环境：</span>
-              <el-rate v-model="valuationrate.valuation[item.username].LE" disabled score-template="知识掌握程度：" />
+              <el-rate v-model="valuationrate.valuation[item.student_name].rating_le" disabled score-template="知识掌握程度：" />
             </div>
           </div>
-          <p v-if="valuationrate.comment[item.username]" v-loading="commentsLoading" class="evaluate">
-            {{ valuationrate.comment[item.username].comment }}
+          <p v-if="valuationrate.comment[item.student_name]" v-loading="commentsLoading" class="evaluate">
+            {{ valuationrate.comment[item.student_name].comment }}
           </p>
           <p v-else class="no-comments">
             <img src="../../assets/icon-no-comments.png">
@@ -370,7 +363,7 @@
           <label>提交时间：{{ virtualclassData.submit_time }}</label>
         </el-col>
         <el-col :span="8">
-          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == '21' ? '学生老师均未出席' : virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
         </el-col>
         <el-col :span="24">
           <el-input
@@ -390,6 +383,7 @@
           <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
             <el-radio :label="1">学生缺席</el-radio>
             <el-radio :label="2">老师缺席</el-radio>
+            <el-radio :label="3">学生老师均未出席</el-radio>
           </el-radio-group>
         </el-col>
         <el-col class="mt10">
@@ -403,9 +397,19 @@
               </screen-item>
             </el-col>
           </div>
-          <div v-else>
+          <div v-else-if="virtualclassData.check_code == 2">
             <el-col>
               <screen-item label="补偿学生" label-width="80">
+                <el-input v-model="virtualclassData.student_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+              <screen-item label="老师罚金" label-width="80">
+                <el-input v-model="virtualclassData.teacher_amount" :disabled="virtualclassData.tag == 1" />
+              </screen-item>
+            </el-col>
+          </div>
+          <div v-else>
+            <el-col>
+              <screen-item label="学生罚金" label-width="80">
                 <el-input v-model="virtualclassData.student_amount" :disabled="virtualclassData.tag == 1" />
               </screen-item>
               <screen-item label="老师罚金" label-width="80">
@@ -457,7 +461,7 @@ export default {
         page_size: '50',
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
-        ordering: 'scheduled_time', // 按上课时间排序
+        ordering: 'start_time', // 按上课时间排序
         cms_user: '' // 课程顾问和学管
       },
       type: 1, // 1全部2未开始3正在上课4已结束
@@ -558,7 +562,7 @@ export default {
         submit_time: '', // 提交时间
         end_reason: '', // 异常类型
         check_result: '', // 审核原因
-        check_code: 1, // 审核结果 1学生缺席2老师缺席
+        check_code: 1, // 审核结果 1学生缺席2老师缺席3学生老师均未出席
         student_amount: '', // 学生罚金
         teacher_amount: '', // 老师补偿
         check_user: '', // 审核人
@@ -592,10 +596,10 @@ export default {
       this.getTableDate()
     },
     sortChange(column) {
-      if (column.prop === 'scheduled_time' && column.order === 'ascending') { // 升序
-        this.screenData.ordering = 'scheduled_time'
-      } else if (column.prop === 'scheduled_time' && column.order === 'descending') { // 降序
-        this.screenData.ordering = '-scheduled_time'
+      if (column.prop === 'start_time' && column.order === 'ascending') { // 升序
+        this.screenData.ordering = 'start_time'
+      } else if (column.prop === 'start_time' && column.order === 'descending') { // 降序
+        this.screenData.ordering = '-start_time'
       } else {
         return
       }
@@ -677,19 +681,19 @@ export default {
     // 老师评语
     clickHandlerComment(virtualclass_id, target, obj) {
       this.studentAll = []
-      this.teacherInfo.teacherName = obj.hosts[ 0 ].username
-      this.teacherInfo.classTime = obj.scheduled_time
+      this.teacherInfo.teacherName = obj.tutor_user.username
+      this.teacherInfo.classTime = obj.start_time
       this.teacherInfo.classType = obj.class_type.type_name
       this.studentFeedback = target === 'Student'
       this.titleName = target === 'Student' ? '老师评语' : '学生反馈'
-      if (obj.course_info) {
-        this.teacherInfo.course = obj.course_info.programme_name === 'Advanced' ? '高级版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no : '国际版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.session_no
-      } else {
-        this.teacherInfo.course = obj.virtualclass.course_session.programme_name === 'Advanced' ? '高级版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name : '国际版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name
-      }
+      // if (obj.course_info) {
+      this.teacherInfo.course = obj.course_info.course_edition_name === 'Advanced' ? '高级版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.lesson_no : obj.course_info.course_edition_name === 'International Lite' ? '国际版 Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.lesson_no : 'SG Level ' + obj.course_info.course_level + ' - lesson' + obj.course_info.lesson_no
+      // } else {
+      //   this.teacherInfo.course = obj.virtualclass.course_session.programme_name === 'Advanced' ? '高级版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name : '国际版 ' + obj.virtualclass.course_session.course_name + ' - ' + obj.virtualclass.course_session.session_name
+      // }
       this.teacherComments = true
       this.commentsLoading = true
-      this.studentAll = obj.learning_group.students
+      this.studentAll = obj.virtual_class_member
       virtualclassComment(virtualclass_id, target).then(res => {
         this.commentsLoading = false
         this.valuationrate = res.data.data
