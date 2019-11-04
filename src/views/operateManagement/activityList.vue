@@ -73,6 +73,11 @@
         <el-table-column align="center" prop="amount" label="充值课时" />
         <el-table-column align="center" prop="recharge_time" label="充值时间" />
         <el-table-column align="center" prop="order" label="订单编号" />
+        <el-table-column align="center" prop="email" label="邮箱" />
+        <el-table-column align="center" prop="top_up_sum" label="充值次数" />
+        <el-table-column align="center" prop="course_adviser" label="课程顾问" />
+        <el-table-column align="center" prop="learn_manager" label="学管" />
+        <el-table-column align="center" prop="currency" label="币种" />
       </el-table>
     </el-dialog>
   </div>
