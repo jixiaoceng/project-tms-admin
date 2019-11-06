@@ -4,9 +4,12 @@
       <screen-item label="用户账号">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入充值用户账号" @keyup.enter.native="search" />
       </screen-item>
+      <screen-item label="团创建人">
+        <el-input v-model.trim="screenData.cms_user" placeholder="请输入团创建人" @keyup.enter.native="search" />
+      </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
-    <custom-card title="数据列表" class="table-wrapper">
+    <custom-card title="数据列表" class="table-wrapper" style="margin-top:20px;">
       <div slot="header-right">
         <el-button type="primary" @click="foundsGroup()">创建团链接</el-button>
       </div>
@@ -32,7 +35,7 @@
         <el-table-column align="center" prop="present_amount" label="团充值课时" :width="labelWidth" />
         <el-table-column align="center" prop="remain_amount" label="成团剩余课时" :width="100" />
         <el-table-column align="center" prop="student_number" label="团人数" :width="labelWidth" />
-        <el-table-column align="center" prop="remain_time" label="成团剩余时间" :width="150" />
+        <el-table-column align="center" prop="remain_time" label="成团剩余时间" :width="100" />
         <el-table-column align="center" prop="group_status" label="团状态" :width="labelWidth" />
         <el-table-column align="center" label="操作" :width="90">
           <template slot-scope="scope">
@@ -90,6 +93,7 @@ export default {
     return {
       screenData: {
         student_name: '', // 充值成员账号
+        cms_user: '',
         page: 1,
         page_size: 50
       },
