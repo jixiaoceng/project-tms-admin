@@ -21,20 +21,20 @@
         <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (screenData.page - 1) * screenData.page_size + scope.$index + 1 }}</template>
         </el-table-column>
-        <el-table-column align="center" label="团编号">
+        <el-table-column align="center" label="团编号" :width="160">
           <template slot-scope="scope">
             <el-button type="text" @click="groupInfo(scope.row.id, scope.row.group_code)">{{ scope.row.group_code }}</el-button>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="group_url" label="团链接" />
-        <el-table-column align="center" prop="create_user" label="团创建人" />
-        <el-table-column align="center" prop="start_time" label="团创建时间" />
-        <el-table-column align="center" prop="present_amount" label="团充值课时" />
-        <el-table-column align="center" prop="remain_amount" label="成团剩余课时" />
-        <el-table-column align="center" prop="student_number" label="团人数" />
-        <el-table-column align="center" prop="remain_time" label="成团剩余时间" />
-        <el-table-column align="center" prop="group_status" label="团状态" />
-        <el-table-column align="center" label="操作">
+        <el-table-column align="center" prop="create_user" label="团创建人" :width="labelWidth" />
+        <el-table-column align="center" prop="start_time" label="团开始时间" :width="140" />
+        <el-table-column align="center" prop="present_amount" label="团充值课时" :width="labelWidth" />
+        <el-table-column align="center" prop="remain_amount" label="成团剩余课时" :width="100" />
+        <el-table-column align="center" prop="student_number" label="团人数" :width="labelWidth" />
+        <el-table-column align="center" prop="remain_time" label="成团剩余时间" :width="150" />
+        <el-table-column align="center" prop="group_status" label="团状态" :width="labelWidth" />
+        <el-table-column align="center" label="操作" :width="90">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.reward_status == 0"
@@ -49,7 +49,7 @@
     <!-- 分页 -->
     <custom-pagination
       :total="total"
-      :current-page="currentPage"
+      :current-page="screenData.page"
       @getCurrentPage="getCurrentPage"
       @getPerPage="getPerPage"
     />
@@ -63,7 +63,7 @@
       <span>发放奖励后该团关闭，链接失效，确定发放奖励吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="grantVisible = false">暂不发放</el-button>
-        <el-button type="primary" @click="grantFun">确定发放</el-button>
+        <el-button type="primary" :disabled="isDisable" @click="grantFun">确定发放</el-button>
       </span>
     </el-dialog>
     <!-- 团信息 -->
@@ -93,7 +93,7 @@ export default {
         page: 1,
         page_size: 50
       },
-      labelWidth: '80',
+      labelWidth: '90',
       grantVisible: false,
       loading: true, // 加载loading
       closeAdviser: false,
@@ -105,7 +105,8 @@ export default {
       tableData: [],
       group_title: '',
       gridData: [],
-      dialogGroupInfo: false
+      dialogGroupInfo: false,
+      isDisable: false
     }
   },
   mounted() {
@@ -145,14 +146,18 @@ export default {
     },
     grantFun() {
       // 请求的接口的位置
-      managerGroupProvideReward(this.grantItem).then(res => {
-        this.grantVisible = false
-        this.$message({
-          message: res.data.message,
-          type: 'success'
+      this.isDisable = true
+      this.grantVisible = false
+      setTimeout(() => {
+        managerGroupProvideReward(this.grantItem).then(res => {
+          this.isDisable = false
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
+          this.getTableDate()
         })
-        this.getTableDate()
-      })
+      }, 100)
     },
     // 创建团
     foundsGroup() {
