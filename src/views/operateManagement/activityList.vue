@@ -1,7 +1,7 @@
 <template>
   <div class="student-wrap">
     <screen-wrapper @search="search">
-      <screen-item label="用户账号">
+      <screen-item label="学生用户名">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入充值用户账号" @keyup.enter.native="search" />
       </screen-item>
       <screen-item label="团创建人">

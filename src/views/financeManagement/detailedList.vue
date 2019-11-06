@@ -73,16 +73,18 @@
         <el-table-column align="center" prop="activity.valid_date" label="有效期" />
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            <span>
+            <span v-if="scope.row.course_info.programme_name">
               {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
             </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
           <template slot-scope="scope">
-            <span>
+            <span v-if="scope.row.course_info.course_level">
               Level{{ scope.row.course_info.course_level }}
             </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="recharge_count" label="充值次数" />
