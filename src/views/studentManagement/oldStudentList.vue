@@ -57,6 +57,8 @@
         :border="true"
         style="width: 100%"
         :height="tableHeight"
+        :default-sort="{prop: 'date', order: 'descending'}"
+        @sort-change="sortChange"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -99,7 +101,7 @@
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
-        <el-table-column align="center" prop="balance_count" label="账户余额" />
+        <el-table-column align="center" prop="balance_count" sortable="custom" :class-name="getSortClass('balance_count')" label="账户余额" />
         <el-table-column align="center" prop="smallclass_count" label="小班课余额" />
         <el-table-column align="center" prop="last_info.last_attend_time" label="最近上课时间" />
         <el-table-column align="center" prop="last_info.last_teacher" label="最近上课老师" />
@@ -327,6 +329,24 @@ export default {
       managerUser('learn_manager').then(res => {
         this.learnmanagerrDate = res.data.data
       })
+    },
+    sortChange(column) {
+      if (column.order === 'ascending') { // 升序
+        this.screenData.ordering = column.prop
+      } else if (column.order === 'descending') { // 降序
+        this.screenData.ordering = '-' + column.prop
+      } else {
+        return
+      }
+      this.getTableDate()
+    },
+    getSortClass(key) {
+      const sort = this.screenData.ordering
+      return sort === `${key}`
+        ? 'ascending'
+        : sort === `-${key}`
+          ? 'descending'
+          : ''
     },
     optionRole() {
       managerUser().then(res => {
