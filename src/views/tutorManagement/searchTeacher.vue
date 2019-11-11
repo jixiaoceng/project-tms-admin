@@ -2,7 +2,7 @@
  * @Author: fangli.ji
  * @Date: 2019-10-30 18:37:47
  * @LastEditors: fangli.ji
- * @LastEditTime: 2019-10-30 19:03:19
+ * @LastEditTime: 2019-11-11 10:18:27
  -->
 <template>
   <div>
@@ -406,6 +406,11 @@ export default {
         })
       }
       this.Lastweek = calendatArr
+    },
+    timeChange(time) {
+      var d = new Date(time)
+      var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+      return datetime
     }
   }
 
