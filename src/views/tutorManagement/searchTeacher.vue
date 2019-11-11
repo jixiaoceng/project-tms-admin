@@ -2,7 +2,7 @@
  * @Author: fangli.ji
  * @Date: 2019-10-30 18:37:47
  * @LastEditors: fangli.ji
- * @LastEditTime: 2019-11-11 10:18:27
+ * @LastEditTime: 2019-11-11 16:49:30
  -->
 <template>
   <div>
@@ -10,7 +10,7 @@
       <screen-item
         label="版本"
         :part="4"
-        :label-width="labelWidth"
+        :label-width="50"
       >
         <el-select v-model="programme" placeholder="请选择">
           <el-option
@@ -52,7 +52,7 @@
       <screen-item label="老师姓名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="input" placeholder="请输入老师姓名" @keyup.enter.native="search" />
       </screen-item>
-      <screen-item label="日期" :part="2" style="width:850px;" label-width="50">
+      <screen-item label="日期" :part="1" label-width="50">
         <el-radio-group v-model="dateDay" @change="changeRadion">
           <el-radio-button style="outlint:none" label="all" @click.native.prevent="clickitem('all')"> 全部</el-radio-button>
           <el-radio-button
@@ -67,15 +67,13 @@
             <span v-if="i!=0&&i!=1">{{ '('+item.week+')' }}</span>
           </el-radio-button>
         </el-radio-group>
-      </screen-item>
-      <screen-item label="" :part="4">
         <el-date-picker
           v-model="date_day"
+          style="margin-left:20px"
           type="date"
           placeholder="选择日期"
           @change="changeDate"
         />
-
       </screen-item>
       <screen-item label="时间" :part="1" label-width="50">
         <el-checkbox-group v-model="times">
