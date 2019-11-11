@@ -4,7 +4,7 @@
  * @Author: fangli.ji
  * @Date: 2019-09-03 12:24:30
  * @LastEditors: fangli.ji
- * @LastEditTime: 2019-10-30 18:38:39
+ * @LastEditTime: 2019-11-11 17:02:49
  -->
 <template>
   <div class="scheduling-wrap">
@@ -459,7 +459,7 @@ export default {
       },
       type: 1, // 1全部2未开始3正在上课4已结束
       labelWidth: '100',
-      tablWidth: '120',
+      tablWidth: '140',
       applyDate: [],
       value1: 4,
       tableType: 1, // 切换
