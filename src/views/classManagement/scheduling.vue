@@ -4,7 +4,7 @@
  * @Author: fangli.ji
  * @Date: 2019-09-03 12:24:30
  * @LastEditors: fangli.ji
- * @LastEditTime: 2019-11-11 17:02:49
+ * @LastEditTime: 2019-11-11 17:27:12
  -->
 <template>
   <div class="scheduling-wrap">
@@ -18,7 +18,7 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:5px;width:150px;"
+          style="margin-left:5px;width:200px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
@@ -49,7 +49,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="版本" :part="4" :label-width="labelWidth">
+      <screen-item label="版本" :part="4"  label-width="60">
         <el-select v-model="screenData.programme_name" placeholder="请选择">
           <el-option
             v-for="item in programmeOption"
