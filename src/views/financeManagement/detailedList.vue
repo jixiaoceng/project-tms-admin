@@ -25,6 +25,9 @@
           @change="timeChange"
         />
       </screen-item>
+      <screen-item label="学生用户名" :part="4">
+        <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" />
+      </screen-item>
       <screen-item label="按员工查看" :part="2">
         <el-select v-model="screenData.cms_user_id" placeholder="请选择">
           <el-option
@@ -114,6 +117,7 @@ export default {
         start_time: '', // 时间段start_time  2019-07-24 12:00:00 end_time  2019-07-24 12:00:00
         end_time: '',
         cms_user_id: '',
+        student_name: '',
         page: 1,
         page_size: 50,
         ordering: '-created_on'
@@ -168,8 +172,8 @@ export default {
     },
     // 充值总数
     getAdhoc() {
-      const { month_query, start_time, end_time, cms_user_id } = this.screenData
-      const params = { month_query, start_time, end_time, cms_user_id }
+      const { month_query, start_time, end_time, cms_user_id, student_name } = this.screenData
+      const params = { month_query, start_time, end_time, cms_user_id, student_name }
       attendRecharge(params).then(res => {
         this.new_student_amount = res.data.data.new_student_amount
         this.old_student_amount = res.data.data.old_student_amount
