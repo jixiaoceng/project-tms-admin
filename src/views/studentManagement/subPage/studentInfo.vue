@@ -44,6 +44,19 @@
         <i v-if="exstudentDisabled" class="iconfont ppIcon-approval" @click="editExstudent" />
       </div>
       <el-row>
+        <screen-item label="学生姓名">
+          <el-input v-model="extstudent.student_name" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="性别">
+          <el-select v-model="extstudent.gender" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in genderOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </screen-item>
         <screen-item label="联系电话">
           <el-input v-model="extstudent.phone" :disabled="exstudentDisabled" />
         </screen-item>
@@ -64,6 +77,33 @@
         </screen-item>
         <screen-item label="来源渠道">
           <el-input v-model="extstudent.source_channel" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="推荐人">
+          <el-input v-model="extstudent.reference_name" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="授课老师">
+          <el-input v-model="extstudent.teacher" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="授课时间">
+          <el-input v-model="extstudent.teach_time" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="上课固定时间">
+          <el-input v-model="extstudent.study_time" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="性格">
+          <el-input v-model="extstudent.nature" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="兴趣爱好">
+          <el-input v-model="extstudent.hobby" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="喜欢的学科">
+          <el-input v-model="extstudent.favorite_subject" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="学习中文目的">
+          <el-input v-model="extstudent.study_target" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="家长期望">
+          <el-input v-model="extstudent.parental_expectation" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="课程顾问">
           <el-input v-model="studentData.course_adviser" :disabled="true" />
@@ -90,8 +130,44 @@
             />
           </el-select>
         </screen-item>
+        <screen-item label="是否可以自行约课">
+          <el-select v-model="extstudent.can_appointment" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in selectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </screen-item>
+        <screen-item label="是否需要更换老师">
+          <el-select v-model="extstudent.change_teacher" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in selectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </screen-item>
+        <screen-item label="日常是否有中文环境">
+          <el-select v-model="extstudent.has_chinese_env" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in selectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </screen-item>
         <screen-item label="学生所在地">
           <el-input v-model="extstudent.student_location" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="在平台学习的兄弟姐妹数量">
+          <el-input v-model="extstudent.learning_brother" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="课程顾问沟通反馈">
+          <el-input v-model="extstudent.feedback" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="">
           <el-button v-if="!exstudentDisabled" type="primary" size="small" @click="addExstudent">保存</el-button>
@@ -200,6 +276,19 @@ export default {
         'test_result': '',
         'test_time': '',
         'pay_action': '', // 1低，2中，3，高
+        'student_name': '', // 新增的字段
+        'reference_name': '',
+        'gender': '',
+        'teacher': '',
+        'teach_time': '',
+        'study_time': '',
+        'nature': '',
+        'hobby': '',
+        'favorite_subject': '',
+        'study_target': '',
+        'parental_expectation': '',
+        'learning_brother': '',
+        'feedback': '',
         'student_residence': ''
       },
       courseInfo: { // 上课进度
@@ -233,6 +322,34 @@ export default {
         {
           value: 3,
           label: '高'
+        }
+      ],
+      selectOption: [
+        {
+          value: 1,
+          label: '是'
+        },
+        {
+          value: 2,
+          label: '否'
+        },
+        {
+          value: 3,
+          label: '未选择'
+        }
+      ],
+      genderOption: [
+        {
+          value: 1,
+          label: '男'
+        },
+        {
+          value: 2,
+          label: '女'
+        },
+        {
+          value: 3,
+          label: '未选择'
         }
       ],
       exstudentDisabled: true, // 扩展信息编辑
@@ -281,7 +398,23 @@ export default {
         equipment,
         create_time,
         class_year,
-        age } = this.extstudent
+        age,
+        student_name,
+        reference_name,
+        gender,
+        teacher,
+        teach_time,
+        study_time,
+        nature,
+        hobby,
+        favorite_subject,
+        can_appointment,
+        change_teacher,
+        has_chinese_env,
+        study_target,
+        parental_expectation,
+        learning_brother,
+        feedback } = this.extstudent
       const params = {
         whatsapp,
         weixin,
@@ -299,6 +432,22 @@ export default {
         create_time,
         class_year,
         age,
+        student_name,
+        reference_name,
+        gender: gender || 3,
+        teacher,
+        teach_time,
+        study_time,
+        nature,
+        hobby,
+        favorite_subject,
+        can_appointment: can_appointment || 3,
+        change_teacher: change_teacher || 3,
+        has_chinese_env: has_chinese_env || 3,
+        study_target,
+        parental_expectation,
+        learning_brother,
+        feedback,
         user_id: this.studentId
       }
       this.exstudentDisabled = true

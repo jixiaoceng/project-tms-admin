@@ -72,6 +72,9 @@
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
+      <screen-item label="老师用户名" :part="4" :label-width="labelWidth">
+        <el-input v-model.trim="screenData.teacher_name" placeholder="请输入老师用户名" @keyup.enter.native="search" />
+      </screen-item>
     </screen-wrapper>
     <!-- 分类 -->
     <el-button-group v-if="tableType == 1" class="type-btn">
@@ -248,6 +251,13 @@
               v-for="item in scope.row.learning_group.students"
               :key="item.id"
             >{{ item.learn_manager }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="学生设备" :width="tablWidth">
+          <template slot-scope="scope">
+            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
+              {{ item.equipment }}
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
@@ -451,6 +461,7 @@ export default {
         teacher: '', // 新老师 new，老老师old
         programme_name: '', // 版本 Advanced高级 国际International
         student_name: '', // 学生姓名
+        teacher_name: '',
         page_size: '50',
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
