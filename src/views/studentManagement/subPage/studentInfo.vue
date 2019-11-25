@@ -57,6 +57,9 @@
             />
           </el-select>
         </screen-item>
+        <screen-item label="年龄">
+          <el-input v-model="extstudent.age" placeholder="请输入数字" :disabled="exstudentDisabled" />
+        </screen-item>
         <screen-item label="联系电话">
           <el-input v-model="extstudent.phone" :disabled="exstudentDisabled" />
         </screen-item>
@@ -166,8 +169,8 @@
         <screen-item label="在平台学习的兄弟姐妹数量">
           <el-input v-model="extstudent.learning_brother" placeholder="请输入数字" :disabled="exstudentDisabled" />
         </screen-item>
-        <screen-item label="课程顾问沟通反馈">
-          <el-input v-model="extstudent.feedback" :disabled="exstudentDisabled" />
+        <screen-item style="width: 100%;" label="课程顾问沟通反馈">
+          <el-input v-model="extstudent.feedback" type="textarea" maxlength=500 :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="">
           <el-button v-if="!exstudentDisabled" type="primary" size="small" @click="addExstudent">保存</el-button>

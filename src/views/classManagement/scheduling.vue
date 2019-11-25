@@ -255,9 +255,11 @@
         </el-table-column>
         <el-table-column align="center" label="学生设备" :width="tablWidth">
           <template slot-scope="scope">
-            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">
+<!--            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">-->
+            <span v-for="item in scope.row.learning_group.students" :key="item.id">
               {{ item.equipment }}
-            </el-button>
+            </span>
+<!--            </el-button>-->
           </template>
         </el-table-column>
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
