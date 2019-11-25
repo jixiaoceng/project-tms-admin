@@ -164,7 +164,7 @@
           <el-input v-model="extstudent.student_location" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="在平台学习的兄弟姐妹数量">
-          <el-input v-model="extstudent.learning_brother" :disabled="exstudentDisabled" />
+          <el-input v-model="extstudent.learning_brother" placeholder="请输入数字" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="课程顾问沟通反馈">
           <el-input v-model="extstudent.feedback" :disabled="exstudentDisabled" />
