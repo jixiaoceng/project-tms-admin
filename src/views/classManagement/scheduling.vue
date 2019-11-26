@@ -18,7 +18,7 @@
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
-          style="margin-left:5px;width:150px;"
+          style="margin-left:5px;width:200px;"
           type="daterange"
           value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
@@ -28,16 +28,7 @@
           @change="timeChange"
         />
       </screen-item>
-      <screen-item label="老师" :part="4" :label-width="labelWidth">
-        <el-select v-model="screenData.teacher" placeholder="请选择">
-          <el-option
-            v-for="item in teacherData"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </screen-item>
+
       <screen-item label="顾问，学管" :part="4" :label-width="labelWidth">
         <el-select v-model="screenData.cms_user" placeholder="请选择">
           <el-option
@@ -58,7 +49,7 @@
           />
         </el-select>
       </screen-item>
-      <screen-item label="版本" :part="4" :label-width="labelWidth">
+      <screen-item label="版本" :part="4"  label-width="60">
         <el-select v-model="screenData.programme_name" placeholder="请选择">
           <el-option
             v-for="item in programmeOption"
@@ -80,6 +71,9 @@
       </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
+      </screen-item>
+      <screen-item label="老师用户名" :part="4" :label-width="labelWidth">
+        <el-input v-model.trim="screenData.teacher_name" placeholder="请输入老师用户名" @keyup.enter.native="search" />
       </screen-item>
     </screen-wrapper>
     <!-- 分类 -->
@@ -120,8 +114,7 @@
         :default-sort="{prop: 'date', order: 'descending'}"
         @sort-change="sortChange"
       >
-        <el-table-column align="center" label="序号" :width="160">
-          <!--          <template slot-scope="scope"> {{ scope.row.id }}</template>-->
+        <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (currentPage - 1) * perPage + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column
@@ -244,6 +237,15 @@
               v-for="item in scope.row.virtual_class_member"
               :key="item.user_id"
             >{{ item.learn_manager }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="学生设备" :width="tablWidth">
+          <template slot-scope="scope">
+<!--            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">-->
+            <span v-for="item in scope.row.virtual_class_member" :key="item.user_id">
+              {{ item.equipment }}
+            </span>
+<!--            </el-button>-->
           </template>
         </el-table-column>
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
@@ -458,6 +460,7 @@ export default {
         teacher: '', // 新老师 new，老老师old
         programme_name: '', // 版本 Advanced高级 国际International
         student_name: '', // 学生姓名
+        teacher_name: '',
         page_size: '50',
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
