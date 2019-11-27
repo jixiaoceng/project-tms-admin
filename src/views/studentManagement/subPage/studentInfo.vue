@@ -451,7 +451,7 @@ export default {
         parental_expectation,
         learning_brother,
         feedback,
-        user_id: this.studentId
+        student_id: this.studentId
       }
       this.exstudentDisabled = true
       managerExtstudentAdd(params).then(res => {

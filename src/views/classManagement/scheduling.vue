@@ -125,11 +125,11 @@
           :width="160"
           :class-name="getSortClass('start_time')"
         />
-        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />
+<!--        <el-table-column align="center" prop="class_type.type_name" label="班型" :width="labelWidth" />-->
         <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
-            <el-button v-for="item in scope.row.virtual_class_member" :key="item.user_id" type="text">
-              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
+            <el-button v-for="item in scope.row.virtual_class_member" :key="item.student_user_id" type="text">
+              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.student_user_id }}">
                 {{ item.student_name }}
               </router-link>
             </el-button>
