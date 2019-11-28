@@ -78,40 +78,15 @@
         <screen-item label="学校性质">
           <el-input v-model="extstudent.school_nature" :disabled="exstudentDisabled" />
         </screen-item>
-        <screen-item label="来源渠道">
-          <el-input v-model="extstudent.source_channel" :disabled="exstudentDisabled" />
-        </screen-item>
-        <screen-item label="推荐人">
-          <el-input v-model="extstudent.reference_name" :disabled="exstudentDisabled" />
-        </screen-item>
-        <screen-item label="授课老师">
-          <el-input v-model="extstudent.teacher" :disabled="exstudentDisabled" />
-        </screen-item>
-        <screen-item label="授课时间">
-          <el-input v-model="extstudent.teach_time" :disabled="exstudentDisabled" />
-        </screen-item>
-        <screen-item label="上课固定时间">
-          <el-input v-model="extstudent.study_time" :disabled="exstudentDisabled" />
-        </screen-item>
-        <screen-item label="是否需要更换老师">
-          <el-select v-model="extstudent.change_teacher" placeholder="" :disabled="exstudentDisabled">
-            <el-option
-              v-for="item in selectOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </screen-item>
         <screen-item label="性格">
           <el-input v-model="extstudent.nature" :disabled="exstudentDisabled" />
         </screen-item>
         <screen-item label="兴趣爱好">
           <el-input v-model="extstudent.hobby" :disabled="exstudentDisabled" />
         </screen-item>
-        <screen-item label="喜欢的学科">
-          <el-input v-model="extstudent.favorite_subject" :disabled="exstudentDisabled" />
-        </screen-item>
+<!--        <screen-item label="喜欢的学科">-->
+<!--          <el-input v-model="extstudent.favorite_subject" :disabled="exstudentDisabled" />-->
+<!--        </screen-item>-->
         <screen-item label="学习中文目的">
           <el-input v-model="extstudent.study_target" :disabled="exstudentDisabled" />
         </screen-item>
@@ -165,6 +140,31 @@
         </screen-item>
         <screen-item label="学生所在地">
           <el-input v-model="extstudent.student_location" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="来源渠道">
+          <el-input v-model="extstudent.source_channel" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="推荐人">
+          <el-input v-model="extstudent.reference_name" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="授课老师">
+          <el-input v-model="extstudent.teacher" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="授课时间">
+          <el-input v-model="extstudent.teach_time" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="上课固定时间">
+          <el-input v-model="extstudent.study_time" :disabled="exstudentDisabled" />
+        </screen-item>
+        <screen-item label="是否需要更换老师">
+          <el-select v-model="extstudent.change_teacher" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in selectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </screen-item>
         <screen-item label="在平台学习的兄弟姐妹数量">
           <el-input v-model="extstudent.learning_brother" placeholder="请输入数字" :disabled="exstudentDisabled" />
@@ -287,7 +287,7 @@ export default {
         'study_time': '',
         'nature': '',
         'hobby': '',
-        'favorite_subject': '',
+        // 'favorite_subject': '',
         'study_target': '',
         'parental_expectation': '',
         'learning_brother': '',
@@ -410,7 +410,7 @@ export default {
         study_time,
         nature,
         hobby,
-        favorite_subject,
+        // favorite_subject,
         can_appointment,
         change_teacher,
         has_chinese_env,
@@ -443,7 +443,7 @@ export default {
         study_time,
         nature,
         hobby,
-        favorite_subject,
+        // favorite_subject,
         can_appointment: can_appointment || 3,
         change_teacher: change_teacher || 3,
         has_chinese_env: has_chinese_env || 3,
