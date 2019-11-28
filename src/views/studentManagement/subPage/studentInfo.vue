@@ -93,6 +93,16 @@
         <screen-item label="上课固定时间">
           <el-input v-model="extstudent.study_time" :disabled="exstudentDisabled" />
         </screen-item>
+        <screen-item label="是否需要更换老师">
+          <el-select v-model="extstudent.change_teacher" placeholder="" :disabled="exstudentDisabled">
+            <el-option
+              v-for="item in selectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </screen-item>
         <screen-item label="性格">
           <el-input v-model="extstudent.nature" :disabled="exstudentDisabled" />
         </screen-item>
@@ -135,16 +145,6 @@
         </screen-item>
         <screen-item label="是否可以自行约课">
           <el-select v-model="extstudent.can_appointment" placeholder="" :disabled="exstudentDisabled">
-            <el-option
-              v-for="item in selectOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </screen-item>
-        <screen-item label="是否需要更换老师">
-          <el-select v-model="extstudent.change_teacher" placeholder="" :disabled="exstudentDisabled">
             <el-option
               v-for="item in selectOption"
               :key="item.value"
