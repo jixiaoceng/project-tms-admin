@@ -42,7 +42,7 @@ export const managerStudent = function(params) {
  *        ordering            {String} 排序
  */
 export const managerOldstudent = function(params) {
-  return $get('/manager/oldstudent/', params)
+  return $get('/oldstudent/', params)
 }
 
 /**
@@ -160,7 +160,7 @@ export const changeAdviser = function(student_id, course_adviser_id) {
  *        learn_manager_id   {String} 学管老师id
  */
 export const distributLearnmanager = function(params) {
-  return $post('/manager/oldstudent/add_learnmanagers/', params)
+  return $post('/oldstudent/add_learnmanagers/', params)
 }
 
 /**
@@ -169,7 +169,7 @@ export const distributLearnmanager = function(params) {
  * @param {Number} learn_manager_id 学管老师id
  */
 export const changeLearnmanager = function(student_id, learn_manager_id) {
-  return $put('/manager/oldstudent/' + student_id + '/change_learnmanager/', { learn_manager_id })
+  return $put('/oldstudent/' + student_id + '/change_learnmanager/', { learn_manager_id })
 }
 
 /**

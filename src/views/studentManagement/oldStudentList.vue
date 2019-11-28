@@ -69,14 +69,14 @@
         <el-table-column align="center" prop="username" label="学生用户名">
           <template slot-scope="scope">
             <router-link :to="{ path : `studentInfo`, query:{ studentId:scope.row.id }}">
-              <el-button type="text">{{ scope.row.username }}</el-button>
+              <el-button type="text">{{ scope.row.real_name }}</el-button>
             </router-link>
           </template>
         </el-table-column>
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
+            {{ scope.row.course_info.edition_name == 'Advanced' ? '高级版' : scope.row.course_info.edition_name == 'International Lite' ? '国际版' : scope.row.course_info.edition_name == 'SG Program' ? 'SG' : '--' }}
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
@@ -86,25 +86,25 @@
         </el-table-column>
         <el-table-column align="center" label="上课进度">
           <template slot-scope="scope">
-            Level{{ scope.row.course_info.session_no }}
+            Level{{ scope.row.course_info.lesson_no }}
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
-        <el-table-column align="center" prop="balance_count" label="账户余额" />
-        <el-table-column align="center" prop="smallclass_count" label="小班课余额" />
+        <el-table-column align="center" prop="parent_user.balance" label="账户余额" />
+        <el-table-column align="center" prop="parent_user.small_class_balance" label="小班课余额" />
         <el-table-column align="center" prop="last_info.last_attend_time" label="最近上课时间" />
         <el-table-column align="center" prop="last_info.last_teacher" label="最近上课老师" />
         <el-table-column align="center" prop="next_info.next_attend_time" label="下次上课时间" />
         <el-table-column align="center" prop="next_info.next_teacher" label="下次上课老师" />
         <el-table-column align="center" prop="lesson_sum" label="本月上课次数" />
-        <el-table-column align="center" prop="student_source" label="来源" />
+        <el-table-column align="center" prop="parent_user.source" label="来源" />
         <el-table-column align="center" prop="last_remark" label="上次备注时间" />
-        <el-table-column align="center" prop="course_adviser" label="课程顾问" />
-        <el-table-column align="center" prop="learn_manager.name" label="学管老师" />
+        <el-table-column align="center" prop="parent_user.course_adviser" label="课程顾问" />
+        <el-table-column align="center" prop="parent_user.learn_manager.name" label="学管老师" />
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
-            <el-button v-if="!scope.row.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
-            <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.learn_manager.id)">重新分配</el-button>
+            <el-button v-if="!scope.row.parent_user.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
+            <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.parent_user.learn_manager.id)">重新分配</el-button>
           </template>
         </el-table-column>
       </el-table>
