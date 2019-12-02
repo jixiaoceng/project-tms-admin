@@ -49,6 +49,20 @@
           />
         </el-select>
       </screen-item>
+      <screen-item
+        label="状态"
+        :part="4"
+        :label-width="labelWidth"
+      >
+        <el-select v-model="tutor_status" placeholder="请选择">
+          <el-option
+            v-for="item in statusOption"
+            :key="item.value"
+            :label="item.lable"
+            :value="item.value"
+          />
+        </el-select>
+      </screen-item>
       <screen-item label="老师姓名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="input" placeholder="请输入老师姓名" @keyup.enter.native="search" />
       </screen-item>
@@ -190,6 +204,7 @@ export default {
       Screeningresults: [], // 筛选结果
       currentRow: null,
       input: '',
+      tutor_status: '',
       date: [
         { val: '0:00', lab: '00:00:00' },
         { val: '0:30', lab: '00:30:00' },
@@ -254,6 +269,23 @@ export default {
       {
         value: 'SG',
         label: '双语版'
+      }
+      ],
+      statusOption: [{
+        value: '',
+        label: '全部'
+      },
+      {
+        value: 'hidden',
+        label: '未激活(隐藏)'
+      },
+      {
+        value: 'normal',
+        label: '在岗'
+      },
+      {
+        value: 'delete',
+        label: '离岗'
       }
       ],
       level: [
