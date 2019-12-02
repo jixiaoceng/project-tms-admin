@@ -86,7 +86,7 @@
         </el-table-column>
         <el-table-column align="center" label="上课进度">
           <template slot-scope="scope">
-            Level{{ scope.row.course_info.lesson_no }}
+            lesson{{ scope.row.course_info.lesson_no }}
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
