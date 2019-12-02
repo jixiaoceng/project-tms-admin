@@ -30,7 +30,7 @@
           <el-option
             v-for="item in level"
             :key="item.value"
-            :label="item.lable"
+            :label="item.label"
             :value="item.value"
           />
         </el-select>
@@ -58,7 +58,7 @@
           <el-option
             v-for="item in statusOption"
             :key="item.value"
-            :label="item.lable"
+            :label="item.label"
             :value="item.value"
           />
         </el-select>
@@ -289,13 +289,13 @@ export default {
       }
       ],
       level: [
-        { value: '', lable: '全部' },
-        { value: '1', lable: 'Level1' },
-        { value: '2', lable: 'Level2' },
-        { value: '3', lable: 'Level3' },
-        { value: '4', lable: 'Level4' },
-        { value: '5', lable: 'Level5' },
-        { value: '6', lable: 'Level6' }
+        { value: '', label: '全部' },
+        { value: '1', label: 'Level1' },
+        { value: '2', label: 'Level2' },
+        { value: '3', label: 'Level3' },
+        { value: '4', label: 'Level4' },
+        { value: '5', label: 'Level5' },
+        { value: '6', label: 'Level6' }
       ],
       classOption: [
         {
@@ -376,7 +376,8 @@ export default {
         date_day: this.date_day ? this.timeChange(this.date_day) : this.dateDay,
         page: this.page,
         page_size: this.page_size,
-        teacher_name: this.input
+        teacher_name: this.input,
+        tutor_status: this.tutor_status
       }
       if (information.times !== '') { // 选择时间就必须选择日期
         if (information.date_day) {
