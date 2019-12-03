@@ -10,7 +10,7 @@ const { $get } = new GetData()
  *        cms_user_id         {String} 学管或者课程顾问id
  */
 export const managerRecharge = function(params) {
-  return $get('/manager/recharge/', params)
+  return $get('/recharge/', params)
 }
 
 /**
@@ -21,7 +21,7 @@ export const managerRecharge = function(params) {
  *        cms_user_id         {String} 学管或者课程顾问id
  */
 export const attendClassInfo = function(params) {
-  return $get('/manager/attendclassinfo/', params)
+  return $get('/attendclassinfo/', params)
 }
 
 /**
@@ -32,7 +32,7 @@ export const attendClassInfo = function(params) {
  *        cms_user_id         {String} 学管或者课程顾问id
  */
 export const managerAdhoc = function(params) {
-  return $get('/manager/statistic/ad_hoc/', params)
+  return $get('/statistic/ad_hoc/', params)
 }
 
 /**
@@ -43,5 +43,5 @@ export const managerAdhoc = function(params) {
  *        cms_user_id         {String} 学管或者课程顾问id
  */
 export const attendRecharge = function(params) {
-  return $get('/manager/statistic/recharge/', params)
+  return $get('/statistic/recharge/', params)
 }
