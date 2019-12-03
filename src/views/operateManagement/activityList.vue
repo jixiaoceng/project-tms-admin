@@ -11,7 +11,7 @@
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper" style="margin-top:20px;">
       <div slot="header-right">
-        <el-button type="primary" @click="foundsGroup()">创建团链接</el-button>
+<!--        <el-button type="primary" @click="foundsGroup()">创建团链接</el-button>-->
       </div>
       <el-table
         v-loading="loading"
