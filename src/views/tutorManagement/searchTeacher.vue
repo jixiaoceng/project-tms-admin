@@ -49,20 +49,20 @@
           />
         </el-select>
       </screen-item>
-      <screen-item
-        label="状态"
-        :part="4"
-        :label-width="labelWidth"
-      >
-        <el-select v-model="tutor_status" placeholder="请选择">
-          <el-option
-            v-for="item in statusOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </screen-item>
+<!--      <screen-item-->
+<!--        label="状态"-->
+<!--        :part="4"-->
+<!--        :label-width="labelWidth"-->
+<!--      >-->
+<!--        <el-select v-model="tutor_status" placeholder="请选择">-->
+<!--          <el-option-->
+<!--            v-for="item in statusOption"-->
+<!--            :key="item.value"-->
+<!--            :label="item.label"-->
+<!--            :value="item.value"-->
+<!--          />-->
+<!--        </el-select>-->
+<!--      </screen-item>-->
       <screen-item label="老师姓名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="input" placeholder="请输入老师姓名" @keyup.enter.native="search" />
       </screen-item>
@@ -204,7 +204,6 @@ export default {
       Screeningresults: [], // 筛选结果
       currentRow: null,
       input: '',
-      tutor_status: '',
       date: [
         { val: '0:00', lab: '00:00:00' },
         { val: '0:30', lab: '00:30:00' },
@@ -376,8 +375,7 @@ export default {
         date_day: this.date_day ? this.timeChange(this.date_day) : this.dateDay,
         page: this.page,
         page_size: this.page_size,
-        teacher_name: this.input,
-        tutor_status: this.tutor_status
+        teacher_name: this.input
       }
       if (information.times !== '') { // 选择时间就必须选择日期
         if (information.date_day) {
