@@ -11,10 +11,10 @@
     <screen-wrapper @search="search">
       <screen-item label="日期" :part="2" label-width="60">
         <el-radio-group v-model="screenData.search_day" @change="changeRadion">
-          <el-radio-button label="1">今天</el-radio-button>
-          <el-radio-button label="2">明天</el-radio-button>
-          <el-radio-button label="3">后天</el-radio-button>
-          <el-radio-button label="7">未来七天</el-radio-button>
+          <el-radio-button class="radio-button" label="1">今天</el-radio-button>
+          <el-radio-button class="radio-button" label="2">明天</el-radio-button>
+          <el-radio-button class="radio-button" label="3">后天</el-radio-button>
+          <el-radio-button class="radio-button" label="7">未来七天</el-radio-button>
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
@@ -811,7 +811,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .scheduling-wrap {
   .type-btn {
     padding: 20px 0 0 0;
