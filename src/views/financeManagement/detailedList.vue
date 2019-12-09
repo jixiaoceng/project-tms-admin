@@ -53,42 +53,43 @@
         <el-table-column align="center" label="序号" :width="50">
           <template slot-scope="scope">{{ (screenData.page - 1) * screenData.page_size + scope.$index + 1 }}</template>
         </el-table-column>
-        <el-table-column align="center" prop="created_on" label="交易时间" sortable="custom" :class-name="getSortClass('created_on')" width="140" />
-        <el-table-column align="center" label="学生用户名" width="100">
+        <el-table-column align="center" prop="update_time" label="交易时间" sortable="custom" :class-name="getSortClass('update_time')" width="140" />
+        <el-table-column align="center" prop="parent_user.parent_name" label="家长用户名" />
+        <el-table-column align="center" label="学生用户名" :width="tablWidth">
           <template slot-scope="scope">
-            <el-button type="text">
-              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:scope.row.student.student_id }}">
-                {{ scope.row.student.student_name }}
+            <el-button v-for="item in scope.row.parent_user.children" :key="item.id" type="text">
+              <router-link :to="{ path : `/studentManagement/studentInfo`, query:{ studentId:item.id }}">
+                {{ item.real_name }}
               </router-link>
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="transaction_type" label="交易类型" />
-        <el-table-column align="center" prop="amount" label="充值课时" />
-        <el-table-column align="center" prop="bonus" label="赠课" />
-        <el-table-column align="center" prop="activity.discount_name" label="充值活动" />
-        <el-table-column align="center" prop="activity.activity_name" label="活动优惠" />
-        <el-table-column align="center" prop="activity.coupon_code" label="优惠码" />
-        <el-table-column align="center" prop="activity.redeem_code" label="课程卡" />
-        <el-table-column align="center" prop="activity.valid_date" label="有效期" />
-        <el-table-column align="center" label="版本">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="级别">
-          <template slot-scope="scope">
-            <span>
-              Level{{ scope.row.course_info.course_level }}
-            </span>
-          </template>
-        </el-table-column>
+        <el-table-column align="center" prop="recharge_type" label="交易类型" />
+        <el-table-column align="center" prop="recharge_amount" label="充值课时" />
+        <el-table-column align="center" prop="incentive_amount" label="赠课" />
+        <el-table-column align="center" prop="activity" label="充值活动" />
+        <el-table-column align="center" prop="activity" label="活动优惠" />
+        <el-table-column align="center" prop="coupon_code" label="优惠码" />
+        <el-table-column align="center" prop="redeem_code" label="课程卡" />
+        <el-table-column align="center" prop="valid_date" label="有效期" />
+<!--        <el-table-column align="center" label="版本">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>-->
+<!--              {{ scope.row.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}-->
+<!--            </span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column align="center" label="级别">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>-->
+<!--              Level{{ scope.row.course_info.course_level }}-->
+<!--            </span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
         <el-table-column align="center" prop="recharge_count" label="充值次数" />
         <el-table-column align="center" prop="course_adviser" label="本次充值课程顾问" />
         <el-table-column align="center" prop="learn_manager" label="本次充值学管老师" />
-        <el-table-column align="center" prop="activity.order_no" label="流水号" width="260" />
+        <el-table-column align="center" prop="order_no" label="流水号" width="260" />
       </el-table>
       <!-- 分页 -->
       <custom-pagination
@@ -114,7 +115,7 @@ export default {
         cms_user_id: '',
         page: 1,
         page_size: 50,
-        ordering: '-created_on'
+        ordering: '-update_time'
       },
       role: [],
       applyDate: [],

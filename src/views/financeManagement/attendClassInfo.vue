@@ -68,14 +68,14 @@
         <el-table-column align="center" label="班型">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.virtualclass.class_type == 'oneonone' ? '一对一' : '小班课' }}
+              {{ scope.row.virtualclass.class_type == 'one2one' ? '一对一' : '小班课' }}
             </span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.virtualclass.course_info.programme_name == 'Advanced' ? '高级版' : scope.row.virtualclass.course_info.programme_name == 'International Lite' ? '国际版' : 'SG' }}
+              {{ scope.row.virtualclass.course_info.edition_name == 'Advanced' ? '高级版' : scope.row.virtualclass.course_info.edition_name == 'International Lite' ? '国际版' : 'SG' }}
             </span>
           </template>
         </el-table-column>
@@ -89,7 +89,7 @@
         <el-table-column align="center" label="上课进度">
           <template slot-scope="scope">
             <span>
-              Lesson {{ scope.row.virtualclass.course_info.session_no }}
+              Lesson {{ scope.row.virtualclass.course_info.lesson_no }}
             </span>
           </template>
         </el-table-column>
