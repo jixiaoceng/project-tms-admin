@@ -34,6 +34,9 @@
             :value="item.id"
           /></el-select>
       </screen-item>
+      <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
+        <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
+      </screen-item>
     </screen-wrapper>
     <!-- 表格 -->
     <custom-card title="数据列表" class="table-wrapper">
@@ -120,9 +123,10 @@ export default {
         start_time: '', // 时间段start_time  2019-07-24 12:00:00 end_time  2019-07-24 12:00:00
         end_time: '',
         cms_user_id: '',
+        student_name: '',
         page: 1,
         page_size: 50,
-        ordering: '-created_on'
+        ordering: '-update_time'
       },
       learnmanagerrDate: [],
       applyDate: [],
@@ -189,9 +193,9 @@ export default {
     },
     sortChange(column) {
       if (column.prop === 'virtualclass.scheduled_time' && column.order === 'ascending') { // 升序
-        this.screenData.ordering = 'created_on'
+        this.screenData.ordering = 'update_time'
       } else if (column.prop === 'virtualclass.scheduled_time' && column.order === 'descending') { // 降序
-        this.screenData.ordering = '-created_on'
+        this.screenData.ordering = '-update_time'
       } else {
         return
       }
