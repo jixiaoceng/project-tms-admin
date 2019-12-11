@@ -274,6 +274,11 @@
             >{{ item.learn_manager }} </span>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="是否审核" :width="labelWidth">
+          <template slot-scope="scope">
+            <span>{{ scope.row.examine_status }} </span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="学生设备" :width="tablWidth">
           <template slot-scope="scope">
 <!--            <el-button v-for="item in scope.row.learning_group.students" :key="item.id" type="text">-->
@@ -513,9 +518,9 @@ export default {
         }
       ],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now()
-        }
+        // disabledDate(time) {
+        //   return time.getTime() < Date.now()
+        // }
       },
       classOption: [
         {
