@@ -686,6 +686,14 @@ export default {
         this.screenData.search_day = ''
         this.tableType = ''
         this.screenData.appoint_status = ''
+
+        //如果开始时间早于现在，则应该显示完课状态
+        if (new Date(new Date(this.screenData.start_time).toLocaleDateString()).getTime() < new Date().getTime()) {
+          this.type = 4
+        } else {
+          this.type = 1
+        }
+        console.log(new Date(new Date(this.screenData.start_time).toLocaleDateString()).getTime() < new Date().getTime())
       } else {
         this.screenData.start_time = null
         this.screenData.end_time = null
