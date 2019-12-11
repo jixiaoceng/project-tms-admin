@@ -693,7 +693,6 @@ export default {
         } else {
           this.type = 1
         }
-        console.log(new Date(new Date(this.screenData.start_time).toLocaleDateString()).getTime() < new Date().getTime())
       } else {
         this.screenData.start_time = null
         this.screenData.end_time = null
