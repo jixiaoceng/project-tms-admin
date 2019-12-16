@@ -69,6 +69,26 @@
           />
         </el-select>
       </screen-item>
+      <screen-item label="是否异常" :part="4" label-width="60">
+        <el-select v-model="screenData.exception" placeholder="请选择">
+          <el-option
+            v-for="item in exceptionOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </screen-item>
+      <screen-item label="是否新老师" :part="4" label-width="60">
+        <el-select v-model="screenData.teacher" placeholder="请选择">
+          <el-option
+            v-for="item in teacherOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </screen-item>
       <screen-item label="学生用户名" :part="4" :label-width="labelWidth">
         <el-input v-model.trim="screenData.student_name" placeholder="请输入学生用户名" @keyup.enter.native="search" />
       </screen-item>
@@ -216,6 +236,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="type === 4" align="center" prop="teacher_end_time" label="老师出课堂时间" :width="tablWidth" />
+        <el-table-column v-if="type === 4" align="center" prop="examine_status" label="审核状态" :width="tablWidth" />
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
@@ -465,7 +486,8 @@ export default {
         page: '1',
         appoint_status: '', // start未开始, started正在进行，finish结束
         ordering: 'start_time', // 按上课时间排序
-        cms_user: '' // 课程顾问和学管
+        cms_user: '', // 课程顾问和学管
+        exception: ''
       },
       type: 1, // 1全部2未开始3正在上课4已结束
       labelWidth: '100',
@@ -536,6 +558,34 @@ export default {
         {
           value: 'old',
           label: '正式课'
+        }
+      ],
+      exceptionOption: [
+        {
+          value: '',
+          label: '全部'
+        },
+        {
+          value: 1,
+          label: '是'
+        },
+        {
+          value: 2,
+          label: '否'
+        }
+      ],
+      teacherOption: [
+        {
+          value: '',
+          label: '全部'
+        },
+        {
+          value: 'new',
+          label: '新老师'
+        },
+        {
+          value: 'old',
+          label: '老老师'
         }
       ],
       studentAll: [],
