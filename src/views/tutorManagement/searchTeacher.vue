@@ -112,7 +112,7 @@
         :height="tableHeight"
         border
         highlight-current-row
-
+        @sort-change="sortChange"
         style="width: 100%;margin-top:20px;"
       >
         <el-table-column
@@ -141,6 +141,12 @@
         <el-table-column
           property="teach_year"
           label="教学年限"
+          align="center"
+        />
+        <el-table-column
+          property="total_number_of_classes"
+          sortable="custom"
+          label="上课数量"
           align="center"
         />
         <el-table-column
@@ -204,6 +210,7 @@ export default {
       Screeningresults: [], // 筛选结果
       currentRow: null,
       input: '',
+      ordering: 'total_number_of_classes',
       date: [
         { val: '0:00', lab: '00:00:00' },
         { val: '0:30', lab: '00:30:00' },
@@ -318,7 +325,8 @@ export default {
       course_level: '',
       class_type: '',
       date_day: '',
-      times: ''
+      times: '',
+      ordering: 'total_number_of_classes'
     }
     this.loading = true
     searchTeacher(information).then(res => {
@@ -375,7 +383,8 @@ export default {
         date_day: this.date_day ? this.timeChange(this.date_day) : this.dateDay,
         page: this.page,
         page_size: this.page_size,
-        teacher_name: this.input
+        teacher_name: this.input,
+        ordering: this.ordering
       }
       if (information.times !== '') { // 选择时间就必须选择日期
         if (information.date_day) {
@@ -440,6 +449,16 @@ export default {
       var d = new Date(time)
       var datetime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
       return datetime
+    },
+    sortChange(column) {
+      if (column.prop === 'total_number_of_classes' && column.order === 'ascending') { // 升序
+        this.ordering = 'total_number_of_classes'
+      } else if (column.prop === 'total_number_of_classes' && column.order === 'descending') { // 降序
+        this.ordering = '-total_number_of_classes'
+      } else {
+        return
+      }
+      this.searchFn()
     }
   }
 

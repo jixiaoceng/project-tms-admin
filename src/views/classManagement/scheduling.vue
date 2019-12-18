@@ -222,6 +222,7 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="hosts[0].lession_num" label="上课数量" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="labelWidth">
           <template slot-scope="scope">
