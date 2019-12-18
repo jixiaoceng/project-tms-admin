@@ -227,15 +227,15 @@ export default {
           label: '全部'
         },
         {
-          value: 'Advanced',
+          value: '1',
           label: '高级版'
         },
         {
-          value: 'International',
+          value: '2',
           label: '国际版'
         },
         {
-          value: 'SG',
+          value: '3',
           label: 'SG'
         }
       ],

@@ -258,15 +258,15 @@ export default {
         label: '全部'
       },
       {
-        value: 'Advanced',
+        value: '1',
         label: '高级版'
       },
       {
-        value: 'International',
+        value: '2',
         label: '国际版'
       },
       {
-        value: 'SG',
+        value: '3',
         label: '双语版'
       }
       ],
@@ -301,10 +301,10 @@ export default {
           value: '',
           label: '全部'
         }, {
-          value: 'oneonone',
+          value: '1',
           label: '一对一'
         }, {
-          value: 'smallclass',
+          value: '2',
           label: '小班课'
         }]
     }
