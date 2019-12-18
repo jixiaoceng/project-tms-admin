@@ -11,10 +11,10 @@
     <screen-wrapper @search="search">
       <screen-item label="日期" :part="2" label-width="60">
         <el-radio-group v-model="screenData.search_day" @change="changeRadion">
-          <el-radio-button label="1">今天</el-radio-button>
-          <el-radio-button label="2">明天</el-radio-button>
-          <el-radio-button label="3">后天</el-radio-button>
-          <el-radio-button label="7">未来七天</el-radio-button>
+          <el-radio-button class="radio-button" label="1">今天</el-radio-button>
+          <el-radio-button class="radio-button" label="2">明天</el-radio-button>
+          <el-radio-button class="radio-button" label="3">后天</el-radio-button>
+          <el-radio-button class="radio-button" label="7">未来七天</el-radio-button>
         </el-radio-group>
         <el-date-picker
           v-model="applyDate"
@@ -514,9 +514,9 @@ export default {
         }
       ],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now()
-        }
+        // disabledDate(time) {
+        //   return time.getTime() < Date.now()
+        // }
       },
       classOption: [
         {
@@ -687,6 +687,13 @@ export default {
         this.screenData.search_day = ''
         this.tableType = ''
         this.screenData.appoint_status = ''
+
+        //如果开始时间早于现在，则应该显示完课状态
+        if (new Date(new Date(this.screenData.start_time).toLocaleDateString()).getTime() < new Date().getTime()) {
+          this.type = 4
+        } else {
+          this.type = 1
+        }
       } else {
         this.screenData.start_time = null
         this.screenData.end_time = null
@@ -812,7 +819,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .scheduling-wrap {
   .type-btn {
     padding: 20px 0 0 0;
