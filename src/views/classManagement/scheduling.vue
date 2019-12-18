@@ -211,6 +211,7 @@
             <span v-for="item in scope.row.hosts" :key="item.id">{{ item.username }}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="hosts[0].lession_num" label="老师完课数量" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
             <span
@@ -222,7 +223,6 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="hosts[0].lession_num" label="上课数量" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" prop="learning_group.last_teacher[0]" label="上节课老师" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" label="课堂模式" :width="labelWidth">
           <template slot-scope="scope">
@@ -688,7 +688,6 @@ export default {
         this.tableType = ''
         this.screenData.appoint_status = ''
 
-        //如果开始时间早于现在，则应该显示完课状态
         if (new Date(new Date(this.screenData.start_time).toLocaleDateString()).getTime() < new Date().getTime()) {
           this.type = 4
         } else {

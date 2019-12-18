@@ -144,12 +144,6 @@
           align="center"
         />
         <el-table-column
-          property="total_number_of_classes"
-          sortable="custom"
-          label="上课数量"
-          align="center"
-        />
-        <el-table-column
           property="rating"
           label="评分"
           align="center"
@@ -162,6 +156,12 @@
         <el-table-column
           property="country_of_residence"
           label="居住国"
+          align="center"
+        />
+        <el-table-column
+          property="total_number_of_classes"
+          sortable="custom"
+          label="老师完课数量"
           align="center"
         />
       </el-table>
