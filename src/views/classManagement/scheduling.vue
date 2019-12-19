@@ -196,6 +196,7 @@
             <span>{{ scope.row.tutor_user.username }}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="tutor_user.total_number_of_class" label="老师完课数量" :width="tablWidth" />
         <el-table-column v-if="type != 4" align="center" label="是否新老师" :width="labelWidth">
           <template slot-scope="scope">
             <!-- <span
