@@ -187,17 +187,17 @@
           <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
         </screen-item>
         <screen-item label="家长问卷结果">
-          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.lesson_no : '国际版 ' + courseInfo.parent_result.course_name + '- lesson ' + courseInfo.parent_result.lesson_no" :disabled="true" />
+          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : '国际版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level" :disabled="true" />
           <el-input v-else value="没做家长问卷" :disabled="true" />
           <el-button type="text">查看家长问卷记录</el-button>
         </screen-item>
         <screen-item label="水平测试结果">
-          <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.assessment_result.programme_name == 'Advanced' ? '高级版 ' + courseInfo.assessment_result.course_name : '国际版 ' + courseInfo.assessment_result.course_name" :disabled="true" />
+          <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : courseInfo.parent_result.course_edition_name == 'International Lite' ? '国际版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : '双语版' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level" :disabled="true" />
           <el-input v-else value="没做水平测试" :disabled="true" />
           <el-button type="text">查看水平测试记录</el-button>
         </screen-item>
         <screen-item label="上课进度">
-          <el-input :value="courseInfo.session_no ? 'Lesson ' + courseInfo.session_no : ''" :disabled="true" />
+          <el-input :value="courseInfo.lesson_no ? 'Lesson ' + courseInfo.lesson_no : ''" :disabled="true" />
         </screen-item>
         <screen-item label="账户余额">
           <el-input v-model="courseInfo.balance" :disabled="true" />
