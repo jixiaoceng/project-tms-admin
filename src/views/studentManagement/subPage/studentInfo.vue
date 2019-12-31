@@ -187,12 +187,12 @@
           <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
         </screen-item>
         <screen-item label="家长问卷结果">
-          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : '国际版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level" :disabled="true" />
+          <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + '- level ' + courseInfo.parent_result.level : courseInfo.parent_result.course_edition_name == 'International Lite' ? '国际版 ' + '- level ' + courseInfo.parent_result.level : '双语版 ' + '- level ' + courseInfo.parent_result.level" :disabled="true" />
           <el-input v-else value="没做家长问卷" :disabled="true" />
           <el-button type="text">查看家长问卷记录</el-button>
         </screen-item>
         <screen-item label="水平测试结果">
-          <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : courseInfo.parent_result.course_edition_name == 'International Lite' ? '国际版 ' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level : '双语版' + courseInfo.parent_result.course_name + '- level ' + courseInfo.parent_result.level" :disabled="true" />
+          <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.assessment_result.course_edition_name == 'Advanced' ? '高级版 ' + '- level ' + courseInfo.assessment_result.test_level : courseInfo.assessment_result.course_edition_name == 'International Lite' ? '国际版 ' + '- level ' + courseInfo.assessment_result.test_level : '双语版 ' + '- level ' + courseInfo.assessment_result.test_level" :disabled="true" />
           <el-input v-else value="没做水平测试" :disabled="true" />
           <el-button type="text">查看水平测试记录</el-button>
         </screen-item>
