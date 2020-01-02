@@ -85,6 +85,13 @@
             </router-link>
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="username" label="家长用户名">
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.parent_name }}
+            </span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">

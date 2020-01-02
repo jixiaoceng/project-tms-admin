@@ -155,6 +155,14 @@
             </el-button>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="家长用户名" :width="tablWidth">
+          <template slot-scope="scope">
+            <span
+              v-for="item in scope.row.virtual_class_member"
+              :key="item.id"
+            >{{ item.parent_name }} </span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column v-if="type != 4" :key="Math.random()" align="center" label="学生居住国" :width="tablWidth">
           <template slot-scope="scope">
             <span v-for="item in scope.row.learning_group.students" :key="item.id">{{ item.nationality }}</span>

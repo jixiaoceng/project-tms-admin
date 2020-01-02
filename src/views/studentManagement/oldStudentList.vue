@@ -89,6 +89,7 @@
             lesson{{ scope.row.course_info.lesson_no }}
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="parent_user.username" label="家长用户名" />
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
         <el-table-column align="center" prop="parent_user.balance" label="账户余额" />
         <el-table-column align="center" prop="parent_user.small_class_balance" label="小班课余额" />
