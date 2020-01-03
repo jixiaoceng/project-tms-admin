@@ -128,7 +128,7 @@
           align="center"
           prop="balance"
           sortable="custom"
-          :class-name="getSortClass('balance')"
+          :class-name="getSortClass('parent_user__balance')"
           label="账户余额"
         />
         <el-table-column
