@@ -301,7 +301,7 @@
               @click="clickHandlerComment(scope.row.id,'Tutor',scope.row)"
             >学生反馈</el-button>
             <el-button
-              v-if="(scope.row.appointment_status == 3 || scope.row.appointment_status == 4) && scope.row.virtualclass_type == '拓客'"
+              v-if="(scope.row.appointment_status == 3 || scope.row.appointment_status == 4) && scope.row.virtualclass_type == '拓课'"
               type="text"
               @click="clickHandlerPlayback(scope.row.id)"
             >课堂回放</el-button>

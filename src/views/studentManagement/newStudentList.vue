@@ -126,9 +126,9 @@
         />
         <el-table-column
           align="center"
-          prop="balance_count"
+          prop="balance"
           sortable="custom"
-          :class-name="getSortClass('balance_count')"
+          :class-name="getSortClass('balance')"
           label="账户余额"
         />
         <el-table-column
