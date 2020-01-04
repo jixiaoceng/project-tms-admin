@@ -77,17 +77,26 @@
         <!-- <el-table-column align="center" prop="" label="时区" /> -->
         <el-table-column align="center" label="版本">
           <template slot-scope="scope">
-            {{ scope.row.course_info.edition_name == 'Advanced' ? '高级版' : scope.row.course_info.edition_name == 'International Lite' ? '国际版' : scope.row.course_info.edition_name == 'SG Program' ? 'SG' : '--' }}
+            <span v-if="scope.row.course_info">
+              {{ scope.row.course_info.edition_name == 'Advanced' ? '高级版' : scope.row.course_info.edition_name == 'International Lite' ? '国际版' : scope.row.course_info.edition_name == 'SG Program' ? 'SG' : '--' }}
+            </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="级别">
           <template slot-scope="scope">
-            Level{{ scope.row.course_info.course_level }}
+            <span v-if="scope.row.course_info">
+              Level{{ scope.row.course_info.course_level }}
+            </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="上课进度">
           <template slot-scope="scope">
-            lesson{{ scope.row.course_info.lesson_no }}
+            <span v-if="scope.row.course_info">
+              lesson{{ scope.row.course_info.lesson_no }}
+            </span>
+            <span v-else>---</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="virtual_class_sum" label="已学课时" />
