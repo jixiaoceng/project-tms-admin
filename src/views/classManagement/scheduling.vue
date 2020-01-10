@@ -720,7 +720,7 @@ export default {
     // 旁听
     clickHandlerMonitor(virtualclass_id) {
       virtualclassMonitor(virtualclass_id).then(res => {
-        if (res.data.data.virtualclass_type === 'Tk') {
+        if (res.data.data.virtualclass_type === '拓课') {
           window.open(res.data.data.entrytkpath, '_blank')
         } else {
           window.open(process.env.VUE_APP_BASE_API + '/man/virtualclass/monitor/?vc_id=' + virtualclass_id, '_blank')
