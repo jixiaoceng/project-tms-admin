@@ -249,7 +249,7 @@
         <el-table-column v-if="type == 4" align="center" label="完课状态">
           <template slot-scope="scope">
             <span :class="scope.row.finish_status != 0 ? 'red': ''">
-              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '21' ? '老师学生均未出席课堂' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : '异常' }}
+              {{ scope.row.finish_status == '1' ? '学生未出席' : scope.row.finish_status == '21' ? '老师学生均未出席课堂' : scope.row.finish_status == '2' ? '学生设备或网络故障' : scope.row.finish_status == '12' ? '老师设备或网络故障' : scope.row.finish_status == '20' ? '其他原因' : scope.row.finish_status == 0 ? '正常' : scope.row.finish_status == 11 ? '教师缺席' : scope.row.finish_status == 22 ? '老师未点击授课结束' : '异常' }}
             </span>
           </template>
         </el-table-column>
