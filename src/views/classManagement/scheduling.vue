@@ -395,7 +395,7 @@
           <label>提交时间：{{ virtualclassData.submit_time }}</label>
         </el-col>
         <el-col :span="8">
-          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == '21' ? '学生老师均未出席' : virtualclassData.end_reason == 0 ? '正常' : '异常' }}</label>
+          <label>异常类型：{{ virtualclassData.end_reason == '1' ? '学生未出席' : virtualclassData.end_reason == '2' ? '学生设备或网络故障' : virtualclassData.end_reason == '12' ? '老师设备或网络故障' : virtualclassData.end_reason == '20' ? '其他原因' : virtualclassData.end_reason == '21' ? '学生老师均未出席' : virtualclassData.end_reason == 0 ? '正常' : virtualclassData.end_reason == 11 ? '教师缺席' : virtualclassData.end_reason == 22 ? '老师未点击授课结束' : '异常' }}</label>
         </el-col>
         <el-col :span="24">
           <el-input
@@ -414,8 +414,8 @@
         <el-col class="mt10">
           <el-radio-group v-model="virtualclassData.check_code" :disabled="virtualclassData.tag == 1" @change="changeReason">
             <el-radio :label="1">学生缺席</el-radio>
-            <el-radio :label="2">老师缺席</el-radio>
-            <el-radio :label="3">学生老师均未出席</el-radio>
+            <el-radio :label="11">老师缺席</el-radio>
+            <el-radio :label="21">学生老师均未出席</el-radio>
           </el-radio-group>
         </el-col>
         <el-col class="mt10">
@@ -429,7 +429,7 @@
               </screen-item>
             </el-col>
           </div>
-          <div v-else-if="virtualclassData.check_code == 2">
+          <div v-else-if="virtualclassData.check_code == 11">
             <el-col>
               <screen-item label="补偿学生" label-width="80">
                 <el-input v-model="virtualclassData.student_amount" :disabled="virtualclassData.tag == 1" />
