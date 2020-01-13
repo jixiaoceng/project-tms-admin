@@ -205,6 +205,20 @@
         <screen-item label="小班课余额">
           <el-input :value="courseInfo.smallclass_balance ? courseInfo.smallclass_balance.remaining_limit: ''" :disabled="true" />
         </screen-item>
+        <!-- 小班课设置 -->
+        <screen-item label="是否开启小班课" :part="2" label-width="120">
+          <el-radio-group v-model="courseInfo.allow_smallclass" @change="changeAllowSmallclass">
+            <el-radio-button label="1">是</el-radio-button>
+            <el-radio-button label="0">否</el-radio-button>
+          </el-radio-group>
+        </screen-item>
+        <!-- 固定小班课 -->
+        <screen-item label="是否上固定小班课" :part="2" label-width="120">
+          <el-radio-group v-model="courseInfo.only_smallclass" @change="changeOnlySmallclass">
+            <el-radio-button label="1">是</el-radio-button>
+            <el-radio-button label="0">否</el-radio-button>
+          </el-radio-group>
+        </screen-item>
       </el-row>
     </custom-card>
     <!--备注-->
@@ -258,7 +272,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { managerStudentDetails, managerExtstudent, managerExtstudentAdd, managerStudentCourse, getRemarkstudent, postRemarkstudent } from '@/api/classManagement/'
+import { managerStudentDetails, managerExtstudent, managerExtstudentAdd, managerStudentCourse, getRemarkstudent, postRemarkstudent, studentAllowSmallclass, studentOnlySmallclass } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -299,7 +313,9 @@ export default {
         'course_level': '',
         'session_no': '',
         'balance': 0,
-        'smallclass_balance': ''
+        'smallclass_balance': '',
+        'allow_smallclass': '',
+        'only_smallclass': ''
       },
       remarkstudent: {
         'page': 1,
@@ -507,6 +523,24 @@ export default {
       this.remarkstudent.page_size = perPage
       this.remarkstudent.page = 1
       this.getRemark()
+    },
+    // 是否允许上小班课
+    changeAllowSmallclass() {
+      studentAllowSmallclass(this.studentId, this.courseInfo.allow_smallclass).then(res => {
+        this.$message({
+          message: 'success',
+          type: 'success'
+        })
+      })
+    },
+    // 是否允许上小班课
+    changeOnlySmallclass() {
+      studentOnlySmallclass(this.studentId, this.courseInfo.only_smallclass).then(res => {
+        this.$message({
+          message: 'success',
+          type: 'success'
+        })
+      })
     }
   }
 }

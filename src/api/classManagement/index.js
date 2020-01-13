@@ -70,6 +70,22 @@ export const managerExtstudentAdd = function(params) {
 }
 
 /**
+ * 学生详情 是否允许小班课
+ * @param {Object} params 参数对象
+ */
+export const studentAllowSmallclass = function(student_id, allow_smallclass) {
+  return $put('/student/' + student_id + '/set_allow_smallclass/', { allow_smallclass })
+}
+
+/**
+ * 学生详情 是否只上小班课
+ * @param {Object} params 参数对象
+ */
+export const studentOnlySmallclass = function(student_id, only_smallclass) {
+  return $put('/student/' + student_id + '/set_only_smallclass/', { only_smallclass })
+}
+
+/**
  * 学生详情 上课进度
  * @param {Number} id 学生
  */
