@@ -213,7 +213,7 @@
           </el-radio-group>
         </screen-item>
         <!-- 固定小班课 -->
-        <screen-item label="是否上固定小班课" :part="2" label-width="120">
+        <screen-item label="是否只上小班课" :part="2" label-width="120">
           <el-radio-group v-model="courseInfo.only_smallclass" @change="changeOnlySmallclass">
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
