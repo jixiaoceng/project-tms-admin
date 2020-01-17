@@ -115,6 +115,7 @@
           <template slot-scope="scope">
             <el-button v-if="!scope.row.parent_user.learn_manager" type="text" @click="endAdviser(scope.row.id)">分配</el-button>
             <el-button v-else type="text" @click="againAdviser(scope.row.id, scope.row.parent_user.learn_manager.id)">重新分配</el-button>
+            <el-button type="text" @click="resetpassword(scope.row.id)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -148,7 +149,7 @@
 </template>
 
 <script>
-import { managerOldstudent, managerUser, distributLearnmanager, changeLearnmanager } from '@/api/classManagement/'
+import { managerOldstudent, managerUser, distributLearnmanager, changeLearnmanager, resetpasswordSer } from '@/api/classManagement/'
 export default {
   data() {
     return {
@@ -257,6 +258,36 @@ export default {
     this.optionRole()
   },
   methods: {
+    // 重置密码
+    resetpassword(id) {
+      console.log(id, 'id')
+      var username = ''
+      for (var i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].id === id) {
+          username = this.tableData[i].username
+        }
+      }
+      this.$confirm('确定重置' + username + '密码?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        resetpasswordSer(id).then(res => {
+          if (res.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '重置成功'
+
+            })
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消重置'
+          })
+        })
+      })
+    },
     // 筛选
     search() {
       this.currentPage = 1

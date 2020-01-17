@@ -219,3 +219,12 @@ export const virtualclassCost = function(virtualclass_id) {
 export const setStudentLesson = function(student_id, params) {
   return $put('/student/' + student_id + '/set_student_lesson/', params)
 }
+
+/**
+ * 重置密码
+ * @param {Number} user_id 用户ID
+ */
+export const resetpasswordSer = function(user_id) {
+  // console.log('/manager/oldstudent/' + user_id + '/resetpasswd/')
+  return $put('/student/' + user_id + '/resetpasswd/')
+}

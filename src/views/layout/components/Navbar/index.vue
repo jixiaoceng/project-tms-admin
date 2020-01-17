@@ -26,9 +26,9 @@
             <span class="" style="font-size: 15px;display: inline-block;line-height: 20px;">{{ user }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <!-- <router-link to="/systemManage/changePassword">
+            <router-link to="/systemManage/changePassword">
               <el-dropdown-item>修改密码</el-dropdown-item>
-            </router-link> -->
+            </router-link>
             <el-dropdown-item>
               <span style="display:block;" @click="logout">退出登录</span>
             </el-dropdown-item>
