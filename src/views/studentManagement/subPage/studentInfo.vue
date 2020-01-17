@@ -180,11 +180,32 @@
     <!-- 上课进度 -->
     <custom-card title="上课进度" class="box-card" :collapse="collapse">
       <el-row>
+<!--        <screen-item label="在学版本">-->
+<!--          <el-input v-model="courseInfo.course_edition_name" :disabled="true" />-->
+<!--        </screen-item>-->
         <screen-item label="在学版本">
-          <el-input v-model="courseInfo.course_edition_name" :disabled="true" />
+          <el-select v-model="form.course_edition_id" placeholder="请选择">
+            <el-option
+              v-for="item in editionList"
+              :key="item.id"
+              :label="item.edition_name"
+              :value="item.id"
+            />
+          </el-select>
         </screen-item>
         <screen-item label="在学级别">
-          <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />
+          <el-select v-model="form.course_level" placeholder="请选择">
+            <el-option
+              v-for="item in courseLevelList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+<!--          <el-input :value="courseInfo.course_level ? 'Level ' + courseInfo.course_level : ''" :disabled="true" />-->
+        </screen-item>
+        <screen-item label="上课进度">
+          <el-input v-model="form.lesson_no" />
         </screen-item>
         <screen-item label="家长问卷结果">
           <el-input v-if="courseInfo.parent_result && JSON.stringify(courseInfo.parent_result) !== '{}'" :value="courseInfo.parent_result.course_edition_name == 'Advanced' ? '高级版 ' + '- level ' + courseInfo.parent_result.level : courseInfo.parent_result.course_edition_name == 'International Lite' ? '国际版 ' + '- level ' + courseInfo.parent_result.level : '双语版 ' + '- level ' + courseInfo.parent_result.level" :disabled="true" />
@@ -195,9 +216,6 @@
           <el-input v-if="courseInfo.assessment_result && JSON.stringify(courseInfo.assessment_result) !== '{}'" :value="courseInfo.assessment_result.course_edition_name == 'Advanced' ? '高级版 ' + '- level ' + courseInfo.assessment_result.test_level : courseInfo.assessment_result.course_edition_name == 'International Lite' ? '国际版 ' + '- level ' + courseInfo.assessment_result.test_level : '双语版 ' + '- level ' + courseInfo.assessment_result.test_level" :disabled="true" />
           <el-input v-else value="没做水平测试" :disabled="true" />
           <el-button type="text">查看水平测试记录</el-button>
-        </screen-item>
-        <screen-item label="上课进度">
-          <el-input :value="courseInfo.lesson_no ? 'Lesson ' + courseInfo.lesson_no : ''" :disabled="true" />
         </screen-item>
         <screen-item label="账户余额">
           <el-input v-model="courseInfo.balance" :disabled="true" />
@@ -219,6 +237,9 @@
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
         </screen-item>
+      </el-row>
+      <el-row>
+        <div class="text-center"><el-button @click="saveCourseProgress">保存</el-button></div>
       </el-row>
     </custom-card>
     <!--备注-->
@@ -272,7 +293,8 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { managerStudentDetails, managerExtstudent, managerExtstudentAdd, managerStudentCourse, getRemarkstudent, postRemarkstudent, studentAllowSmallclass, studentOnlySmallclass } from '@/api/classManagement/'
+import { managerStudentDetails, managerExtstudent, managerExtstudentAdd, managerStudentCourse, getRemarkstudent, postRemarkstudent, studentAllowSmallclass, studentOnlySmallclass, setStudentLesson } from '@/api/classManagement/'
+import { base } from '@/api'
 export default {
   data() {
     return {
@@ -373,15 +395,49 @@ export default {
       ],
       exstudentDisabled: true, // 扩展信息编辑
       // 表格数据
-      tableData: []
+      tableData: [],
+      editionList: [], // 版本列表
+      form: {
+        course_edition_id: '',
+        course_level: 1,
+        lesson_no: '1'
+      },
+      courseLevelList: [
+        { name: 'Level1', id: 1 },
+        { name: 'Level2', id: 2 },
+        { name: 'Level3', id: 3 },
+        { name: 'Level4', id: 4 },
+        { name: 'Level5', id: 5 },
+        { name: 'Level6', id: 6 }
+      ]
     }
   },
   created() {
     this.studentId = this.$route.query.studentId
     this.setPageTitle('学生档案')
     this.studentDetails()
+    base.courseEdition().then(({ status, data }) => {
+      if (status === 200 && data instanceof Array && data.length > 0) {
+        this.editionList = data
+      }
+    })
   },
   methods: {
+    saveCourseProgress() {
+      setStudentLesson(this.studentId, this.form).then(res => {
+        if (res.status === 200 && res.data.code === 0) {
+          this.$message({
+            message: '添加成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: res.data.message,
+            type: 'fail'
+          })
+        }
+      })
+    },
     // 注册信息
     studentDetails() {
       managerStudentDetails(this.studentId).then(res => {
@@ -484,6 +540,10 @@ export default {
         if (res.data.code === 0) {
           this.courseInfo = res.data.data
           this.courseInfo.programme_name = this.courseInfo.course_edition_name === 'Advanced' ? '高级版' : this.courseInfo.course_edition_nmae === 'International Lite' ? '国际版' : 'SG'
+          console.log(this.courseInfo)
+          this.form.course_edition_id = this.courseInfo.course_edition_id
+          this.form.lesson_no = this.courseInfo.lesson_no
+          this.form.course_level = this.courseInfo.course_level
         }
         this.getRemark()
       })

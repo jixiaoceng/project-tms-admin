@@ -211,3 +211,11 @@ export const checkExceptionPut = function(virtualclass_id, param) {
 export const virtualclassCost = function(virtualclass_id) {
   return $put('/classroom/' + virtualclass_id + '/provide_cost/')
 }
+
+/**
+ * 设置学生等级
+ * @param {Number} student_id 学生id
+ */
+export const setStudentLesson = function(student_id, params) {
+  return $put('/student/' + student_id + '/set_student_lesson/', params)
+}

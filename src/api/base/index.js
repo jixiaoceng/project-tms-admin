@@ -38,3 +38,10 @@ export const tokenAuth = function(params) {
 export const userInfo = function() {
   return $get('/menu/menu_list', { all: 1 })
 }
+/**
+ * 获取学生版本
+ * @param {Number} all
+ */
+export const courseEdition = function() {
+  return $get('/course_edition/')
+}
