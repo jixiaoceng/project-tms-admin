@@ -203,3 +203,11 @@ export const virtualclassException = function(virtualclass_id) {
 export const checkExceptionPut = function(virtualclass_id, param) {
   return $put('/classroom/' + virtualclass_id + '/check_exception/', param)
 }
+
+/**
+ * 已上课堂发放课时费
+ * @param {Number} virtualclass_id 课堂id
+ */
+export const virtualclassCost = function(virtualclass_id) {
+  return $put('/classroom/' + virtualclass_id + '/provide_cost/')
+}

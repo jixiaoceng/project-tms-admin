@@ -281,6 +281,10 @@
         <el-table-column align="center" prop="" label="操作" :width="type==4 || type==1?'240':tablWidth">
           <template slot-scope="scope">
             <el-button
+              type="text"
+              @click="clickHandlerCost(scope.row.id)"
+            >发放课时</el-button>
+            <el-button
               v-if="scope.row.appointment_status == 2"
               type="text"
               @click="clickHandlerMonitor(scope.row.id)"
@@ -476,7 +480,8 @@ import {
   virtualclassComment,
   managerUser,
   checkExceptionPut,
-  virtualclassException
+  virtualclassException,
+  virtualclassCost
 } from '@/api/classManagement/'
 export default {
   data() {
@@ -781,6 +786,15 @@ export default {
         this.abnormalLog = false
         this.$message({
           message: '异常审核成功',
+          type: 'success'
+        })
+      })
+    },
+    // 发放课时
+    clickHandlerCost(virtualclass_id) {
+      virtualclassCost(virtualclass_id).then(res => {
+        this.$message({
+          message: 'success',
           type: 'success'
         })
       })
